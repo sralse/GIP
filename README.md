@@ -24,14 +24,21 @@ Featuring:
     * - [x] Game Options
   * - [ ] Game pause menu
  
-Visual progress:?
-![alt text](/build/menuAdded.JPG "Main Game")
-Main Menu?
-![alt text](/build/mainMenuv1.JPG "Main Menu")
-Settings Menu:?
-![alt text](/build/mainSettingsv1.JPG "Settings Menu")
+Visual progress:
+
+![alt text](/preview/menuAdded.JPG "Main Game")
+
+Main Menu
+
+![alt text](/preview/mainMenuv1.JPG "Main Menu")
+
+Settings Menu:
+
+![alt text](/preview/mainSettingsv1.JPG "Settings Menu")
+
 Debug Mode (Press 'D')
-![alt text](/build/tools11build.JPG "DEBUG mode")
+
+![alt text](/preview/npc1.JPG "DEBUG mode")
 
 <h2>Credits</h2>
 *   Kevin Macleod - All music inc.
