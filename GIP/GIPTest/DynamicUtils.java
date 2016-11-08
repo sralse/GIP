@@ -17,6 +17,7 @@ import java.io.InputStreamReader;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.StringTokenizer;
 
 import javax.imageio.ImageIO;
 
@@ -96,6 +97,7 @@ public class DynamicUtils extends Settings {
 			msgTimer2 = System.currentTimeMillis();
 			if(msgTimer2 - msgTimer1 > msgTime) {
 				messaged = false;
+				msgEntity.setInteraction(false);
 				return;
 			} else {
 				message(msgEntity, msgMSG);
@@ -119,6 +121,7 @@ public class DynamicUtils extends Settings {
 					messaged = true;
 					select = false;
 					msgEntity = ENTITIES.get(i);
+					msgEntity.setInteraction(true);
 					msgTimer1 = System.currentTimeMillis();
 					msgMSG = getMessage();
 					message(msgEntity, msgMSG);
@@ -127,15 +130,34 @@ public class DynamicUtils extends Settings {
 		}		
 	}
 	
-	private void message(Entity entity, String s) {
+	private void message(Entity entity, String s) {		 
+		StringTokenizer tok = new StringTokenizer(s, " ");
+	    StringBuilder output = new StringBuilder(s.length());
+	    int lineLen = 0;
+	    while (tok.hasMoreTokens()) {
+	        String word = tok.nextToken() + " ";
+
+	        if (lineLen + word.length() > msgBoxImgSpace * 2) {
+	            output.append("::");
+	            lineLen = 0;
+	        }
+	        output.append(word);
+	        lineLen += word.length();
+	    }
+	    String[] msgTempString = (output.toString()).split("::");
+		
 		// Info box
 		g.drawImage(msgBox, msgBoxX, msgBoxY, null);
 		entity.getImage();
 		g.drawImage(entity.getImage(), msgBoxX  + msgBoxImgSpace, msgBoxY + msgBoxImgSpace, null);
-		Font tempF = font_retro2D2.deriveFont(18.0f);
-		GlyphVector gv = tempF.createGlyphVector(frc, s);
-		g.setColor(Color.black);
-		g.drawGlyphVector(gv, msgBoxX + msgBoxImgSpace * 3, msgBoxY + msgBoxImgSpace * 2);
+		Font tempF = font_retro2D2.deriveFont(16.0f);
+		
+		for(int i = 0; i < msgTempString.length; i++){
+			s = msgTempString[i];
+			GlyphVector gv = tempF.createGlyphVector(frc, s);
+			g.setColor(Color.black);
+			g.drawGlyphVector(gv, msgBoxX + msgBoxImgSpace * 3, msgBoxY + msgBoxImgSpace * 2 + (msgBoxImgSpace / 2) * i + screenCorrection);
+		}
 	}
 	
 	private String getMessage() {

@@ -34,6 +34,7 @@ public abstract class Entity extends Settings {
 	protected Image IMAGE;
 	/** The rectangle or collision box of this entity */
 	protected Rectangle entityRectangle = new Rectangle();
+	protected boolean interact;
 	// NPC data
 	private static String entDataDir = lvlDir + entDir;
 	private static List<String> entNPC = new ArrayList<String>();
@@ -211,6 +212,10 @@ public abstract class Entity extends Settings {
 		return aY;
 	}
 	
+	public void setInteraction(boolean b) {
+		interact = b;
+	}	
+	
 	public static void init() {
 		// init entity msg
 		messages = dynamics.readFileArray(msgNPCFilePath);
@@ -232,5 +237,5 @@ public abstract class Entity extends Settings {
 				ENTITIES.add(npc);
 			}
 		}	
-	}	
+	}
 }
