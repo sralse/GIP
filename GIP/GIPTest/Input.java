@@ -1,4 +1,4 @@
-package GIPTest;
+package GIP.GIPTest;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;

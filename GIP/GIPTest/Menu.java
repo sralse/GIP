@@ -1,4 +1,4 @@
-package GIPTest;
+package GIP.GIPTest;
 
 import java.awt.Color;
 import java.awt.Graphics2D;

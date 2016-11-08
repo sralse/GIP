@@ -1,9 +1,8 @@
-package GIPTest;
+package GIP.GIPTest;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Image;
-import java.util.List;
 import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -11,6 +10,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 public class MapUtils extends Settings {
 	// ArrayLists containing our tile data
@@ -106,7 +106,7 @@ public class MapUtils extends Settings {
 		// Create local buffer
 		Graphics2D gBuffer = (Graphics2D) image.getGraphics();
 		// This part converts all the tiles we have to 1 list of tiles tileData
-		String[] strTileData = dynamics.readFile(mapDir + mapName + mapID + mapDirTiles + lvlExt).split(MapObjects.splitSymbol);
+		String[] strTileData = dynamics.readFileString(mapDir + mapName + mapID + mapDirTiles + lvlExt).split(MapObjects.splitSymbol);
 		
 		for(int i = 0; i < strTileData.length; i++){
 			String s = strTileData[i];

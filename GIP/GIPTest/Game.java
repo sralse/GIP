@@ -1,12 +1,12 @@
-package GIPTest;
+package GIP.GIPTest;
 
 import java.awt.Canvas;
 import java.awt.Dimension;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+
 import javax.swing.JFrame;
 import javax.swing.JPanel;
-import GIPTest.Input;
 
 /**
  * The main hook of our game. This class with both act as a manager
@@ -34,6 +34,7 @@ import GIPTest.Input;
  * +Player sprint
  * +Game Scaling
  * +Clean up main class
+ * +Sync uID and ENTITIES
  */
 @SuppressWarnings("serial")
 public class Game extends Canvas {

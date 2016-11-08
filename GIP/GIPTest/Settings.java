@@ -1,4 +1,4 @@
-package GIPTest;
+package GIP.GIPTest;
 
 import java.awt.*;
 import java.awt.font.FontRenderContext;
@@ -147,6 +147,19 @@ class Settings {
 	public static final String tx_animal = animalImgDir + "animal_";
 	public final static String[] playerDirections = {"U", "R", "L", "D", "0"};
 	
+	// Message box settings
+	public static boolean messaged = false;
+	public static Entity msgEntity;
+	public static long msgTimer1;
+	public static long msgTimer2;
+	public static int msgTime = 5000;
+	public static String msgMSG;
+	public static String msgNPCFilePath = "/level/entity/npc_msg.txt";
+	public static final int msgBoxX = 825;
+	public static final int msgBoxY = 600;
+	public static final int msgBoxImgSpace = 20;
+	public static List<String> messages = new ArrayList<String>();
+	
 	// Global music settings
 	public static Audio audioPlayer = null;
 	public static double SETTING_VOLUME = 5;
@@ -199,9 +212,9 @@ class Settings {
 		HERO_FEMALE(1),
 		KNIGHT_MALE(2),
 		KNIGHT_FEMALE(3),
-		QUEST_MASTER(4),
-		VILLAGER_FEMALE(5),
-		VILLAGER_MALE(6),
+		VILLAGER_FEMALE(4),
+		VILLAGER_MALE(5),
+		QUEST_MASTER(6),
 		PROFESSOR(7),
 		PIRATE(8);
 		public int value;
@@ -210,15 +223,15 @@ class Settings {
 		}
 	}
 	public static enum ENTITY_MONSTER {
-		IMP_SMALL(0), 
-		RAT_BIG(1);
+		IMP_SMALL(9), 
+		RAT_BIG(10);
 		public int value;
 		private ENTITY_MONSTER(int value) {
 			this.value = value;
 		}
 	}
 	public static enum ENTITY_ANIMAL {
-		CROW(0);
+		CROW(11);
 		public int value;
 		private ENTITY_ANIMAL(int value) {
 			this.value = value;

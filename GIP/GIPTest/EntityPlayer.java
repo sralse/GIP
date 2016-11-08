@@ -1,4 +1,4 @@
-package GIPTest;
+package GIP.GIPTest;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
@@ -23,7 +23,7 @@ public class EntityPlayer extends Entity {
 		this.y = y * 16;
 		this.HEALTH = HEALTH;
 		this.NAME = NAME;
-		this.ID = 0;
+		this.ID = uID.newID(this.NAME);
 		if(IMAGE == null) {
 			this.IMAGE = dynamics.loadImage(tx_npc + 0 + face + mode + imgExt);
 		} else {

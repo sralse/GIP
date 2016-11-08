@@ -1,4 +1,4 @@
-package GIPTest;
+package GIP.GIPTest;
 
 import java.awt.Image;
 import java.awt.Rectangle;
@@ -13,6 +13,11 @@ public abstract class Entity extends Settings {
 	protected double y;
 	/** The uID of the entity */
 	protected int ID;
+	protected int TYPE;
+	// Anchor
+	protected double aX;
+	protected double aY;
+	protected boolean anchor;
 	/** The current speed of this entity horizontally (pixels/sec) */
 	protected double dx;
 	/** The current speed of this entity vertically (pixels/sec) */
@@ -170,13 +175,52 @@ public abstract class Entity extends Settings {
 		this.mode = mode;
 	}
 
+	
+	/**
+	 * Will move the Entity based on it's current anchor.
+	 * Entities will stay in range of 5 of their anchor.
+	 * */
+	public void moveAnchor(int x, int y) {
+		int d = (int) Math.round(Math.random() * 10);
+		switch(d) {
+		case 0:
+			this.setHorizontalMovement(100);
+			break;
+		case 1:
+			this.setHorizontalMovement(-100);
+			break;
+		case 2:
+			this.setVerticalMovement(100);
+			break;
+		case 3:
+			this.setVerticalMovement(-100);
+			break;
+		default:
+			this.setHorizontalMovement(0);
+			this.setVerticalMovement(0);
+			break;
+		}
+		this.move((long) (Math.random() * 10));
+	}
+	
+	public double getAnchorX() {
+		return aX;
+	}
+	
+	public double getAnchorY() {
+		return aY;
+	}
+	
 	public static void init() {
-		player = new EntityPlayer(10, 1, 100, "name", null);
+		// init entity msg
+		messages = dynamics.readFileArray(msgNPCFilePath);
+		// init entities
+		player = new EntityPlayer(10, 1, 100, "PLAYER", null);
 		initNPC();
 	}
 
 	private static void initNPC() {
-		entNPC = Arrays.asList(dynamics.readFile("/" + entDataDir + mapName + "npc_" + mapID + lvlExt).split(splitSymbol));
+		entNPC = Arrays.asList(dynamics.readFileString("/" + entDataDir + mapName + "npc_" + mapID + lvlExt).split(splitSymbol));
 		if(entNPC.size() >= entNPCSize) {
 			for(int i = 0; i < (entNPC.size() / entNPCSize); i++) {
 				Entity npc = new EntityNPC(
@@ -186,9 +230,7 @@ public abstract class Entity extends Settings {
 						entNPC.get(i+3), 
 						ENTITY_NPC.valueOf(entNPC.get(i+4)).value);
 				ENTITIES.add(npc);
-				System.out.println(ENTITIES.size());
 			}
 		}	
-	}
-	
+	}	
 }

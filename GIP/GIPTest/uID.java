@@ -1,4 +1,4 @@
-package GIPTest;
+package GIP.GIPTest;
 
 public class uID extends Settings{
 	

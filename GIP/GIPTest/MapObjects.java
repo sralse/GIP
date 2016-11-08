@@ -1,4 +1,4 @@
-package GIPTest;
+package GIP.GIPTest;
 
 import java.awt.Image;
 import java.util.ArrayList;
@@ -36,7 +36,7 @@ public class MapObjects extends Settings {
 		// Read the file and its contents where the objects are
 		// Transform our map into objectsList
 		String mapCurrent = mapDir + mapName + mapID  + mapDirObjects  + lvlExt ;
-		objectsList = dynamics.readFile(mapCurrent).split(splitSymbol);
+		objectsList = dynamics.readFileString(mapCurrent).split(splitSymbol);
 		//  TODO Get the array of non walkables, extend the current mapBounds
 		extendBounds();
 		// TODO Get the lists of objects that need to be drawn on this map.

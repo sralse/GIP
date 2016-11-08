@@ -1,22 +1,23 @@
-package GIPTest;
+package GIP.GIPTest;
 
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics2D;
-import java.awt.GraphicsConfiguration;
-import java.awt.GraphicsEnvironment;
 import java.awt.Image;
+import java.awt.Rectangle;
 import java.awt.RenderingHints;
-import java.awt.Transparency;
 import java.awt.font.GlyphVector;
 import java.awt.geom.AffineTransform;
 import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferedImage;
-import java.net.URL;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.imageio.ImageIO;
 
 
@@ -25,7 +26,6 @@ import javax.imageio.ImageIO;
  * 
  * TODO Layer rendering from left-right, top-down
  * */
-@SuppressWarnings("unused")
 public class DynamicUtils extends Settings {	
 //	private Image directionImage = loadImage(tx_player + playerType + playerFacing + imgExt);
 	private Image[] playerImages = {null, null, null, null, null};
@@ -37,7 +37,7 @@ public class DynamicUtils extends Settings {
 	private int frameInLastSecond = 0;
 	
 	// UI Images
-	private Image infoBox = scaleImageDetailed(loadImage(uiImageDir + box1_brown), 450, 150);
+	private Image msgBox = scaleImageDetailed(loadImage(uiImageDir + box1_brown), 450, 150);
 	private Image healthBlock = scaleImageCubic(loadImage(uiImageDir + health_Block), -3);
 	private Image healthBlockL = scaleImageCubic(loadImage(uiImageDir + health_BlockL), -3);
 	private Image healthBlockR = scaleImageCubic(loadImage(uiImageDir + health_BlockR), -3);
@@ -76,14 +76,14 @@ public class DynamicUtils extends Settings {
 		if(DEBUG){moveSpeed = 200;} else {moveSpeed = 100;}
 		player.movementCheck(delta);
 		
-		// First we ask to remove any unneeded entities
-		removeEntities();
-		
 		// Now we ask to draw any object/house/tree/player/entity
 		updateGraphics(g);
 		
 		// Update GUI
 		updateGUI(g);
+		
+		// Update info box and entities
+		updateEntities();
 		
 		// Flip graphics buffer
 		g.dispose();
@@ -91,9 +91,55 @@ public class DynamicUtils extends Settings {
 		
 	}
 
-	private void removeEntities() {
-		// TODO Auto-generated method stub
+	private void updateEntities() {		
+		if(messaged) {
+			msgTimer2 = System.currentTimeMillis();
+			if(msgTimer2 - msgTimer1 > msgTime) {
+				messaged = false;
+				return;
+			} else {
+				message(msgEntity, msgMSG);
+			}
+		}
 		
+		for(int i = 0; i < ENTITIES.size(); i++) {
+			ENTITIES.get(i).doLogic();
+			if(select && !messaged) {
+				int ecc = ENTITIES.get(i).getImage().getWidth(null);
+				int pcc = player.getImage().getWidth(null);
+				double eX1 = ENTITIES.get(i).getX();
+				double eY1 = ENTITIES.get(i).getY();
+				double pX1 = player.getX();
+				double pY1 = player.getY();
+				Rectangle  entityRectangle = new Rectangle();
+				entityRectangle.setBounds((int)eX1,(int)eY1,ecc,ecc);
+				Rectangle playerRectangle = new Rectangle();
+				playerRectangle.setBounds((int)pX1,(int)pY1,pcc,pcc);
+				if(entityRectangle.intersects(playerRectangle)) {
+					messaged = true;
+					select = false;
+					msgEntity = ENTITIES.get(i);
+					msgTimer1 = System.currentTimeMillis();
+					msgMSG = getMessage();
+					message(msgEntity, msgMSG);
+				}
+			}
+		}		
+	}
+	
+	private void message(Entity entity, String s) {
+		// Info box
+		g.drawImage(msgBox, msgBoxX, msgBoxY, null);
+		entity.getImage();
+		g.drawImage(entity.getImage(), msgBoxX  + msgBoxImgSpace, msgBoxY + msgBoxImgSpace, null);
+		Font tempF = font_retro2D2.deriveFont(18.0f);
+		GlyphVector gv = tempF.createGlyphVector(frc, s);
+		g.setColor(Color.black);
+		g.drawGlyphVector(gv, msgBoxX + msgBoxImgSpace * 3, msgBoxY + msgBoxImgSpace * 2);
+	}
+	
+	private String getMessage() {
+		return messages.get((int) ((messages.size() - 1) / (Math.round(Math.random() * 10) + 1)));
 	}
 
 	private void updateGraphics(Graphics2D g) {
@@ -168,8 +214,6 @@ public class DynamicUtils extends Settings {
 		g.drawGlyphVector(gv, 
 				(float) (player.getX() + 16 - gv.getLogicalBounds().getCenterX()), 
 				(float) (player.getY() - screenCorrection));
-		// Info box
-		g.drawImage(infoBox, 825, 600, null);
 		// Health text
 		s = menuLang[16];
 		gv = localFont.createGlyphVector(frc, s);
@@ -226,7 +270,7 @@ public class DynamicUtils extends Settings {
 	
 	}
 	
-	public String readFile(String filePath) {
+	public String readFileString(String filePath) {
 		// Init reader
 		BufferedReader read;
 		// Init Strings used by the read loop
@@ -250,6 +294,34 @@ public class DynamicUtils extends Settings {
 		}
 
 		return strOut;
+	}
+	
+	// TODO Make it happen
+	public List<String> readFileArray(String filePath) {
+		List<String> tmp = new ArrayList<String>();
+		// Init reader
+		BufferedReader read;
+		// Init Strings used by the read loop
+		String str1;
+		// Init url, and read mapCurrent path to URL
+		InputStream in = MapUtils.class.getClass().getResourceAsStream(filePath);
+
+		if (in == null) {System.out.println("Can't find ref: " + filePath);}
+		// Try reading our file
+		try {
+			read = new BufferedReader(new InputStreamReader(in));
+			while ((str1 = read.readLine()) != null) {
+				tmp.add(str1);
+			}
+			// Close reader and notify us of our completed action.
+			read.close();
+			if (DEBUG) {System.out.println("Done loading file: " + filePath);}
+		} catch (IOException e) {
+			e.printStackTrace();
+			return null;
+		}
+
+		return tmp;
 	}
 	
 	/**

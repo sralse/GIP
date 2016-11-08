@@ -1,8 +1,6 @@
-package GIPTest;
+package GIP.GIPTest;
 
 class EntityNPC extends Entity{
-	
-	protected int TYPE;
 	
 	/**
 	 * Create a new entity to represent the players ship
@@ -15,10 +13,14 @@ class EntityNPC extends Entity{
 	public EntityNPC(int x, int y, int HEALTH, String NAME, int TYPE) {
 		this.x = x * 16;
 		this.y = y * 16;
+		this.aX = this.x;
+		this.aY = this.y;
 		this.HEALTH = HEALTH;
 		this.NAME = NAME;
 		this.TYPE = TYPE;
+		if(this.TYPE < ENTITY_NPC.VILLAGER_MALE.value) this.anchor = true;
 		this.ID = uID.newID(this.NAME);
 		this.IMAGE = dynamics.loadImage(tx_npc + TYPE + face + mode + imgExt);
 	}
+	
 }
