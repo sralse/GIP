@@ -61,7 +61,8 @@ public class Game extends Canvas {
 		// Tell AWT not to bother repainting our canvas since we're
 		// going to do that our self in accelerated mode
 		setIgnoreRepaint(true);
-		// finally make the window visible 
+		// finally make the window visible
+		frame.setIconImage(Settings.dynamics.loadImage(Settings.ICON));
 		frame.pack();
 		frame.setResizable(false);
 		frame.setVisible(true);

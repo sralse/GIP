@@ -33,6 +33,7 @@ class Settings {
 	public static final int screenCorrection = 4;
 	public static final int screenOffset = 150;
 	public static final String TITLE = "Neamless Aura - DEMO";
+	public static final String ICON = "NA.png";
 	public static BufferStrategy graphicsBuffer;
 	public static FontRenderContext frc = null;
 	
@@ -154,7 +155,7 @@ class Settings {
 	public static long msgTimer2;
 	public static int msgTime = 5000;
 	public static String msgMSG;
-	public static String msgNPCFilePath = "/level/entity/npc_msg.txt";
+	public static String msgNPCFilePath = "/level/locals/" + SETTING_LANGUAGE + "/npc_msg.txt";
 	public static final int msgBoxX = 825;
 	public static final int msgBoxY = 600;
 	public static final int msgBoxImgSpace = 20;

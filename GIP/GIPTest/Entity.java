@@ -218,6 +218,7 @@ public abstract class Entity extends Settings {
 	
 	public static void init() {
 		// init entity msg
+		msgNPCFilePath = "/level/locals/" + SETTING_LANGUAGE + "/npc_msg.txt";
 		messages = dynamics.readFileArray(msgNPCFilePath);
 		// init entities
 		player = new EntityPlayer(10, 1, 100, "PLAYER", null);
@@ -229,11 +230,11 @@ public abstract class Entity extends Settings {
 		if(entNPC.size() >= entNPCSize) {
 			for(int i = 0; i < (entNPC.size() / entNPCSize); i++) {
 				Entity npc = new EntityNPC(
-						Integer.parseInt(entNPC.get(i)), 
-						Integer.parseInt(entNPC.get(i+1)), 
-						Integer.parseInt(entNPC.get(i+2)), 
-						entNPC.get(i+3), 
-						ENTITY_NPC.valueOf(entNPC.get(i+4)).value);
+						Integer.parseInt(entNPC.get(i * entNPCSize)), 
+						Integer.parseInt(entNPC.get(i * entNPCSize + 1)), 
+						Integer.parseInt(entNPC.get(i * entNPCSize + 2)), 
+						entNPC.get(i * entNPCSize + 3),
+						ENTITY_NPC.valueOf(entNPC.get(i * entNPCSize + 4)).value);
 				ENTITIES.add(npc);
 			}
 		}	

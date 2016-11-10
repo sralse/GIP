@@ -50,6 +50,8 @@ public class DynamicUtils extends Settings {
 	public void init() {
 		// TODO UI Images
 		localFont = getFont(FONTS.RETRO_2D1.value);
+		msgNPCFilePath = "/level/locals/" + SETTING_LANGUAGE + "/npc_msg.txt";
+		messages = dynamics.readFileArray(msgNPCFilePath);
 		// Player image
 		Entity.init();
 		player.setImage(loadImage(tx_player + playerType + player.getFace() + player.getMode() + imgExt));
@@ -185,7 +187,7 @@ public class DynamicUtils extends Settings {
 		// If a certaint image does not exist we draw the default image "DOWN"
 		if(player.getImage() == null) {
 			player.setImage(defaultPlayerImage);
-			player.setFace("D");;
+			player.setFace("D");
 		}
 		// Set the new player image
 		playerFacingOld = player.getFace();

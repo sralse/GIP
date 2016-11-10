@@ -18,7 +18,8 @@ class EntityNPC extends Entity{
 		this.HEALTH = HEALTH;
 		this.NAME = NAME;
 		this.TYPE = TYPE;
-		if(this.TYPE < ENTITY_NPC.VILLAGER_MALE.value) this.anchor = true;
+		System.out.println(TYPE);
+		if(this.TYPE < ENTITY_NPC.VILLAGER_MALE.value) {this.anchor = true;}
 		this.ID = uID.newID(this.NAME);
 		this.IMAGE = dynamics.loadImage(tx_npc + TYPE + face + mode + imgExt);
 	}
