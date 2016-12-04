@@ -13,7 +13,7 @@ class Settings {
 	public static Game game = new Game();
 	public static EntityPlayer player;
 	public static StringWriter errors = new StringWriter();
-	public static DynamicUtils dynamics = new DynamicUtils();
+	public static UtilsGraphics dynamics = new UtilsGraphics();
 	public static Graphics2D g;
 	
 	// Global Game options

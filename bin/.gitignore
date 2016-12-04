@@ -46,7 +46,18 @@ Network Trash Folder
 Temporary Items
 .apdisk
 /.gradle/
-/GIP/
-/NA.ico
+/.classpath
+/.gitattributes
+/.gitignore
+/.project
+/.settings/
+/README.md
+/preview/
 /NA.png
+/entity/
+/fonts/
+/gui/
+/items/
 /level/
+/music/
+/GIP/

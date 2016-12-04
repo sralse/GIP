@@ -21,13 +21,12 @@ import java.util.StringTokenizer;
 
 import javax.imageio.ImageIO;
 
-
 /**
  * DynamicUtils provides Layer rendering.
  * 
  * TODO Layer rendering from left-right, top-down
  * */
-public class DynamicUtils extends Settings {	
+public class UtilsGraphics extends Settings {	
 //	private Image directionImage = loadImage(tx_player + playerType + playerFacing + imgExt);
 	private Image[] playerImages = {null, null, null, null, null};
 	private String playerFacingOld = "";
@@ -92,6 +91,8 @@ public class DynamicUtils extends Settings {
 		g.dispose();
 		graphicsBuffer.show();
 		
+		// Poll gamepad
+		new JInput();
 	}
 
 	private void updateEntities() {		
@@ -197,10 +198,10 @@ public class DynamicUtils extends Settings {
 		for(int i = 0; i <= screenHeight; i++){
 			// Cycle throug all of our objects asking to redraw themselves by X.
 			// TODO Fix image heights
-			for(int j = 0; j < MapObjects.sum(); j++) {
-				if(i == MapObjects.objectY.get(j)) {
-					if(MapObjects.objectImage != null) {
-						g.drawImage(MapObjects.objectImage.get(j), MapObjects.objectX.get(j), i, null);
+			for(int j = 0; j < UtilsObject.sum(); j++) {
+				if(i == UtilsObject.objectY.get(j)) {
+					if(UtilsObject.objectImage != null) {
+						g.drawImage(UtilsObject.objectImage.get(j), UtilsObject.objectX.get(j), i, null);
 					} else {
 						System.out.println("No objects initialised");
 					}
@@ -254,7 +255,7 @@ public class DynamicUtils extends Settings {
 						screenWidth - i * healthBlockR.getWidth(null) - screenCorrection * 3, 
 						screenCorrection * 10 + screenCorrection / 2, null);
 			}
-			if(player.getHealth() == 100) {
+			if(player.getHealth() >= 100) {
 				g.drawImage(healthBlockL, 
 						barHolderX + screenCorrection + screenCorrection / 2, 
 						screenCorrection * 10 + screenCorrection / 2, null);
@@ -283,12 +284,12 @@ public class DynamicUtils extends Settings {
 			g.setColor(Color.red);
 			g.drawRect(player.getX(), player.getY(), player.getImage().getWidth(null),  player.getImage().getHeight(null));
 			// Object ESP
-			for(int i = 0; i < MapObjects.objectImage.size(); i++) {
+			for(int i = 0; i < UtilsObject.objectImage.size(); i++) {
 			g.setColor(Color.red);
-			g.drawRect(	MapObjects.objectX.get(i), 
-						MapObjects.objectY.get(i), 
-						MapObjects.objectImage.get(i).getWidth(null), 
-						MapObjects.objectImage.get(i).getHeight(null));
+			g.drawRect(	UtilsObject.objectX.get(i), 
+						UtilsObject.objectY.get(i), 
+						UtilsObject.objectImage.get(i).getWidth(null), 
+						UtilsObject.objectImage.get(i).getHeight(null));
 			}
 		}
 	
@@ -300,7 +301,7 @@ public class DynamicUtils extends Settings {
 		// Init Strings used by the read loop
 		String str1, strOut = "";
 		// Init url, and read mapCurrent path to URL
-		InputStream in = MapUtils.class.getClass().getResourceAsStream(filePath);
+		InputStream in = UtilsMap.class.getClass().getResourceAsStream(filePath);
 
 		if (in == null) {System.out.println("Can't find ref: " + filePath);}
 		// Try reading our file
@@ -328,7 +329,7 @@ public class DynamicUtils extends Settings {
 		// Init Strings used by the read loop
 		String str1;
 		// Init url, and read mapCurrent path to URL
-		InputStream in = MapUtils.class.getClass().getResourceAsStream(filePath);
+		InputStream in = UtilsMap.class.getClass().getResourceAsStream(filePath);
 
 		if (in == null) {System.out.println("Can't find ref: " + filePath);}
 		// Try reading our file
@@ -460,7 +461,7 @@ public class DynamicUtils extends Settings {
 	 * */
 	public Font getFont(String s) {
 		// Make a new exFont instance called font
-		InputStream istream = Menu.class.getClass().getResourceAsStream(fontDir + s);
+		InputStream istream = GameMenu.class.getClass().getResourceAsStream(fontDir + s);
 		Font newFont;
 		try {
 			newFont = Font.createFont(Font.TRUETYPE_FONT, istream);

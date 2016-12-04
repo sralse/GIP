@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class MapUtils extends Settings {
+public class UtilsMap extends Settings {
 	// ArrayLists containing our tile data
 	private static List<String> tileData = new ArrayList<String>();
 	private static List<Image> tileImage = new ArrayList<Image>();
@@ -38,7 +38,7 @@ public class MapUtils extends Settings {
 		// Get the array of map boundries.
 		mapBounds = getMapBounds();		
 		// Initialize all our objects
-		MapObjects.init();
+		UtilsObject.init();
 
 	}
 	
@@ -46,7 +46,7 @@ public class MapUtils extends Settings {
 		// Transform our mapID to a complete mapname
 		mapCurrent = mapDir + mapName + mapID  + lvlExt ;
 		// Init reader
-		InputStream in = MapUtils.class.getClass().getResourceAsStream(mapCurrent);
+		InputStream in = UtilsMap.class.getClass().getResourceAsStream(mapCurrent);
 		// Init Strings used by the read loop
 		String str1, strOut = "";
 		mapLines = 0;
@@ -106,7 +106,7 @@ public class MapUtils extends Settings {
 		// Create local buffer
 		Graphics2D gBuffer = (Graphics2D) image.getGraphics();
 		// This part converts all the tiles we have to 1 list of tiles tileData
-		String[] strTileData = dynamics.readFileString(mapDir + mapName + mapID + mapDirTiles + lvlExt).split(MapObjects.splitSymbol);
+		String[] strTileData = dynamics.readFileString(mapDir + mapName + mapID + mapDirTiles + lvlExt).split(UtilsObject.splitSymbol);
 		
 		for(int i = 0; i < strTileData.length; i++){
 			String s = strTileData[i];

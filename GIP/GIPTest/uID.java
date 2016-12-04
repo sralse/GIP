@@ -37,6 +37,13 @@ public class uID extends Settings{
 		uNameList.set(uNameList.indexOf(i), s);
 		return;
 	}
+
+	public static void init() {
+		if(uIDList != null) {
+			uIDList.clear();
+			uNameList.clear();
+		}
+	}
 	
 	
 

@@ -8,6 +8,8 @@ import java.awt.event.WindowEvent;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
+import GIP.GIPTest.Settings.audioLine;
+
 /**
  * The main hook of our game. This class with both act as a manager
  * for the display and central mediator for the game logic. 
@@ -26,7 +28,7 @@ import javax.swing.JPanel;
  * @author Lars Carr�
  * 
  * TODO:
- * +Controller support
+ * +Controller Thread
  * +Player GUI
  * +Entity WalkUpdate() Thread/function
  * +Game Objects
@@ -93,7 +95,8 @@ public class Game extends Canvas {
 
 	
 	public void initGame() {
-		MapUtils.init();
+		UtilsMap.init();
+		uID.init();
 		Settings.dynamics.init();
 		Settings.leftPressed = false;
 		Settings.rightPressed = false;
@@ -102,6 +105,8 @@ public class Game extends Canvas {
 		Settings.DEBUG = false;
 		Settings.INFO = false;
 		Settings.gameRunning = true;
+		Settings.dynamics.musicStop(audioLine.AUDIOLINE_MAIN);
+		gameLoop();
 		//firePressed = false;	
 	}
 	

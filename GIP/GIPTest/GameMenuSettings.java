@@ -7,7 +7,7 @@ import java.awt.Image;
 import java.awt.font.GlyphVector;
 import java.util.Arrays;
 
-class MenuSettings extends Settings {
+class GameMenuSettings extends Settings {
 	// Other
 	private static boolean gameLoop = true;
 	private static int sliderHeigth = 4;

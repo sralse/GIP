@@ -3,7 +3,7 @@ package GIP.GIPTest;
 import java.awt.Image;
 import java.util.ArrayList;
 
-public class MapObjects extends Settings {
+public class UtilsObject extends Settings {
 
 	public static ArrayList<Integer> objectX = new ArrayList<Integer>();
 	public static ArrayList<Integer> objectY = new ArrayList<Integer>();

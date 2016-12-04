@@ -8,7 +8,7 @@ import java.io.PrintWriter;
 
 import javax.swing.JOptionPane;
 
-public class Menu extends Settings {
+public class GameMenu extends Settings {
 	/** Private number defining the current selection */
 	private static int choice = 0;
 	// Private time
@@ -96,10 +96,10 @@ public class Menu extends Settings {
 				dynamics.musicPlay(audioEffect.AUDIO_EFFECT_BUTTON_CLICK.value, audioLine.AUDIOLINE_4);
 				switch(choice) {
 				case 0:
-					startGame();
+					game.initGame();
 					break;
 				case 1:
-					MenuSettings.start();
+					GameMenuSettings.start();
 					break;
 				case 2:
 					System.exit(0);
@@ -158,13 +158,5 @@ public class Menu extends Settings {
 		}
 
 		DEBUG = false;
-	}
-
-	public static void startGame() {
-		gameRunning = true;
-		dynamics.musicStop(audioLine.AUDIOLINE_MAIN);
-		game.initGame();
-		game.gameLoop();
-
 	}
 }
