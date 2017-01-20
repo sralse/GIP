@@ -5,13 +5,13 @@ import net.java.games.input.Controller;
 import net.java.games.input.ControllerEnvironment;
 import net.java.games.input.Event;
 import net.java.games.input.EventQueue;
+import net.java.games.input.Version;
 
 public class JInput {
 	public JInput() {
 		while (true) {
 			/* Get the available controllers */
-			Controller[] controllers = ControllerEnvironment
-					.getDefaultEnvironment().getControllers();
+			Controller[] controllers = ControllerEnvironment.getDefaultEnvironment().getControllers();
 			if (controllers.length == 0) {
 				System.out.println("Found no controllers.");
 				System.exit(0);
@@ -24,7 +24,9 @@ public class JInput {
 				/* Get the controllers event queue */
 				EventQueue queue = controllers[i].getEventQueue();
 
-				/* Create an event object for the underlying plugin to populate */
+				/*
+				 * Create an event object for the underlying plugin to populate
+				 */
 				Event event = new Event();
 
 				/* For each object in the queue */
@@ -40,8 +42,7 @@ public class JInput {
 					 * across controllers this way. We can not use it to tell
 					 * exactly *when* an event happened just the order.
 					 */
-					StringBuffer buffer = new StringBuffer(controllers[i]
-							.getName());
+					StringBuffer buffer = new StringBuffer(controllers[i].getName());
 					buffer.append(" at ");
 					buffer.append(event.getNanos()).append(", ");
 					Component comp = event.getComponent();
@@ -77,4 +78,13 @@ public class JInput {
 			}
 		}
 	}
+
+	// public static void main(String[] args) {
+	// System.out.println("JInput version: " + Version.getVersion());
+	// ControllerEnvironment ce = ControllerEnvironment.getDefaultEnvironment();
+	// Controller[] cs = ce.getControllers();
+	// for (int i = 0; i < cs.length; i++)
+	// System.out.println(i + ". " + cs[i].getName() + ", " + cs[i].getType() );
+	// }
+
 }

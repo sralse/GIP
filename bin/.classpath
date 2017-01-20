@@ -3,14 +3,11 @@
 	<classpathentry excluding="src/" kind="src" path=""/>
 	<classpathentry kind="src" path="src">
 		<attributes>
+			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="GIP/src/lib"/>
 			<attribute name="ignore_optional_problems" value="true"/>
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8"/>
-	<classpathentry kind="lib" path="C:/Users/Lars/Downloads/jinput-master/archive - jinput/archive/dist/jinput.jar" sourcepath="C:/Users/Lars/Downloads/jinput-master/archive - jinput/archive/coreAPI/apidocs/resources">
-		<attributes>
-			<attribute name="javadoc_location" value="file:/C:/Users/Lars/Downloads/jinput-master/archive%20-%20jinput/archive/coreAPI/apidocs/"/>
-		</attributes>
-	</classpathentry>
+	<classpathentry kind="lib" path="src/lib/jinput.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

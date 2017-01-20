@@ -2,7 +2,6 @@ package GIP.GIPTest;
 
 import java.io.BufferedInputStream;
 import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.io.InputStream;
 
 import javax.sound.sampled.AudioFormat;
@@ -25,11 +24,13 @@ public class Audio implements Runnable {
 
 	/**
 	 * Play a given audio file.
-	 * @param audioFilePath Path of the audio file.
+	 * 
+	 * @param audioFilePath
+	 *            Path of the audio file.
 	 */
 	private void player() {
 		InputStream in = Audio.class.getClass().getResourceAsStream(Settings.audioDir + file);
-		try {			
+		try {
 			AudioInputStream audioStream = AudioSystem.getAudioInputStream(new BufferedInputStream(in));
 
 			AudioFormat format = audioStream.getFormat();
@@ -39,40 +40,50 @@ public class Audio implements Runnable {
 			SourceDataLine audioLine = (SourceDataLine) AudioSystem.getLine(info);
 
 			audioLine.open(format);
-						
+
 			FloatControl volume = (FloatControl) audioLine.getControl(FloatControl.Type.MASTER_GAIN);
-			
-			if(Settings.DEBUG) {System.out.println("Audio started.");}
+
+			if (Settings.DEBUG) {
+				System.out.println("Audio started.");
+			}
 
 			audioLine.start();
-			
+
 			byte[] bytesBuffer = new byte[BUFFER_SIZE];
 			int bytesRead = -1;
 
 			while ((bytesRead = audioStream.read(bytesBuffer)) != -1) {
-				volume.setValue((float) Math.min(volume.getMaximum(), Math.max(volume.getMinimum(), Settings.SETTING_VOLUME_db)));
+				volume.setValue((float) Math.min(volume.getMaximum(),
+						Math.max(volume.getMinimum(), Settings.SETTING_VOLUME_db)));
 				audioLine.write(bytesBuffer, 0, bytesRead);
-			} 
+			}
 
 			audioLine.drain();
 			audioLine.close();
 			audioStream.close();
 
-			if(Settings.DEBUG) {System.out.println("Audio completed.");}
+			if (Settings.DEBUG) {
+				System.out.println("Audio completed.");
+			}
 
 		} catch (UnsupportedAudioFileException ex) {
 			System.err.println("The specified audio file is not supported.");
 			ex.printStackTrace();
+			Settings.hasAudio = false;
 		} catch (LineUnavailableException ex) {
 			System.err.println("Audio line for playing back is unavailable.");
 			ex.printStackTrace();
-		}catch (FileNotFoundException ex){
+			Settings.hasAudio = false;
+		} catch (FileNotFoundException ex) {
 			System.err.println("Audio file : " + file + " not found.");
 			ex.printStackTrace();
-		} catch (IOException ex) {
+			Settings.hasAudio = false;
+		} catch (Exception ex) {
 			System.err.println("Error playing the audio file.");
 			ex.printStackTrace();
+			Settings.hasAudio = false;
 		}
+		
 	}
 
 	public void run() {
