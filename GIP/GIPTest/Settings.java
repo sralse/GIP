@@ -7,6 +7,7 @@ import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Random;
 
 class Settings {
 	// Global instances
@@ -14,14 +15,15 @@ class Settings {
 	public static EntityPlayer player;
 	public static Game game = new Game();
 	public static StringWriter errors = new StringWriter();
-	public static UtilsID uID;
-	public static UtilsGUI uGUI;
+	public static UtilsID uID = new UtilsID();
 	public static UtilsFiles uFiles = new UtilsFiles();
 	public static UtilsAudio uAudio = new UtilsAudio();
 	public static UtilsImages uImages = new UtilsImages();
 	public static UtilsEntity uEntity = new UtilsEntity();
 	public static UtilsObjects uObjects = new UtilsObjects();
 	public static UtilsGraphics uGraph = new UtilsGraphics();
+	public static UtilsGUI uGUI = new UtilsGUI();
+	public static Random randGen = new Random();
 
 	// Global Game options
 	public static boolean DEBUG = true;
@@ -33,8 +35,8 @@ class Settings {
 	public static boolean waitingForKeyPress = false;
 	public static int SETTING_BUFFERS = 2;
 	public static int pressCount;
-	public static int moveSpeedTiles = 6;
-	public static int moveSpeed = moveSpeedTiles * 16;
+	public static int moveSpeedTiles = 4;
+	public static int playerSpeed = moveSpeedTiles * 16;
 	public static int gameLoopTime;
 	public static final int screenWidth = 1280;
 	public static final int screenHeight = 720;

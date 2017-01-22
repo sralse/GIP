@@ -26,9 +26,11 @@ import GIP.GIPTest.Settings.audioLine;
  * 
  * @author Lars Carr�
  * 
- *         TODO: +Controller Thread +Player GUI +Entity WalkUpdate()
- *         Thread/function +Game Objects +Game Entity +Player sprint +Game
- *         Scaling +Clean up main class +Sync uID and ENTITIES
+ *         TODO: 
+ *         +Controller Thread 
+ *         +Player GUI 
+ *         +Game Objects 
+ *         +Player sprint 
  */
 @SuppressWarnings("serial")
 public class Game extends Canvas {
@@ -89,6 +91,7 @@ public class Game extends Canvas {
 		UtilsMap.init();
 		UtilsID.init();
 		Settings.uGraph.init();
+		Settings.uEntity.init();
 		Input.init();
 		Settings.DEBUG = false;
 		Settings.INFO = false;

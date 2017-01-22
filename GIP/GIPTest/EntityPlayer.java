@@ -9,17 +9,19 @@ import java.awt.Graphics2D;
  * @author Kevin Glass
  */
 public class EntityPlayer extends Entity {
-
+	
 	public EntityPlayer(int x, int y, int HEALTH, String NAME, String IMAGE) {
+		this.TYPE = 0;
 		this.x = x * 16;
 		this.y = y * 16;
 		this.HEALTH = HEALTH;
 		this.NAME = NAME;
-		this.ID = uID.newID(this);
+		this.ID = uID.newID();
+		System.out.println("TYPE: " + TYPE + " Name of TYPE: PLAYER" + " SUBTYPE: " + SUBTYPE + " Display name: " + NAME);
 		if (IMAGE == null) {
-			this.IMAGE = uFiles.loadImage(tx_npc + 0 + face + mode + imgExt);
+			this.IMAGE = uFiles.loadImage(tx_player + 0 + face + mode + imgExt);
 		} else {
-			this.IMAGE = uFiles.loadImage(tx_npc + IMAGE + face + mode + imgExt);
+			this.IMAGE = uFiles.loadImage(tx_player + IMAGE + face + mode + imgExt);
 		}
 	}
 
@@ -28,40 +30,49 @@ public class EntityPlayer extends Entity {
 		setVerticalMovement(0);
 
 		// Check movement
+		walking = false;
 		if ((leftPressed) && (!rightPressed)) {
-			setHorizontalMovement(-moveSpeed);
-			player.setFace("L");
+			setHorizontalMovement(-playerSpeed);
+			face = "L";
+			walking = true;
 		} else if ((rightPressed) && (!leftPressed)) {
-			setHorizontalMovement(moveSpeed);
-			player.setFace("R");
+			setHorizontalMovement(playerSpeed);
+			face = "R";
+			walking = true;
 		}
 		if ((upPressed) && (!downPressed)) {
-			setVerticalMovement(-moveSpeed);
-			player.setFace("U");
+			setVerticalMovement(-playerSpeed);
+			face = "U";
+			walking = true;
 		} else if ((downPressed) && (!upPressed)) {
-			setVerticalMovement(moveSpeed);
-			player.setFace("D");
+			setVerticalMovement(playerSpeed);
+			face = "D";
+			walking = true;
 		}
 
 		// if we're moving left and have reached the left hand side
 		// of the screen, don't move
 		if ((dx < 0) && (x <= 1)) {
-			dx = 0;
+			setHorizontalMovement(0);
+			walking = false;
 		}
 		// if we're moving right and have reached the right hand side
 		// of the screen, don't move
 		if ((dx > 0) && (x >= screenWidth - 32)) {
-			dx = 0;
+			setHorizontalMovement(0);
+			walking = false;
 		}
 		// if we're moving up and have reached the up hand side
 		// of the screen, don't move
 		if ((dy < 0) && (y <= 16)) {
-			dy = 0;
+			setVerticalMovement(0);
+			walking = false;
 		}
 		// if we're moving down and have reached the down hand side
 		// of the screen, don't move
 		if ((dy > 0) && (y >= screenHeight - 34 - screenCorrection)) {
-			dy = 0;
+			setVerticalMovement(0);
+			walking = false;
 		}
 
 		// Detect where we can or cannot walk
@@ -80,25 +91,29 @@ public class EntityPlayer extends Entity {
 							// TOP
 							if (dy > 0) {
 								if (entityRectangle.intersects(x1 + screenCorrection, y1, 16 - screenCorrection, 1)) {
-									dy = 0;
+									setVerticalMovement(0);
+									walking = false;
 								}
 							}
 							// BOTTOM
 							if (dy < 0) {
 								if (entityRectangle.intersects(x1 + screenCorrection, y2, 16 - screenCorrection, 1)) {
-									dy = 0;
+									setVerticalMovement(0);
+									walking = false;
 								}
 							}
 							// LEFT
 							if (dx > 0) {
 								if (entityRectangle.intersects(x1, y1 + screenCorrection, 1, 16 - screenCorrection)) {
-									dx = 0;
+									setHorizontalMovement(0);
+									walking = false;
 								}
 							}
 							// RIGHT
 							if (dx < 0) {
 								if (entityRectangle.intersects(x2, y1 + screenCorrection, 1, 16 - screenCorrection)) {
-									dx = 0;
+									setHorizontalMovement(0);
+									walking = false;
 								}
 							}
 						}

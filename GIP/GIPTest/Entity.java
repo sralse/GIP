@@ -7,11 +7,14 @@ public abstract class Entity extends Settings {
 	/** The uID of the entity */
 	protected int ID;
 	protected int TYPE;
+	protected int SUBTYPE;
 	// Anchor
 	protected double x;
 	protected double y;
-	protected double aX;
-	protected double aY;
+	protected int aX;
+	protected int aY;
+	protected int nX;
+	protected int nY;
 	protected boolean anchor;
 	protected double dx;
 	protected double dy;
@@ -19,23 +22,136 @@ public abstract class Entity extends Settings {
 	protected String NAME;
 	protected Image IMAGE;
 	protected Rectangle entityRectangle = new Rectangle();
-	
 	/** Animation status */
 	protected int mode = 0;
+	protected int oldMode = mode;
+	protected int walkCounter;
+	protected boolean walking = false;
 	/** Allows us to interact with the Entity */
-	protected boolean interact;
+	protected boolean interact = false;
 	/** The way the player is facing default is D (Down/Left/Up/Right) */
 	protected String face = "D";
+	protected String oldFace = face;
+
+	protected static int radius = 100;
+	protected static int defaultEntitySpeed = (playerSpeed * 3) / 4;
 
 	/**
 	 * 3 Request that this entity move itself based on a certain ammount of time passing.
 	 * @param delta The ammount of time that has passed in milliseconds
 	 */
+
+	public void movementCheck(long delta, int speed) {
+		int adx = (int) (x - nX);
+		int ady = (int) (y - nY);
+		int absDX = (int) Math.abs(adx);
+		int absDY = (int) Math.abs(ady);
+		setHorizontalMovement(0);
+		setVerticalMovement(0);
+		walking = false;
+
+		if(!(adx == 0 && ady == 0) && !(interact)) {
+			walking = true;
+			if(absDX > absDY) {
+				if(adx > 0) {
+					setHorizontalMovement(-speed);
+				} else if (adx < 0) {
+					setHorizontalMovement(speed);
+				} else {
+					setHorizontalMovement(0);
+				}
+			} else {
+				if(ady > 0) {
+					setVerticalMovement(-speed);
+				} else if (ady < 0) {
+					setVerticalMovement(speed);
+				} else {
+					setVerticalMovement(0);
+				}
+			}
+		} else {
+			walking = false;
+		}
+
+		// if we're moving left and have reached the left hand side
+		// of the screen, don't move
+		if ((dx < 0) && (x <= 1)) {
+			setHorizontalMovement(0);
+			walking = false;
+		}
+		// if we're moving right and have reached the right hand side
+		// of the screen, don't move
+		if ((dx > 0) && (x >= screenWidth - 32)) {
+			setHorizontalMovement(0);
+			walking = false;
+		}
+		// if we're moving up and have reached the up hand side
+		// of the screen, don't move
+		if ((dy < 0) && (y <= 16)) {
+			setVerticalMovement(0);
+			walking = false;
+		}
+		// if we're moving down and have reached the down hand side
+		// of the screen, don't move
+		if ((dy > 0) && (y >= screenHeight - 34 - screenCorrection)) {
+			setVerticalMovement(0);
+			walking = false;
+		}
+
+		// Detect if the entity can be there
+		if (mapBounds != null) {
+			for (int i = 0; i < mapLines; i++) {
+				for (int j = 0; j < mapColumns; j++) {
+					int k = (mapColumns * i) + j;
+					if (mapBounds.get(k).equals("1")) {
+						int x1 = j * 16;
+						int x2 = j * 16 + 16;
+						int y1 = i * 16;
+						int y2 = i * 16 + 16;
+						entityRectangle.setBounds((int) x, (int) y, 32, 32);
+						// TOP
+						if (dy > 0) {
+							if (entityRectangle.intersects(x1 + screenCorrection, y1, 16 - screenCorrection, 1)) {
+								setVerticalMovement(0);
+								walking = false;
+							}
+						}
+						// BOTTOM
+						if (dy < 0) {
+							if (entityRectangle.intersects(x1 + screenCorrection, y2, 16 - screenCorrection, 1)) {
+								setVerticalMovement(0);
+								walking = false;
+							}
+						}
+						// LEFT
+						if (dx > 0) {
+							if (entityRectangle.intersects(x1, y1 + screenCorrection, 1, 16 - screenCorrection)) {
+								setHorizontalMovement(0);
+								walking = false;
+							}
+						}
+						// RIGHT
+						if (dx < 0) {
+							if (entityRectangle.intersects(x2, y1 + screenCorrection, 1, 16 - screenCorrection)) {
+								setHorizontalMovement(0);
+								walking = false;
+							}
+						}
+					}
+				}
+			}
+		} else {
+			System.out.println("No map bounds set.");
+		}
+
+		move(delta);
+	}
+
 	public void move(long delta) {
 		// public void move(long delta) {
 		// update the location of the entity based on move speeds
-		x += (dx * delta) / 1008;
-		y += (dy * delta) / 1008;
+		x += (dx * delta) / 1000;
+		y += (dy * delta) / 1000;
 	}
 
 	/**
@@ -70,18 +186,10 @@ public abstract class Entity extends Settings {
 		return dy;
 	}
 
-	/**
-	 * Get the x location of this entity
-	 * @return The x location of this entity
-	 */
 	public int getX() {
 		return (int) x;
 	}
 
-	/**
-	 * Get the y location of this entity
-	 * @return The y location of this entity
-	 */
 	public int getY() {
 		return (int) y;
 	}
@@ -119,11 +227,8 @@ public abstract class Entity extends Settings {
 		return NAME;
 	}
 
-	/**
-	 * Do the logic associated with this entity. This method will be called
-	 * periodically based on game events
-	 */
-	public void doLogic() {
+	public int getID() {
+		return ID;
 	}
 
 	public void setImage(Image loadImage) {
@@ -132,22 +237,6 @@ public abstract class Entity extends Settings {
 
 	public Image getImage() {
 		return IMAGE;
-	}
-
-	public String getFace() {
-		return face;
-	}
-
-	public int getMode() {
-		return mode;
-	}
-
-	public void setFace(String f) {
-		face = f;
-	}
-
-	public void setMode(int m) {
-		mode = m;
 	}
 
 	/**
@@ -187,5 +276,28 @@ public abstract class Entity extends Settings {
 
 	public void setInteraction(boolean b) {
 		interact = b;
+	}
+
+	public void animationWalk(String path) {
+		// Walk animation
+		walkCounter += gameLoopTime;
+
+		if(walkCounter > 300 && walking == true) {
+			mode += 1;
+			if(mode > 2) {mode = 1;}
+			walkCounter = 0;
+		} else if (walking == false) {
+			mode = 0;
+		}
+
+		if(face != oldFace || mode != oldMode) {
+			IMAGE = uFiles.loadImage(path + SUBTYPE + face + mode + imgExt);
+			oldFace = face;
+			oldMode = mode;
+		}
+
+		if(IMAGE == null) {
+			IMAGE =  uFiles.loadImage(path + SUBTYPE + "D" + 0 + imgExt);
+		}
 	}
 }

@@ -3,21 +3,20 @@ package GIP.GIPTest;
 public class UtilsID extends Settings {
 
 	// TODO Desc
-	public int newID(Entity ent) {
+	public int newID() {
 		if (uIDList == null) {
 			uIDList.add(0);
-			ENTITIES.add(ent);
 			return 0;
 		}
 
 		int i = uIDList.size();
 		uIDList.add(i);
-		System.out.println("New entity: " + ent + " ID: " + i);
+		System.out.println("New entity: " + " ID: " + i);
 		return i;
 	}
 	
-	public Entity getEntity(int id) {
-		return ENTITIES.get(id);
+	public int getEntity(Entity ent) {
+		return ENTITIES.indexOf(ent);
 	}
 
 	public static void init() {

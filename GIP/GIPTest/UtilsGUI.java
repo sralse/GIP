@@ -22,19 +22,10 @@ public class UtilsGUI extends Settings{
 
 	// User space info
 	private int barHolderX = screenWidth - healthHolder.getWidth(null) - screenCorrection * 2 + screenCorrection / 2;
-	
-	private String s;
-	private GlyphVector gv;
-	
-	public void entityMessage(int id, String msg) {
 
-		// Message box
-		g.drawImage(msgBox, msgBoxX, msgBoxY, null);
-		g.drawImage(uID.getEntity(id).getImage(), msgBoxX + msgBoxImgSpace, msgBoxY + msgBoxImgSpace, null);
-		Font tempF = font_retro2D2.deriveFont(16.0f);
-
-		StringTokenizer tok = new StringTokenizer(s, " ");
-		StringBuilder output = new StringBuilder(s.length());
+	public void entityMessage(Entity ent, String msg) {
+		StringTokenizer tok = new StringTokenizer(msg, " ");
+		StringBuilder output = new StringBuilder(msg.length());
 		int lineLen = 0;
 		while (tok.hasMoreTokens()) {
 			String word = tok.nextToken() + " ";
@@ -47,10 +38,15 @@ public class UtilsGUI extends Settings{
 			lineLen += word.length();
 		}
 		String[] msgTempString = (output.toString()).split("::");
-		
+
+		// Message box
+		g.drawImage(msgBox, msgBoxX, msgBoxY, null);
+		g.drawImage(ent.getImage(), msgBoxX + msgBoxImgSpace, msgBoxY + msgBoxImgSpace, null);
+		Font tempF = font_retro2D2.deriveFont(16.0f);
 		for (int i = 0; i < msgTempString.length; i++) {
-			String s = msgTempString[i];
-			gv = tempF.createGlyphVector(frc, s);
+			msg = msgTempString[i];
+			GlyphVector gv = tempF.createGlyphVector(frc, msg);
+			gv = tempF.createGlyphVector(frc, msg);
 			g.setColor(Color.black);
 			g.drawGlyphVector(gv, msgBoxX + msgBoxImgSpace * 3,
 					msgBoxY + msgBoxImgSpace * 2 + (msgBoxImgSpace / 2) * i + screenCorrection);
@@ -58,19 +54,39 @@ public class UtilsGUI extends Settings{
 	}
 
 	public void update(Graphics2D g) {
+		// Player name
+		String s = player.getName();
+		Font tempF = font_retro2D2.deriveFont(16.0f);
+		GlyphVector gv = tempF.createGlyphVector(frc, s);
+		g.setColor(Color.black);
+		g.drawGlyphVector(gv, 
+				(float) (player.getX() + 16 - gv.getLogicalBounds().getCenterX()), 
+				(float) (player.getY() - screenCorrection));
+		
+		// Health text
+		s = menuLang[16];
+		gv = localFont.createGlyphVector(frc, s);
+		g.drawGlyphVector(
+				gv, 
+				(float) (screenWidth - gv.getLogicalBounds().getWidth() - screenCorrection * 3), 
+				screenCorrection * 7);
+		
 		// Healthbar holder
 		g.drawImage(healthHolder, barHolderX, (int) (gv.getLogicalBounds().getHeight() + screenCorrection * 4), null);
-		// Health blocks TODO Rework so 1 size fits all (auto center of blocks
-		// etc...)
-		for (int i = 1; i < ((player.getHealth() + 9) / 10); i++) {
-			if (player.getHealth() > 30) {
-				g.drawImage(healthBlockR, screenWidth - healthBlockR.getWidth(null) - screenCorrection * 3,
+		
+		// Health blocks TODO Rework so 1 size fits all (auto center of blocks etc...)
+		for(int i = 1; i < ((player.getHealth() + 9 )/ 10); i++) {
+			if(player.getHealth() > 30) {
+				g.drawImage(healthBlockR, 
+						screenWidth - healthBlockR.getWidth(null) - screenCorrection * 3, 
 						screenCorrection * 10 + screenCorrection / 2, null);
-				g.drawImage(healthBlock, screenWidth - i * healthBlockR.getWidth(null) - screenCorrection * 3,
+				g.drawImage(healthBlock,  
+						screenWidth - i * healthBlockR.getWidth(null) - screenCorrection * 3, 
 						screenCorrection * 10 + screenCorrection / 2, null);
 			}
-			if (player.getHealth() >= 100) {
-				g.drawImage(healthBlockL, barHolderX + screenCorrection + screenCorrection / 2,
+			if(player.getHealth() >= 100) {
+				g.drawImage(healthBlockL, 
+						barHolderX + screenCorrection + screenCorrection / 2, 
 						screenCorrection * 10 + screenCorrection / 2, null);
 			}
 		}
@@ -89,7 +105,7 @@ public class UtilsGUI extends Settings{
 			g.drawString("FPS: " + frameInLastSecond, 10, screenHeight - 60);
 			g.drawString("XPos : " + player.getX(), 10, screenHeight - 45);
 			g.drawString("YPos : " + player.getY(), 10, screenHeight - 30);
-			g.drawString("Facing : " + player.getFace(), 10, screenHeight - 15);
+			g.drawString("Facing : " + player.face, 10, screenHeight - 15);
 			// Column 2
 			g.drawString("Direction X : " + player.getHorizontalMovement(), 100, screenHeight - 30);
 			g.drawString("Direction Y : " + player.getVerticalMovement(), 100, screenHeight - 15);
@@ -104,11 +120,5 @@ public class UtilsGUI extends Settings{
 						uObjects.objectImage.get(i).getWidth(null), uObjects.objectImage.get(i).getHeight(null));
 			}
 		}
-
-		// Health text
-		s = menuLang[16];
-		gv = localFont.createGlyphVector(frc, s);
-		g.drawGlyphVector(gv, (float) (screenWidth - gv.getLogicalBounds().getWidth() - screenCorrection * 3),
-				screenCorrection * 7);
 	}
 }

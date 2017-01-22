@@ -12,16 +12,26 @@ public class UtilsEntity extends Settings {
 		msgVillagerPath = "/level/locals/" + SETTING_LANGUAGE + "/villager_msg.txt";
 		messages = uFiles.readFileArray(msgVillagerPath);
 		// init entities
-		player = new EntityPlayer(10, 1, 100, "PLAYER", null);
+		initPlayer();
 		initVillagers();
+	}
+	
+	public void initPlayer() {
+		player = new EntityPlayer(10, 1, 100, "PLAYER", null);
+		
+		player.animationWalk(tx_player);
+		if (DEBUG) {
+			System.out.println("Player graphics initialised");
+		}
 	}
 
 	public void initVillagers() {
-		
+		// Load Villager's messages
+		msgVillagerPath = "/level/locals/" + SETTING_LANGUAGE + "/villager_msg.txt";
+		messages = uFiles.readFileArray(msgVillagerPath);
+		// Load all Villagers from mapData
 		List<String> entNPC = new ArrayList<String>();
-		
-		entNPC = Arrays
-				.asList(uFiles.readFileString("/" + lvlDir + entDir + mapName + "villager_" + mapID + lvlExt).split(splitSymbol));
+		entNPC = Arrays.asList(uFiles.readFileString("/" + lvlDir + entDir + mapName + "villager_" + mapID + lvlExt).split(splitSymbol));
 		for (int i = 0; i < (entNPC.size() / entDataBlockSize); i++) {
 			Entity npc = new EntityVillager(Integer.parseInt(entNPC.get(i * entDataBlockSize)),
 					Integer.parseInt(entNPC.get(i * entDataBlockSize + 1)),
@@ -32,7 +42,10 @@ public class UtilsEntity extends Settings {
 	}
 	
 	
-	public void update() {
+	public void update(long delta) {
+		
+		updatePlayer(delta);
+		
 		if (messaged) {
 			msgTimer2 = System.currentTimeMillis();
 			if (msgTimer2 - msgTimer1 > msgTime) {
@@ -40,12 +53,19 @@ public class UtilsEntity extends Settings {
 				msgEntity.setInteraction(false);
 				return;
 			} else {
-				message(msgEntity, msgMSG);
+				uGUI.entityMessage(msgEntity, msgMSG);
 			}
 		}
 
 		for (int i = 0; i < ENTITIES.size(); i++) {
-			ENTITIES.get(i).doLogic();
+			// Call submethods doLogic (if any)
+			switch(ENTITIES.get(i).TYPE) {
+			case 1:
+				updateVillagers(i);
+			case 2:
+				updateOther(i);
+			}
+			
 			if (select && !messaged) {
 				int ecc = ENTITIES.get(i).getImage().getWidth(null);
 				int pcc = player.getImage().getWidth(null);
@@ -64,18 +84,41 @@ public class UtilsEntity extends Settings {
 					msgEntity.setInteraction(true);
 					msgTimer1 = System.currentTimeMillis();
 					msgMSG = getMessage();
-					message(msgEntity, msgMSG);
+					uGUI.entityMessage(msgEntity, msgMSG);
 				}
 			}
 		}
 	}
 
-	public void message(Entity entity, String s) {
-		
-
+	public String getMessage() {
+		return messages.get(randGen.nextInt(messages.size()));
 	}
 
-	public String getMessage() {
-		return messages.get((int) ((messages.size() - 1) / (Math.round(Math.random() * 10) + 1)));
+	private void updatePlayer(long delta) {
+
+		player.animationWalk(tx_player);
+		if (DEBUG) player.face = "0";
+		player.movementCheck(delta);
+		
+//		if (!player.face.equals(playerFacingOld) || player.mode != player.oldMode) {
+//			for (int i = 0; i < playerDirections.length; i++) {
+//				if (playerDirections[i].equals(player.face)) {
+//					player.setImage(playerImages[i]);
+//				}
+//			}
+//		}
+//		// If a certaint image does not exist we draw the default image "DOWN"
+//		
+//		// Set the new player image
+//		playerFacingOld = player.face;
+	}
+
+	private void updateVillagers(int i) {
+		((EntityVillager)ENTITIES.get(i)).doLogic();
+	}
+	
+
+	private void updateOther(int i) {
+		
 	}
 }

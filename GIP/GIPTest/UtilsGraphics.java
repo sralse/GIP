@@ -3,37 +3,19 @@ package GIP.GIPTest;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics2D;
-import java.awt.Image;
 import java.awt.RenderingHints;
 import java.awt.font.GlyphVector;
 import java.io.InputStream;
 
-/**
- * DynamicUtils provides Layer rendering.
- * 
- * TODO Layer rendering from left-right, top-down
- */
 public class UtilsGraphics extends Settings {
 	// private Image directionImage = loadImage(tx_player + playerType +
 	// playerFacing + imgExt);
-	private Image[] playerImages = { null, null, null, null, null };
-	private String playerFacingOld = "";
+
 
 	public void init() {
 		// TODO UI Images
 		localFont = getFont(FONTS.RETRO_2D1.value);
-		msgVillagerPath = "/level/locals/" + SETTING_LANGUAGE + "/villager_msg.txt";
-		messages = uFiles.readFileArray(msgVillagerPath);
-		// Player image
-		uEntity.init();
-		player.setImage(uFiles.loadImage(tx_player + playerType + player.getFace() + player.getMode() + imgExt));
-		// directionImage = defaultPlayerImage;
-		for (int i = 0; i < playerImages.length; i++) {
-			playerImages[i] = uFiles.loadImage(tx_player + playerType + playerDirections[i] + playerFace + imgExt);
-		}
-		if (DEBUG) {
-			System.out.println("Player graphics initialised");
-		}
+
 	}
 
 	public void getUpdate(Graphics2D g, int delta) {
@@ -48,17 +30,8 @@ public class UtilsGraphics extends Settings {
 		// g.setColor(Color.black);
 		g.fillRect(0, 0, screenWidth, screenHeight);
 		g.drawImage(mapImage, 0, 0, null);
-
-		// First we update the player movement
-		if (DEBUG) {
-			moveSpeed = 200;
-		} else {
-			moveSpeed = 100;
-		}
 		
-		uEntity.update();
-		
-		//player.movementCheck(delta);
+		uEntity.update(delta);
 
 		// Now we ask to draw any object/house/tree/player/entity
 		updateGraphics(g);
@@ -81,27 +54,6 @@ public class UtilsGraphics extends Settings {
 			g.setColor(Color.BLACK);
 			g.fillOval(player.getX() + 7, player.getY() + 30, 16, 6);
 		}
-		// Debug player
-		if (DEBUG) {
-			player.setFace("0");
-		} else if (player.getFace().equals("0")) {
-			player.setFace("D");
-		}
-
-		if (!player.getFace().equals(playerFacingOld)) {
-			for (int i = 0; i < playerDirections.length; i++) {
-				if (playerDirections[i].equals(player.getFace())) {
-					player.setImage(playerImages[i]);
-				}
-			}
-		}
-		// If a certaint image does not exist we draw the default image "DOWN"
-		if (player.getImage() == null) {
-			player.setImage(defaultPlayerImage);
-			player.setFace("D");
-		}
-		// Set the new player image
-		playerFacingOld = player.getFace();
 
 		// TODO dynamic drawing
 		for (int i = 0; i <= screenHeight; i++) {
@@ -134,6 +86,7 @@ public class UtilsGraphics extends Settings {
 						(float) (player.getY() - screenCorrection));
 			}
 
+			// Draw all entities
 			for (int j = 0; j < ENTITIES.size(); j++) {
 				if (ENTITIES.get(j).getY() == i) {
 					// Entity name
