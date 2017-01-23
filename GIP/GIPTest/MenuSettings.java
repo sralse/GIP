@@ -179,8 +179,8 @@ class MenuSettings extends Settings {
 		timeNew = System.currentTimeMillis();
 		if (timeNew - time > 20) {
 
-			if (select && choice == 5) {
-				select = false;
+			if (spacePressed && choice == 5) {
+				spacePressed = false;
 				uAudio.musicPlay(audioEffect.AUDIO_EFFECT_BUTTON_CLICK.value, audioLine.AUDIOLINE_4);
 				uGraph.updateSettings(true);
 				gameLoop = false;

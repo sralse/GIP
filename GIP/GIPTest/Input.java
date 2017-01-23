@@ -65,7 +65,7 @@ public class Input implements KeyListener {
 			}
 		}
 		if ((e.getKeyCode() == KeyEvent.VK_SPACE) || (e.getKeyCode() == KeyEvent.VK_ENTER)) {
-			Settings.select = true;
+			Settings.spacePressed = true;
 		}
 		if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
 			Settings.escape = true;
@@ -117,7 +117,7 @@ public class Input implements KeyListener {
 			// firePressed = false;
 		}
 		if ((e.getKeyCode() == KeyEvent.VK_SPACE) || (e.getKeyCode() == KeyEvent.VK_ENTER)) {
-			Settings.select = false;
+			Settings.spacePressed = false;
 		}
 		if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
 			Settings.escape = false;

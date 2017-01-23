@@ -22,25 +22,29 @@ public abstract class Entity extends Settings {
 	protected String NAME;
 	protected Image IMAGE;
 	protected Rectangle entityRectangle = new Rectangle();
-	/** Animation status */
+	// Animations modes of an entity
 	protected int mode = 0;
 	protected int oldMode = mode;
+	// Helps detecting when to animate
 	protected int walkCounter;
 	protected boolean walking = false;
-	/** Allows us to interact with the Entity */
+	// Helps detecting if we can interact with an entity
+	protected boolean canInteract;
 	protected boolean interact = false;
 	/** The way the player is facing default is D (Down/Left/Up/Right) */
 	protected String face = "D";
 	protected String oldFace = face;
-
+	// Entity speed and reach settings
 	protected static int radius = 100;
 	protected static int defaultEntitySpeed = (playerSpeed * 3) / 4;
+	/** Entity AttackRadius */
+	protected static int AR = 25;
 
 	/**
 	 * 3 Request that this entity move itself based on a certain ammount of time passing.
 	 * @param delta The ammount of time that has passed in milliseconds
+	 * @param speed The speed at wich the entity moves
 	 */
-
 	public void movementCheck(long delta, int speed) {
 		int adx = (int) (x - nX);
 		int ady = (int) (y - nY);
@@ -108,7 +112,6 @@ public abstract class Entity extends Settings {
 						int x2 = j * 16 + 16;
 						int y1 = i * 16;
 						int y2 = i * 16 + 16;
-						entityRectangle.setBounds((int) x, (int) y, 32, 32);
 						// TOP
 						if (dy > 0) {
 							if (entityRectangle.intersects(x1 + screenCorrection, y1, 16 - screenCorrection, 1)) {
@@ -152,6 +155,8 @@ public abstract class Entity extends Settings {
 		// update the location of the entity based on move speeds
 		x += (dx * delta) / 1000;
 		y += (dy * delta) / 1000;
+		
+		entityRectangle.setBounds((int) x, (int) y, IMAGE.getWidth(null), IMAGE.getHeight(null));
 	}
 
 	/**
@@ -278,11 +283,11 @@ public abstract class Entity extends Settings {
 		interact = b;
 	}
 
-	public void animationWalk(String path) {
+	public void animationWalk(String path, int interval) {
 		// Walk animation
 		walkCounter += gameLoopTime;
 
-		if(walkCounter > 300 && walking == true) {
+		if(walkCounter > interval && walking == true) {
 			mode += 1;
 			if(mode > 2) {mode = 1;}
 			walkCounter = 0;
@@ -299,5 +304,13 @@ public abstract class Entity extends Settings {
 		if(IMAGE == null) {
 			IMAGE =  uFiles.loadImage(path + SUBTYPE + "D" + 0 + imgExt);
 		}
+	}
+
+	public int getCenterX() {
+		return (int) (x + (IMAGE.getWidth(null) / 2));
+	}
+	
+	public int getCenterY() {
+		return (int) (y + (IMAGE.getHeight(null) / 2));
 	}
 }

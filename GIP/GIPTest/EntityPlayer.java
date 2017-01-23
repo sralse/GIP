@@ -4,9 +4,8 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 
 /**
- * The entity that represents the players ship
- * 
- * @author Kevin Glass
+ * The entity that represents the player
+ * @author Lars Carré
  */
 public class EntityPlayer extends Entity {
 	
@@ -16,13 +15,13 @@ public class EntityPlayer extends Entity {
 		this.y = y * 16;
 		this.HEALTH = HEALTH;
 		this.NAME = NAME;
-		this.ID = uID.newID();
 		System.out.println("TYPE: " + TYPE + " Name of TYPE: PLAYER" + " SUBTYPE: " + SUBTYPE + " Display name: " + NAME);
 		if (IMAGE == null) {
 			this.IMAGE = uFiles.loadImage(tx_player + 0 + face + mode + imgExt);
 		} else {
 			this.IMAGE = uFiles.loadImage(tx_player + IMAGE + face + mode + imgExt);
 		}
+		this.entityRectangle.setBounds((int) this.x, (int) this.y, this.IMAGE.getWidth(null), this.IMAGE.getHeight(null));
 	}
 
 	public void movementCheck(long delta) {
@@ -132,17 +131,4 @@ public class EntityPlayer extends Entity {
 		super.move(delta);
 	}
 
-	/**
-	 * Notification that the player's ship has collided with something
-	 * 
-	 * @param other
-	 *            The entity with which the ship has collided
-	 */
-	// public void collidedWith(other) {
-	// if its an alien, notify the game that the player
-	// is dead
-	// if (other instanceof AlienEntity) {
-	// game.notifyDeath();
-	// }
-	// }
 }

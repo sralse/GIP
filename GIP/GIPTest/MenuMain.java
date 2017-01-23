@@ -84,8 +84,8 @@ public class MenuMain extends Settings {
 		timeNew = System.currentTimeMillis();
 		if (timeNew - time > 20) {
 
-			if (select) {
-				select = false;
+			if (spacePressed) {
+				spacePressed = false;
 				uAudio.musicPlay(audioEffect.AUDIO_EFFECT_BUTTON_CLICK.value, audioLine.AUDIOLINE_4);
 				switch (choice) {
 				case 0:
@@ -102,7 +102,7 @@ public class MenuMain extends Settings {
 					break;
 				}
 				localFont = uGraph.getFont(FONTS.FUTURE_NORMAL.value);
-				select = false;
+				spacePressed = false;
 				choice = 0;
 			}
 

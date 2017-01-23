@@ -3,14 +3,19 @@ package GIP.GIPTest;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics2D;
+import java.awt.Image;
 import java.awt.RenderingHints;
 import java.awt.font.GlyphVector;
 import java.io.InputStream;
 
 public class UtilsGraphics extends Settings {
-	// private Image directionImage = loadImage(tx_player + playerType +
-	// playerFacing + imgExt);
 
+	private Image healthCircleM = uImages.scaleImageCubic(uFiles.loadImage(uiImageDir + health_CircleM), -3);
+	private Image healthCircleL = uImages.scaleImageCubic(uFiles.loadImage(uiImageDir + health_CircleL), -3);
+	private Image healthCircleR = uImages.scaleImageCubic(uFiles.loadImage(uiImageDir + health_CircleR), -3);
+	private Image healthCircleMR = uImages.scaleImageCubic(uFiles.loadImage(uiImageDir + health_CircleMR), -3);
+	private Image healthCircleLR = uImages.scaleImageCubic(uFiles.loadImage(uiImageDir + health_CircleLR), -3);
+	private Image healthCircleRR = uImages.scaleImageCubic(uFiles.loadImage(uiImageDir + health_CircleRR), -3);
 
 	public void init() {
 		// TODO UI Images
@@ -58,7 +63,6 @@ public class UtilsGraphics extends Settings {
 		// TODO dynamic drawing
 		for (int i = 0; i <= screenHeight; i++) {
 			// Cycle throug all of our objects asking to redraw themselves by X.
-			// TODO Fix image heights
 			for (int j = 0; j < uObjects.sum(); j++) {
 				if (i == (uObjects.objectY.get(j) + uObjects.objectImage.get(j).getHeight(null))) {
 					if (uObjects.objectImage != null) {
@@ -73,7 +77,6 @@ public class UtilsGraphics extends Settings {
 				}
 			}
 
-			// TODO Rework w Rectangle
 			// Draw the player
 			if (i == (player.getY() + player.getImage().getHeight(null))) {
 				g.drawImage(player.getImage(), player.getX(), player.getY(), null);
@@ -86,17 +89,32 @@ public class UtilsGraphics extends Settings {
 						(float) (player.getY() - screenCorrection));
 			}
 
+			// TODO Rework w Rectangle
 			// Draw all entities
-			for (int j = 0; j < ENTITIES.size(); j++) {
-				if (ENTITIES.get(j).getY() == i) {
+			for (int j = 1; j < ENTITIES.size(); j++) {
+				if (i == ENTITIES.get(j).getY() + ENTITIES.get(j).getImage().getHeight(null)) {
+					g.drawImage(ENTITIES.get(j).getImage(), ENTITIES.get(j).getX(), ENTITIES.get(j).getY(), null);
 					// Entity name
 					String s = ENTITIES.get(j).getName();
 					Font tempF = font_retro2D2.deriveFont(12.0f);
 					GlyphVector gv = tempF.createGlyphVector(frc, s);
 					g.setColor(Color.black);
-					g.drawGlyphVector(gv, (float) (ENTITIES.get(j).getX() + 16 - gv.getLogicalBounds().getCenterX()),
-							(float) (ENTITIES.get(j).getY() - screenCorrection));
-					g.drawImage(ENTITIES.get(j).getImage(), ENTITIES.get(j).getX(), ENTITIES.get(j).getY(), null);
+					g.drawGlyphVector(gv, (float) (ENTITIES.get(j).getCenterX() - gv.getLogicalBounds().getCenterX()),
+							(float) (ENTITIES.get(j).getY() - screenCorrection * 2));
+					// TODO Entity health
+					if(ENTITIES.get(j).getHealth() > 0) {
+						g.drawImage(healthCircleLR, 
+								ENTITIES.get(j).getX() - healthCircleLR.getWidth(null) * 3 + 1, 
+								ENTITIES.get(j).getY() - screenCorrection * 2 + 2, null);
+						g.drawImage(healthCircleRR,
+								ENTITIES.get(j).getX() + healthCircleLR.getWidth(null) * 7 + 1, 
+								ENTITIES.get(j).getY() - screenCorrection * 2 + 2, null);
+						for(int k = 1; k < 9; k++) {
+							g.drawImage(healthCircleMR, 
+									ENTITIES.get(j).getX() - healthCircleLR.getWidth(null) * 3 + healthCircleLR.getWidth(null) * k + 1, 
+									ENTITIES.get(j).getY() - screenCorrection * 2 + 2, null);
+						}
+					}
 				}
 			}
 		}

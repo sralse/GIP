@@ -18,6 +18,10 @@ public class UtilsGUI extends Settings{
 	private Image healthBlock = uImages.scaleImageCubic(uFiles.loadImage(uiImageDir + health_Block), -3);
 	private Image healthBlockL = uImages.scaleImageCubic(uFiles.loadImage(uiImageDir + health_BlockL), -3);
 	private Image healthBlockR = uImages.scaleImageCubic(uFiles.loadImage(uiImageDir + health_BlockR), -3);
+	private Image healthBlockMO = uImages.scaleImageCubic(uFiles.loadImage(uiImageDir + health_BlockMO), -3);
+	private Image healthBlockRO = uImages.scaleImageCubic(uFiles.loadImage(uiImageDir + health_BlockRO), -3);
+	private Image healthBlockMR = uImages.scaleImageCubic(uFiles.loadImage(uiImageDir + health_BlockMR), -3);
+	private Image healthBlockRR = uImages.scaleImageCubic(uFiles.loadImage(uiImageDir + health_BlockRR), -3);
 	private Image healthHolder = uImages.scaleImageDetailed(uFiles.loadImage(uiImageDir + health_Holder), 130, 25);
 
 	// User space info
@@ -76,7 +80,22 @@ public class UtilsGUI extends Settings{
 		
 		// Health blocks TODO Rework so 1 size fits all (auto center of blocks etc...)
 		for(int i = 1; i < ((player.getHealth() + 9 )/ 10); i++) {
-			if(player.getHealth() > 30) {
+			if(player.getHealth() <= 30) {
+				g.drawImage(healthBlockRR, 
+						screenWidth - healthBlockRR.getWidth(null) - screenCorrection * 3, 
+						screenCorrection * 10 + screenCorrection / 2, null);
+				g.drawImage(healthBlockMR,  
+						screenWidth - i * healthBlockMR.getWidth(null) - screenCorrection * 3, 
+						screenCorrection * 10 + screenCorrection / 2, null);
+			} else if(player.getHealth() > 30) {
+				g.drawImage(healthBlockRO, 
+						screenWidth - healthBlockRO.getWidth(null) - screenCorrection * 3, 
+						screenCorrection * 10 + screenCorrection / 2, null);
+				g.drawImage(healthBlockMO,  
+						screenWidth - i * healthBlockMO.getWidth(null) - screenCorrection * 3, 
+						screenCorrection * 10 + screenCorrection / 2, null);
+			} 
+			if(player.getHealth() >= 60) {
 				g.drawImage(healthBlockR, 
 						screenWidth - healthBlockR.getWidth(null) - screenCorrection * 3, 
 						screenCorrection * 10 + screenCorrection / 2, null);
@@ -110,14 +129,17 @@ public class UtilsGUI extends Settings{
 			g.drawString("Direction X : " + player.getHorizontalMovement(), 100, screenHeight - 30);
 			g.drawString("Direction Y : " + player.getVerticalMovement(), 100, screenHeight - 15);
 			// Player ESP
-			g.setColor(Color.red);
-			g.drawRect(player.getX(), player.getY(), player.getImage().getWidth(null),
-					player.getImage().getHeight(null));
+			g.setColor(Color.blue);
+			g.draw(player.entityRectangle);
 			// Object ESP
 			for (int i = 0; i < uObjects.objectImage.size(); i++) {
 				g.setColor(Color.red);
 				g.drawRect(uObjects.objectX.get(i), uObjects.objectY.get(i),
 						uObjects.objectImage.get(i).getWidth(null), uObjects.objectImage.get(i).getHeight(null));
+			}
+			for (int i = 0; i < ENTITIES.size(); i++) {
+				g.setColor(Color.green);
+				g.draw(ENTITIES.get(i).entityRectangle);
 			}
 		}
 	}

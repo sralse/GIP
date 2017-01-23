@@ -62,8 +62,20 @@ class Settings {
 	public static final String sliderD_blue = "sliderBlue_down.png";
 	public static final String sliderD_grey = "sliderGrey_down.png";
 	public static final String health_Block = "barGreen_horizontalMid2.png";
+	public static final String health_BlockMO = "barOrange_horizontalMid2.png";
+	public static final String health_BlockMR = "barRed_horizontalMid2.png";
 	public static final String health_BlockL = "barGreen_horizontalLeft2.png";
 	public static final String health_BlockR = "barGreen_horizontalRight2.png";
+	public static final String health_BlockLO = "barOrange_horizontalLeft2.png";
+	public static final String health_BlockRO = "barOrange_horizontalRight2.png";
+	public static final String health_BlockLR = "barOrange_horizontalLeft2.png";
+	public static final String health_BlockRR = "barOrange_horizontalRight2.png";
+	public static final String health_CircleL = "barGreen_horizontalLeft.png";
+	public static final String health_CircleR = "barGreen_horizontalRight.png";
+	public static final String health_CircleM = "barGreen_horizontalMid.png";
+	public static final String health_CircleLR = "barRed_horizontalLeft.png";
+	public static final String health_CircleRR = "barRed_horizontalRight.png";
+	public static final String health_CircleMR = "barRed_horizontalMid.png";
 	public static final String health_Holder = "barHolder_00.png";
 	public static final String box1_brown = "boxBrown_01.png";
 	public static Image bg0 = uFiles.loadImage(uiImageDir + bg00);
@@ -111,7 +123,7 @@ class Settings {
 	public static boolean rightPressed = false;
 	public static boolean upPressed = false;
 	public static boolean downPressed = false;
-	public static boolean select = false;
+	public static boolean spacePressed = false;
 	public static boolean escape = false;
 
 	// Global map settings
@@ -136,6 +148,7 @@ class Settings {
 	public static Image mapImage;
 	public static Image defaultPlayerImage = null;
 	public static int entDataBlockSize = 5;
+	public static int aDefInt = 300;
 	public static final String mapDirObjects = "_objects";
 	public static final String mapDirTiles = "_tiles";
 	public static final String entDir = "entity/";
@@ -151,7 +164,7 @@ class Settings {
 	public static final String tx_monster = monsterImgDir + "monster_";
 	public static final String tx_animal = animalImgDir + "animal_";
 	public final static String[] playerDirections = { "U", "R", "L", "D", "0" };
-	public static List<String> logicRequired = new ArrayList<String>();
+	//public static List<String> logicRequired = new ArrayList<String>();
 
 	// Message box settings
 	public static boolean messaged = false;
@@ -210,16 +223,15 @@ class Settings {
 
 	// Global Entities lists
 	public static List<Entity> ENTITIES = new ArrayList<Entity>();
-	public static List<Integer> uIDList = new ArrayList<Integer>();
-	public static List<String> uTypes = Arrays
-			.asList(new String[] { "VILLAGER", "SMITH", "CLERCK", "FARMER", "QUEST MASTER", "PRIEST" });
+	//public static List<String> uTypes = Arrays
+	//		.asList(new String[] { "VILLAGER", "SMITH", "CLERCK", "FARMER", "QUEST MASTER", "PRIEST" });
 
-	public static enum ENTITY_NPC {
+	public static enum ENTITY_VILLAGER {
 		HERO_MALE(0), HERO_FEMALE(1), KNIGHT_MALE(2), KNIGHT_FEMALE(3), VILLAGER_FEMALE(4), VILLAGER_MALE(
 				5), QUEST_MASTER(6), PROFESSOR(7), PIRATE(8);
 		public int value;
 
-		private ENTITY_NPC(int value) {
+		private ENTITY_VILLAGER(int value) {
 			this.value = value;
 		}
 	}

@@ -1,11 +1,13 @@
 package GIP.GIPTest;
 
-import java.awt.Rectangle;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 public class UtilsEntity extends Settings {
+	
+	/** Time Since Last Attack */
+	private static int TSLA;
 	
 	public void init() {
 		// init entity msg
@@ -14,15 +16,18 @@ public class UtilsEntity extends Settings {
 		// init entities
 		initPlayer();
 		initVillagers();
+		initImps();
+		System.out.println(ENTITIES);
 	}
 	
 	public void initPlayer() {
 		player = new EntityPlayer(10, 1, 100, "PLAYER", null);
 		
-		player.animationWalk(tx_player);
+		player.animationWalk(tx_player, aDefInt);
 		if (DEBUG) {
 			System.out.println("Player graphics initialised");
 		}
+		((UtilsID) uID).addPlayer(player);
 	}
 
 	public void initVillagers() {
@@ -30,17 +35,31 @@ public class UtilsEntity extends Settings {
 		msgVillagerPath = "/level/locals/" + SETTING_LANGUAGE + "/villager_msg.txt";
 		messages = uFiles.readFileArray(msgVillagerPath);
 		// Load all Villagers from mapData
-		List<String> entNPC = new ArrayList<String>();
-		entNPC = Arrays.asList(uFiles.readFileString("/" + lvlDir + entDir + mapName + "villager_" + mapID + lvlExt).split(splitSymbol));
-		for (int i = 0; i < (entNPC.size() / entDataBlockSize); i++) {
-			Entity npc = new EntityVillager(Integer.parseInt(entNPC.get(i * entDataBlockSize)),
-					Integer.parseInt(entNPC.get(i * entDataBlockSize + 1)),
-					Integer.parseInt(entNPC.get(i * entDataBlockSize + 2)), entNPC.get(i * entDataBlockSize + 3),
-					ENTITY_NPC.valueOf(entNPC.get(i * entDataBlockSize + 4)).value);
-			ENTITIES.add(npc);
+		List<String> ent = new ArrayList<String>();
+		ent = Arrays.asList(uFiles.readFileString("/" + lvlDir + entDir + mapName + "villager_" + mapID + lvlExt).split(splitSymbol));
+		for (int i = 0; i < (ent.size() / entDataBlockSize); i++) {
+			Entity npc = new EntityVillager(
+					Integer.parseInt(ent.get(i * entDataBlockSize)),
+					Integer.parseInt(ent.get(i * entDataBlockSize + 1)),
+					Integer.parseInt(ent.get(i * entDataBlockSize + 2)), 
+					ent.get(i * entDataBlockSize + 3),
+					ENTITY_VILLAGER.valueOf(ent.get(i * entDataBlockSize + 4)).value);
+			uID.addEntity(npc);
 		}
 	}
 	
+	public void initImps() {
+		List<String> ent = new ArrayList<String>();
+		ent = Arrays.asList(uFiles.readFileString("/" + lvlDir + entDir + mapName + "monster_" + mapID + lvlExt).split(splitSymbol));
+		for (int i = 0; i < (ent.size() / entDataBlockSize); i++) {
+			Entity monster = new EntityImp(
+					Integer.parseInt(ent.get(i * entDataBlockSize)),
+					Integer.parseInt(ent.get(i * entDataBlockSize + 1)),
+					Integer.parseInt(ent.get(i * entDataBlockSize + 2)), 
+					ENTITY_MONSTER.valueOf(ent.get(i * entDataBlockSize + 3)).value);
+			uID.addEntity(monster);
+		}
+	}
 	
 	public void update(long delta) {
 		
@@ -57,34 +76,28 @@ public class UtilsEntity extends Settings {
 			}
 		}
 
+		// Update Logic
 		for (int i = 0; i < ENTITIES.size(); i++) {
-			// Call submethods doLogic (if any)
-			switch(ENTITIES.get(i).TYPE) {
-			case 1:
-				updateVillagers(i);
-			case 2:
-				updateOther(i);
+			int type = ENTITIES.get(i).TYPE;
+			if(type == 1) {
+				updateVillager(i);
+			} else if (type == 2) {
+				updateImps(i);
 			}
-			
-			if (select && !messaged) {
-				int ecc = ENTITIES.get(i).getImage().getWidth(null);
-				int pcc = player.getImage().getWidth(null);
-				double eX1 = ENTITIES.get(i).getX();
-				double eY1 = ENTITIES.get(i).getY();
-				double pX1 = player.getX();
-				double pY1 = player.getY();
-				Rectangle entityRectangle = new Rectangle();
-				entityRectangle.setBounds((int) eX1, (int) eY1, ecc, ecc);
-				Rectangle playerRectangle = new Rectangle();
-				playerRectangle.setBounds((int) pX1, (int) pY1, pcc, pcc);
-				if (entityRectangle.intersects(playerRectangle)) {
+		}
+
+		// Check for a message
+		for (int i = 1; i < ENTITIES.size(); i++) {
+			if (spacePressed && !messaged && TSLA > 500) {
+				msgEntity = ENTITIES.get(i);
+				if (ENTITIES.get(i).entityRectangle.intersects(player.entityRectangle) && msgEntity.canInteract) {
 					messaged = true;
-					select = false;
-					msgEntity = ENTITIES.get(i);
+					spacePressed = false;
 					msgEntity.setInteraction(true);
 					msgTimer1 = System.currentTimeMillis();
 					msgMSG = getMessage();
 					uGUI.entityMessage(msgEntity, msgMSG);
+					TSLA = 0;
 				}
 			}
 		}
@@ -95,30 +108,30 @@ public class UtilsEntity extends Settings {
 	}
 
 	private void updatePlayer(long delta) {
-
-		player.animationWalk(tx_player);
+		TSLA += delta;
+		player.animationWalk(tx_player, aDefInt);
 		if (DEBUG) player.face = "0";
 		player.movementCheck(delta);
 		
-//		if (!player.face.equals(playerFacingOld) || player.mode != player.oldMode) {
-//			for (int i = 0; i < playerDirections.length; i++) {
-//				if (playerDirections[i].equals(player.face)) {
-//					player.setImage(playerImages[i]);
-//				}
-//			}
-//		}
-//		// If a certaint image does not exist we draw the default image "DOWN"
-//		
-//		// Set the new player image
-//		playerFacingOld = player.face;
+		if(spacePressed) {
+			for(int i = 1; i < ENTITIES.size(); i++) {
+				if(!ENTITIES.get(i).canInteract 
+						&& TSLA > 250
+						&& ENTITIES.get(i).getHealth() > 0 
+						&& player.entityRectangle.intersects(ENTITIES.get(i).entityRectangle)) {
+					ENTITIES.get(i).HEALTH -= 5;
+					TSLA = 0;
+				}
+			}
+		}
+		
 	}
 
-	private void updateVillagers(int i) {
+	private void updateVillager(int i) {
 		((EntityVillager)ENTITIES.get(i)).doLogic();
 	}
 	
-
-	private void updateOther(int i) {
-		
+	private void updateImps(int i) {
+		((EntityImp)ENTITIES.get(i)).doLogic();
 	}
 }
