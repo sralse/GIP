@@ -41,8 +41,9 @@ Debug Mode (Press 'D')
 ![alt text](/preview/npc1.JPG "DEBUG mode")
 
 <h2>Credits</h2>
-*   Kevin Macleod - All music inc.
-*   Kevin Glass - Main Game
-*   Matthias Zajkowski - Player Sprites
-*   [Kenney](http://kenney.nl/) - All Game Graphics
+*   [Kevin Macleod](https://incompetech.com/) - All music inc.
+*   [Kevin Glass](http://www.cokeandcode.com) - Core Game
+*   Matthias Zajkowski - Graphics
+*   [Kenney](http://kenney.nl/) - Graphics
+*   [Ravenmore](http://dycha.net) - Graphics
 *   Me, yay! - Not being too lazy
