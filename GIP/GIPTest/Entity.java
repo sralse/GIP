@@ -19,6 +19,7 @@ public abstract class Entity extends Settings {
 	protected double dx;
 	protected double dy;
 	protected int HEALTH;
+	protected int maxHealth;
 	protected String NAME;
 	protected Image IMAGE;
 	protected Rectangle entityRectangle = new Rectangle();

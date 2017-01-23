@@ -101,7 +101,7 @@ public class MenuMain extends Settings {
 					System.out.println("No valid button press");
 					break;
 				}
-				localFont = uGraph.getFont(FONTS.FUTURE_NORMAL.value);
+				localFont = uGraph.getFont(FONTS.MEDIEVAL.value);
 				spacePressed = false;
 				choice = 0;
 			}
@@ -135,7 +135,7 @@ public class MenuMain extends Settings {
 		//Init our Audio
 		uAudio.init();
 		// Set our font
-		localFont = uGraph.getFont(FONTS.FUTURE_NORMAL.value);
+		localFont = uGraph.getFont(FONTS.MEDIEVAL.value);
 		// Scale our buttons
 		if (SCALE_BUTTON != 1) {
 			button = uImages.scaleImageDetailed(button, (int) btnWidth, button.getHeight(null));

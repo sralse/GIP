@@ -16,6 +16,7 @@ public class EntityImp extends Entity {
 		this.nY = (int) this.y;
 		this.anchor = true;
 		this.HEALTH = HEALTH;
+		this.maxHealth = HEALTH;
 		this.TYPE = 2;
 		this.SUBTYPE = SUBTYPE - 9;
 		if(this.SUBTYPE == 0) {this.NAME = "Small Imp";} else {this.NAME = "Big Imp";}
@@ -47,25 +48,27 @@ public class EntityImp extends Entity {
 					int rand1 = randGen.nextInt(2);
 					if(rand1 == 0) {
 						adx += rand;
-						face = "R";
+						face = "L";
 					} else {
 						adx -= rand;
-						face = "L";
+						face = "R";
 					}
 				} else {
 					int rand2 = randGen.nextInt(2);
 					if(rand2 == 0) {
 						ady += rand;
-						face = "D";
+						face = "U";
 					} else {
 						ady -= rand;
-						face = "U";
+						face = "D";
 					}
 				}
-				nX = aX;
-				nX += adx;
-				nY = aY;
-				nY += ady;
+				nX = (int) x;
+				nY = (int) y;
+				// Prevent sticky edges
+				if(aX + adx > 100 && aX + adx < screenWidth - 100) {nX += adx;} else {nX -= adx;}
+				if(aY + ady > 100 && aY + ady < screenWidth - 100) {nY += ady;} else {nY -= ady;}
+				
 				if(DEBUG || INFO) System.out.println("MOVEMENT - Type: VILLAGER ID: " + ID 
 						+ " Name: " + NAME 
 						+ " New X: " + nX

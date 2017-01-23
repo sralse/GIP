@@ -102,21 +102,20 @@ class Settings {
 	public static final String fontDir = "/fonts/";
 
 	public static enum FONTS {
-		FUTURE_NORMAL("KenneyFuture00b.ttf"), FUTURE_SMALL("KenneyFuture00s.ttf"), NORMAL_NORMAL(
-				"Nevis.ttf"), RETRO_3D1(
-						"Cubic3D.ttf"), RETRO_3D2("Fipps3D.ttf"), RETRO_2D1("Cubic2D.ttf"), RETRO_2D2("Cubic2D2.ttf");
+		NEWS_1("Enchanted Land.otf"),
+		SPELL_1("HopferHornbook.ttf"),
+		RETRO_2D1("Cubic2D.ttf"), 
+		RETRO_2D2("Cubic2D2.ttf"),
+		MEDIEVAL("IMMORTAL.ttf"),
+		MEDIEVAL2("BigElla.ttf");
 		public String value;
 
 		private FONTS(String value) {
 			this.value = value;
 		}
 	}
-
-	public static Font font_future_normal = uGraph.getFont(FONTS.FUTURE_NORMAL.value);
-	public static Font font_retro3D1 = uGraph.getFont(FONTS.RETRO_3D1.value);
-	public static Font font_retro3D2 = uGraph.getFont(FONTS.RETRO_3D2.value);
-	public static Font font_retro2D1 = uGraph.getFont(FONTS.RETRO_2D1.value);
-	public static Font font_retro2D2 = uGraph.getFont(FONTS.RETRO_2D2.value);
+	// Fonts!
+	public static Font font_med_1 = uGraph.getFont(FONTS.MEDIEVAL.value);
 
 	// Global keys pressed
 	public static boolean leftPressed = false;

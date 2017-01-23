@@ -17,6 +17,7 @@ class EntityVillager extends Entity {
 		this.nX = this.aX;
 		this.nY = this.aY;
 		this.HEALTH = HEALTH;
+		this.maxHealth = HEALTH;
 		this.NAME = NAME;
 		this.TYPE = 1;
 		this.SUBTYPE = SUBTYPE;

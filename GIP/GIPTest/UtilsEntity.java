@@ -119,7 +119,7 @@ public class UtilsEntity extends Settings {
 						&& TSLA > 250
 						&& ENTITIES.get(i).getHealth() > 0 
 						&& player.entityRectangle.intersects(ENTITIES.get(i).entityRectangle)) {
-					ENTITIES.get(i).HEALTH -= 5;
+					ENTITIES.get(i).HEALTH -= 1;
 					TSLA = 0;
 				}
 			}

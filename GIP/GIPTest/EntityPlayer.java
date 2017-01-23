@@ -14,6 +14,7 @@ public class EntityPlayer extends Entity {
 		this.x = x * 16;
 		this.y = y * 16;
 		this.HEALTH = HEALTH;
+		this.maxHealth = HEALTH;
 		this.NAME = NAME;
 		System.out.println("TYPE: " + TYPE + " Name of TYPE: PLAYER" + " SUBTYPE: " + SUBTYPE + " Display name: " + NAME);
 		if (IMAGE == null) {

@@ -34,7 +34,7 @@ public class UtilsGUI extends Settings{
 		while (tok.hasMoreTokens()) {
 			String word = tok.nextToken() + " ";
 
-			if (lineLen + word.length() > msgBoxImgSpace * 2) {
+			if (lineLen + word.length() > msgBoxImgSpace * 2 + screenCorrection * 2) {
 				output.append("::");
 				lineLen = 0;
 			}
@@ -46,37 +46,34 @@ public class UtilsGUI extends Settings{
 		// Message box
 		g.drawImage(msgBox, msgBoxX, msgBoxY, null);
 		g.drawImage(ent.getImage(), msgBoxX + msgBoxImgSpace, msgBoxY + msgBoxImgSpace, null);
-		Font tempF = font_retro2D2.deriveFont(16.0f);
+		Font tempF = font_med_1.deriveFont(16.0f);
 		for (int i = 0; i < msgTempString.length; i++) {
 			msg = msgTempString[i];
 			GlyphVector gv = tempF.createGlyphVector(frc, msg);
 			gv = tempF.createGlyphVector(frc, msg);
 			g.setColor(Color.black);
-			g.drawGlyphVector(gv, msgBoxX + msgBoxImgSpace * 3,
-					msgBoxY + msgBoxImgSpace * 2 + (msgBoxImgSpace / 2) * i + screenCorrection);
+			g.drawGlyphVector(gv, 
+					msgBoxX + msgBoxImgSpace * 3,
+					msgBoxY + msgBoxImgSpace * 2 + msgBoxImgSpace * i + screenCorrection);
 		}
 	}
 
 	public void update(Graphics2D g) {
-		// Player name
-		String s = player.getName();
-		Font tempF = font_retro2D2.deriveFont(16.0f);
+		// init
+		String s = "";
+		Font tempF = font_med_1.deriveFont(20.0f);
 		GlyphVector gv = tempF.createGlyphVector(frc, s);
-		g.setColor(Color.black);
-		g.drawGlyphVector(gv, 
-				(float) (player.getX() + 16 - gv.getLogicalBounds().getCenterX()), 
-				(float) (player.getY() - screenCorrection));
 		
 		// Health text
 		s = menuLang[16];
-		gv = localFont.createGlyphVector(frc, s);
+		gv = tempF.createGlyphVector(frc, s);
 		g.drawGlyphVector(
 				gv, 
 				(float) (screenWidth - gv.getLogicalBounds().getWidth() - screenCorrection * 3), 
 				screenCorrection * 7);
 		
 		// Healthbar holder
-		g.drawImage(healthHolder, barHolderX, (int) (gv.getLogicalBounds().getHeight() + screenCorrection * 4), null);
+		g.drawImage(healthHolder, barHolderX, (int) (gv.getLogicalBounds().getHeight() + screenCorrection * 3), null);
 		
 		// Health blocks TODO Rework so 1 size fits all (auto center of blocks etc...)
 		for(int i = 1; i < ((player.getHealth() + 9 )/ 10); i++) {
