@@ -3,19 +3,11 @@ package GIP.GIPTest;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics2D;
-import java.awt.Image;
 import java.awt.RenderingHints;
 import java.awt.font.GlyphVector;
 import java.io.InputStream;
 
 public class UtilsGraphics extends Settings {
-
-	private Image healthCircleMG = uImages.scaleImageCubic(uFiles.loadImage(uiImageDir + health_CircleM), -3);
-	private Image healthCircleLG = uImages.scaleImageCubic(uFiles.loadImage(uiImageDir + health_CircleL), -3);
-	private Image healthCircleRG = uImages.scaleImageCubic(uFiles.loadImage(uiImageDir + health_CircleR), -3);
-	private Image healthCircleMR = uImages.scaleImageCubic(uFiles.loadImage(uiImageDir + health_CircleMR), -3);
-	private Image healthCircleLR = uImages.scaleImageCubic(uFiles.loadImage(uiImageDir + health_CircleLR), -3);
-	private Image healthCircleRR = uImages.scaleImageCubic(uFiles.loadImage(uiImageDir + health_CircleRR), -3);
 
 	public void init() {
 		// TODO UI Images
@@ -23,7 +15,7 @@ public class UtilsGraphics extends Settings {
 
 	}
 
-	public void getUpdate(Graphics2D g, int delta) {
+	public void getUpdate(Graphics2D g) {
 
 		if (escape) {
 			gameRunning = false;
@@ -36,7 +28,7 @@ public class UtilsGraphics extends Settings {
 		g.fillRect(0, 0, screenWidth, screenHeight);
 		g.drawImage(mapImage, 0, 0, null);
 		
-		uEntity.update(delta);
+		uEntity.update();
 
 		// Now we ask to draw any object/house/tree/player/entity
 		updateGraphics(g);
@@ -53,14 +45,13 @@ public class UtilsGraphics extends Settings {
 	}
 
 	private void updateGraphics(Graphics2D g) {
-		// TODO Player animations
+		// dynamic drawing
 		// This part below will make sure our player faces the right direction.
 		if (SETTING_SHADOW) {
-			g.setColor(Color.BLACK);
-			g.fillOval(player.getX() + 7, player.getY() + 30, 16, 6);
+			g.setColor(Color.gray);
+			g.fillOval((int) player.x + 7, (int) player.y + 30, 16, 6);
 		}
-
-		// TODO dynamic drawing
+		
 		for (int i = 0; i <= screenHeight; i++) {
 			// Cycle throug all of our objects asking to redraw themselves by X.
 			for (int j = 0; j < uObjects.sum(); j++) {
@@ -77,80 +68,37 @@ public class UtilsGraphics extends Settings {
 				}
 			}
 
+			// Draw all entities
+			for (int j = 1; j < ENTITIES.size(); j++) {
+				if (i == (int) ENTITIES.get(j).y + ENTITIES.get(j).IMAGE.getHeight(null)) {
+					g.drawImage(ENTITIES.get(j).IMAGE, 
+							(int) ENTITIES.get(j).x, 
+							(int) ENTITIES.get(j).y, null);
+					// Entity name
+					String s = ENTITIES.get(j).NAME;
+					Font tempF = font_med_1.deriveFont(12.0f);
+					GlyphVector gv = tempF.createGlyphVector(frc, s);
+					g.setColor(Color.yellow);
+					g.drawGlyphVector(gv, 
+							(float) (ENTITIES.get(j).getCenterX() - gv.getLogicalBounds().getCenterX()),
+							(float) (ENTITIES.get(j).y - screenCorrection * 2));
+				}
+			}
+			
 			g.setColor(Color.white);
 			// Draw the player
-			if (i == (player.getY() + player.getImage().getHeight(null))) {
-				g.drawImage(player.getImage(), player.getX(), player.getY(), null);
+			if (i == ((int)player.y + player.IMAGE.getHeight(null))) {
+				g.drawImage(player.IMAGE, 
+						(int) player.x, 
+						(int) player.y, null);
 				// Player name
-				String s = player.getName();
+				String s = player.NAME;
 				Font tempF = font_med_1.deriveFont(14.0f);
 				GlyphVector gv = tempF.createGlyphVector(frc, s);
 				
-				g.drawGlyphVector(gv, (float) (player.getX() + 16 - gv.getLogicalBounds().getCenterX()),
-						(float) (player.getY() - screenCorrection));
-			}
-
-			// Draw all entities
-			for (int j = 1; j < ENTITIES.size(); j++) {
-				if (i == ENTITIES.get(j).getY() + ENTITIES.get(j).getImage().getHeight(null)) {
-					g.drawImage(ENTITIES.get(j).getImage(), ENTITIES.get(j).getX(), ENTITIES.get(j).getY(), null);
-					// Entity name
-					String s = ENTITIES.get(j).getName();
-					Font tempF = font_med_1.deriveFont(12.0f);
-					GlyphVector gv = tempF.createGlyphVector(frc, s);
-					g.setColor(Color.black);
-					g.drawGlyphVector(gv, (float) (ENTITIES.get(j).getCenterX() - gv.getLogicalBounds().getCenterX()),
-							(float) (ENTITIES.get(j).getY() - screenCorrection * 2));
-					
-					// TODO Entity health bg
-					int maxH = ENTITIES.get(j).maxHealth;
-					int cH = ENTITIES.get(j).HEALTH;
-					if(maxH > 0) {
-						// Red Health holder
-						g.drawImage(healthCircleLR, 
-								ENTITIES.get(j).getX() - healthCircleLR.getWidth(null) * 3 + 1, 
-								ENTITIES.get(j).getY() - screenCorrection * 2 + 2, null);
-						g.drawImage(healthCircleRR,
-								ENTITIES.get(j).getX() + healthCircleLR.getWidth(null) * 7 + 1, 
-								ENTITIES.get(j).getY() - screenCorrection * 2 + 2, null);
-						for(int k = 1; k < 9; k++) {
-							g.drawImage(healthCircleMR, 
-									ENTITIES.get(j).getX() - healthCircleLR.getWidth(null) * 3 + healthCircleLR.getWidth(null) * k + 1, 
-									ENTITIES.get(j).getY() - screenCorrection * 2 + 2, null);
-						}
-						
-						// Begin of health
-						g.drawImage(healthCircleRG,
-								ENTITIES.get(j).getX() + healthCircleLR.getWidth(null) * 7 + 1, 
-								ENTITIES.get(j).getY() - screenCorrection * 2 + 2, null);
-						// Entity health
-						int cycles;
-						int factor;
-						int beginH = ENTITIES.get(j).getX() - healthCircleLR.getWidth(null) * 3 + 1;
-						if(maxH / 10 < 8) {
-							cycles = maxH;
-							factor = 1;
-						} else {
-							cycles = maxH / 10;
-							factor = cycles;
-						}
-						for(int k = 1; k < cycles - 1; k++) {
-							// Blocks of health
-							if(cH > k * factor && healthCircleLR.getWidth(null) * 3 + healthCircleLR.getWidth(null) * k + 1 < beginH) {
-							g.drawImage(healthCircleMG, 
-									ENTITIES.get(j).getX() + healthCircleLR.getWidth(null) * 6 - healthCircleLR.getWidth(null) * k + 1, 
-									ENTITIES.get(j).getY() - screenCorrection * 2 + 2, null);
-							}
-							if(cH/maxH >= 1) {
-								
-								// Full health
-								g.drawImage(healthCircleLG,
-										beginH, 
-										ENTITIES.get(j).getY() - screenCorrection * 2 + 2, null);
-							}
-						}
-					}
-				}
+				g.drawGlyphVector(gv, 
+						(float) (player.x + 16 - gv.getLogicalBounds().getCenterX()),
+						(float) (player.y - screenCorrection));
 			}
 		}
 	}

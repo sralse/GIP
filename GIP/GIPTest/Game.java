@@ -123,7 +123,7 @@ public class Game extends Canvas {
 			Settings.gameLoopTime = delta;
 			lastLoopTime = System.currentTimeMillis();
 			// Dynamic update, has to hold everything graphical
-			Settings.uGraph.getUpdate(Settings.g, delta);
+			Settings.uGraph.getUpdate(Settings.g);
 			// Audio
 			if (!Settings.audioLine1.isAlive() && Settings.hasAudio) {
 				Settings.uAudio.musicPlay(Settings.audioTrack.AUDIO_TRACK_GAME_00.value,

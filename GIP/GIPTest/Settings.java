@@ -36,6 +36,7 @@ class Settings {
 	public static int SETTING_BUFFERS = 2;
 	public static int pressCount;
 	public static int moveSpeedTiles = 4;
+	public static int tileWidth = 16;
 	public static int playerSpeed = moveSpeedTiles * 16;
 	public static int gameLoopTime;
 	public static final int screenWidth = 1280;
@@ -116,7 +117,8 @@ class Settings {
 	}
 	// Fonts!
 	public static Font font_med_1 = uGraph.getFont(FONTS.MEDIEVAL.value);
-
+	public static Font font_2D_2 = uGraph.getFont(FONTS.RETRO_2D2.value);
+	
 	// Global keys pressed
 	public static boolean leftPressed = false;
 	public static boolean rightPressed = false;
@@ -159,7 +161,7 @@ class Settings {
 	public static int playerType = 0;
 	public static int playerFace = 0;
 	public static final String tx_player = playerImgDir + "player_";
-	public static final String tx_npc = villagerImgDir + "npc_";
+	public static final String tx_villager = villagerImgDir + "npc_";
 	public static final String tx_monster = monsterImgDir + "monster_";
 	public static final String tx_animal = animalImgDir + "animal_";
 	public final static String[] playerDirections = { "U", "R", "L", "D", "0" };
@@ -221,7 +223,7 @@ class Settings {
 	public static final int AUDIOLINE_MAIN = 0;
 
 	// Global Entities lists
-	public static List<Entity> ENTITIES = new ArrayList<Entity>();
+	public static ArrayList<Entity> ENTITIES = new ArrayList<Entity>();
 	//public static List<String> uTypes = Arrays
 	//		.asList(new String[] { "VILLAGER", "SMITH", "CLERCK", "FARMER", "QUEST MASTER", "PRIEST" });
 
@@ -236,7 +238,7 @@ class Settings {
 	}
 
 	public static enum ENTITY_MONSTER {
-		IMP_SMALL(9), RAT_BIG(10);
+		IMP_SMALL(0), RAT_BIG(1), SKELETON_NORMAL(2);
 		public int value;
 
 		private ENTITY_MONSTER(int value) {
@@ -245,7 +247,7 @@ class Settings {
 	}
 
 	public static enum ENTITY_ANIMAL {
-		CROW(11);
+		CROW(0);
 		public int value;
 
 		private ENTITY_ANIMAL(int value) {

@@ -4,12 +4,11 @@ package GIP.GIPTest;
  * Create a new entity that represents an Imp
  * @author Lars Carré
  */
-public class EntityImp extends Entity {
+public class EntitySkeleton extends Entity {
 	
 	private int counter;
-	private int impSpeed = (playerSpeed * 3) / 2;
 
-	public EntityImp(int x, int y, int HEALTH, int SUBTYPE) {
+	public EntitySkeleton(int x, int y, int HEALTH, int SUBTYPE) {
 		this.x = x * 16;
 		this.y = y * 16;
 		this.nX = (int) this.x;
@@ -18,8 +17,8 @@ public class EntityImp extends Entity {
 		this.oldHealth = HEALTH;
 		this.maxHealth = HEALTH;
 		this.TYPE = "monster";
-		this.SUBTYPE = ENTITY_MONSTER.IMP_SMALL.value;
-		this.NAME = "Small Imp";
+		this.SUBTYPE = ENTITY_MONSTER.SKELETON_NORMAL.value;
+		this.NAME = "Skeletal";
 		this.canInteract = false;
 		this.IMAGE = uFiles.loadImage(tx_monster + this.SUBTYPE + face + mode + imgExt);
 		if (IMAGE == null) {
@@ -86,10 +85,11 @@ public class EntityImp extends Entity {
 		
 		if(walking) counter = 0;
 		
-		if(inAttack) {
-			int dpX = (int) Math.abs(player.getCenterX() - x);
-			int dpY = (int) Math.abs(player.getCenterY() - y);
-			
+		int dpX = (int) Math.abs(player.getCenterX() - x);
+		int dpY = (int) Math.abs(player.getCenterY() - y);
+		int dtp = (int) Math.sqrt((dpX*dpX) + (dpY*dpY));
+		if(inAttack || dtp < attackFindingRadius) {
+			if(!inAttack) inAttack = true;
 			if(dpY > dpX) {
 				if(player.getCenterY() - y < 0) {
 					face = "U";
@@ -106,7 +106,6 @@ public class EntityImp extends Entity {
 			
 			if(oldFace != face) counter = 0;
 			
-			int dtp = (int) Math.sqrt((dpX*dpX) + (dpY*dpY));
 			// Update Attack AI
 			if(dtp < attackFindingRadius) {
 				if(dtp < attackingRadius && super.canAttack()) {
@@ -123,8 +122,8 @@ public class EntityImp extends Entity {
 			super.setTarget(null);
 		}
 		
-		super.movementCheck(gameLoopTime, impSpeed);
-		super.animationWalk(tx_monster, 150);
+		super.movementCheck(gameLoopTime, defaultEntitySpeed);
+		super.animationWalk(tx_monster, 500);
 	}
 	
 	

@@ -71,14 +71,14 @@ public class Input implements KeyListener {
 			Settings.escape = true;
 		}
 		if (Settings.DEBUG && Settings.gameRunning) {
-			if (Settings.player.getHealth() > 0) {
+			if (Settings.player.HEALTH > 0) {
 				if (e.getKeyCode() == KeyEvent.VK_SUBTRACT) {
-					Settings.player.addHealth(-1);
+					Settings.player.HEALTH -= 1;
 				}
 			}
-			if (Settings.player.getHealth() < 100) {
+			if (Settings.player.HEALTH < 100) {
 				if (e.getKeyCode() == KeyEvent.VK_ADD) {
-					Settings.player.addHealth(1);
+					Settings.player.HEALTH += 1;
 				}
 			}
 		}

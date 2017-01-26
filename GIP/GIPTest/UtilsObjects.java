@@ -1,6 +1,7 @@
 package GIP.GIPTest;
 
 import java.awt.Image;
+import java.awt.Rectangle;
 import java.util.ArrayList;
 
 public class UtilsObjects extends Settings {
@@ -11,6 +12,7 @@ public class UtilsObjects extends Settings {
 	public ArrayList<Integer> objectNameLength = new ArrayList<Integer>();
 	public ArrayList<String> objectName = new ArrayList<String>();
 	public ArrayList<Image> objectImage = new ArrayList<Image>();
+	public ArrayList<Rectangle> objectRectangle = new ArrayList<Rectangle>();
 	private static String[] objectsList = {};
 	public static String splitSymbol = ",";
 
@@ -35,18 +37,19 @@ public class UtilsObjects extends Settings {
 		objectNameLength.clear();
 		objectName.clear();
 		objectImage.clear();
+		objectRectangle.clear();
 		// Read the file and its contents where the objects are
 		// Transform our map into objectsList
 		String mapCurrent = mapDir + mapName + mapID + mapDirObjects + lvlExt;
 		objectsList = uFiles.readFileString(mapCurrent).split(splitSymbol);
-		// TODO Get the array of non walkables, extend the current mapBounds
+		// Get the array of non walkables, extend the current mapBounds
 		extendBounds();
-		// TODO Get the lists of objects that need to be drawn on this map.
+		// Get the lists of objects that need to be drawn on this map.
 		getObjects();
 	}
 
 	public void getObjects() {
-		// TODO Parsing of our objects
+		// Parsing of our objects
 		int j = 0;
 		for (int i = 0; i <= objectsList.length - 3; i += 3) {
 			// Seperate names
@@ -70,6 +73,11 @@ public class UtilsObjects extends Settings {
 
 			if (image != null) {
 				objectImage.add(image);
+				int imgW = image.getWidth(null) / 2;
+				int imgH = image.getHeight(null) / 2;
+				int x = objectX.get(i);
+				int y = objectX.get(i);
+				objectRectangle.add(new Rectangle(x + (imgW / 2), y + (imgH / 2), imgW, imgH));
 			}
 		}
 

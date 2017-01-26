@@ -17,17 +17,19 @@ class EntityVillager extends Entity {
 		this.nX = this.aX;
 		this.nY = this.aY;
 		this.HEALTH = HEALTH;
+		this.oldHealth = HEALTH;
 		this.maxHealth = HEALTH;
 		this.NAME = NAME;
-		this.TYPE = 1;
+		this.TYPE = "villager";
 		this.SUBTYPE = SUBTYPE;
 		this.canInteract = true;
 		if (this.SUBTYPE < ENTITY_VILLAGER.VILLAGER_MALE.value) {
 			this.anchor = true;
 		}
-		System.out.println("TYPE: " + TYPE + " Name of TYPE: VILLAGER" + " SUBTYPE: " + SUBTYPE + " Display name: " + NAME);
-		this.IMAGE = uFiles.loadImage(tx_npc + SUBTYPE + face + mode + imgExt);
-		this.entityRectangle.setBounds((int) this.x, (int) this.y, IMAGE.getWidth(null), IMAGE.getHeight(null));
+		this.IMAGE = uFiles.loadImage(tx_villager + SUBTYPE + face + mode + imgExt);
+		this.imgH = this.IMAGE.getHeight(null);
+		this.imgW = this.IMAGE.getWidth(null);
+		this.entityRectangle.setBounds((int) this.x, (int) this.y, imgW, imgH);
 	}
 
 	public void doLogic() {
@@ -99,17 +101,17 @@ class EntityVillager extends Entity {
 		if(walking) counter = 0;
 		
 		if(interact) {
-			int dpX = (int) Math.abs(player.getX() - x);
-			int dpY = (int) Math.abs(player.getY() - y);
+			int dpX = (int) Math.abs(player.x - x);
+			int dpY = (int) Math.abs(player.y - y);
 			
 			if(dpY > dpX) {
-				if(player.getY() - y < 0) {
+				if(player.y - y < 0) {
 					face = "U";
 				} else {
 					face = "D";
 				}
 			} else {
-				if(player.getX() - x < 0) {
+				if(player.x - x < 0) {
 					face = "L";
 				} else {
 					face = "R";
@@ -117,7 +119,7 @@ class EntityVillager extends Entity {
 			}
 		}
 		super.movementCheck(gameLoopTime, villagerSpeed);
-		super.animationWalk(tx_npc, aDefInt);
+		super.animationWalk(tx_villager, aDefInt);
 	}
 
 }

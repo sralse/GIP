@@ -6,7 +6,7 @@ import java.awt.Rectangle;
 public abstract class Entity extends Settings {
 	/** The uID of the entity */
 	protected int ID;
-	protected int TYPE;
+	protected String TYPE;
 	protected int SUBTYPE;
 	// Anchor
 	protected double x;
@@ -16,12 +16,18 @@ public abstract class Entity extends Settings {
 	protected int nX;
 	protected int nY;
 	protected boolean anchor;
+	protected boolean noMove;
 	protected double dx;
 	protected double dy;
 	protected int HEALTH;
 	protected int maxHealth;
+	protected int oldHealth;
+	protected int DMG = 0;
+	protected int healthCounter;
 	protected String NAME;
 	protected Image IMAGE;
+	protected int imgW;
+	protected int imgH;
 	protected Rectangle entityRectangle = new Rectangle();
 	// Animations modes of an entity
 	protected int mode = 0;
@@ -32,14 +38,20 @@ public abstract class Entity extends Settings {
 	// Helps detecting if we can interact with an entity
 	protected boolean canInteract;
 	protected boolean interact = false;
+	// Attack stuff
+	protected boolean inAttack = false;
+	protected int TSLA = 0;
+	protected int attackSpeedInterval = 1000;
+	protected int attackFindingRadius = tileWidth * 8;
+	protected int attackingRadius = tileWidth * 3;
+	protected Entity target = null;
 	/** The way the player is facing default is D (Down/Left/Up/Right) */
 	protected String face = "D";
 	protected String oldFace = face;
+	protected boolean forceAnimation = false;
 	// Entity speed and reach settings
 	protected static int radius = 100;
 	protected static int defaultEntitySpeed = (playerSpeed * 3) / 4;
-	/** Entity AttackRadius */
-	protected static int AR = 25;
 
 	/**
 	 * 3 Request that this entity move itself based on a certain ammount of time passing.
@@ -77,7 +89,20 @@ public abstract class Entity extends Settings {
 		} else {
 			walking = false;
 		}
-
+		// If angry it will stop walking once touching you
+		if(inAttack && target != null) {
+			if(entityRectangle.intersects(target.entityRectangle)) {
+				setHorizontalMovement(0);
+				setVerticalMovement(0);
+				return;
+			}
+		}
+		// If we can't move, we can't move!
+		if(noMove) {
+			setHorizontalMovement(0);
+			setVerticalMovement(0);
+			return;
+		}
 		// if we're moving left and have reached the left hand side
 		// of the screen, don't move
 		if ((dx < 0) && (x <= 1)) {
@@ -157,7 +182,7 @@ public abstract class Entity extends Settings {
 		x += (dx * delta) / 1000;
 		y += (dy * delta) / 1000;
 		
-		entityRectangle.setBounds((int) x, (int) y, IMAGE.getWidth(null), IMAGE.getHeight(null));
+		entityRectangle.setBounds((int) x, (int) y, imgW, imgH);
 	}
 
 	/**
@@ -174,75 +199,6 @@ public abstract class Entity extends Settings {
 	 */
 	public void setVerticalMovement(double dirY) {
 		dy = dirY;
-	}
-
-	/**
-	 * Get the horizontal speed of this entity
-	 * @return The horizontal speed of this entity (pixels/sec)
-	 */
-	public double getHorizontalMovement() {
-		return dx;
-	}
-
-	/**
-	 * Get the vertical speed of this entity
-	 * @return The vertical speed of this entity (pixels/sec)
-	 */
-	public double getVerticalMovement() {
-		return dy;
-	}
-
-	public int getX() {
-		return (int) x;
-	}
-
-	public int getY() {
-		return (int) y;
-	}
-
-	/**
-	 * Adds an amount of health
-	 * @param d <br>The amount of health to add (or remove)
-	 */
-	public void addHealth(double d) {
-		HEALTH += d;
-	}
-
-	/**
-	 * Get the health
-	 * @return The health
-	 */
-	public int getHealth() {
-		return (int) HEALTH;
-	}
-
-	/**
-	 * Set's the DISPLAY name of this Entity
-	 * @param d <br>The amount of health to add (or remove)
-	 */
-	public void setName(String s, int index) {
-		// int i = uID.getID(NAME);
-		NAME = s;
-	}
-
-	/**
-	 * Get the DISPLAY name
-	 * @return NAME
-	 */
-	public String getName() {
-		return NAME;
-	}
-
-	public int getID() {
-		return ID;
-	}
-
-	public void setImage(Image loadImage) {
-		IMAGE = loadImage;
-	}
-
-	public Image getImage() {
-		return IMAGE;
 	}
 
 	/**
@@ -284,6 +240,10 @@ public abstract class Entity extends Settings {
 		interact = b;
 	}
 
+	/**
+	 * @param path The directory of the image + image prefix.
+	 * @param interval The interval at which the entity animation should update
+	 * */
 	public void animationWalk(String path, int interval) {
 		// Walk animation
 		walkCounter += gameLoopTime;
@@ -296,22 +256,62 @@ public abstract class Entity extends Settings {
 			mode = 0;
 		}
 
-		if(face != oldFace || mode != oldMode) {
-			IMAGE = uFiles.loadImage(path + SUBTYPE + face + mode + imgExt);
+		if((face != oldFace || mode != oldMode) && !inAttack) {
+			IMAGE = uImages.getEntityImage(TYPE, SUBTYPE, face, mode);
+			imgH = IMAGE.getHeight(null);
+			imgW = IMAGE.getWidth(null);
 			oldFace = face;
 			oldMode = mode;
+		} else if (walkCounter > interval && inAttack) {
+			IMAGE = uImages.getEntityImage(TYPE, SUBTYPE, face, mode);
+			imgH = IMAGE.getHeight(null);
+			imgW = IMAGE.getWidth(null);
+			oldFace = face;
 		}
 
 		if(IMAGE == null) {
-			IMAGE =  uFiles.loadImage(path + SUBTYPE + "D" + 0 + imgExt);
+			IMAGE = uImages.getEntityImage(TYPE, SUBTYPE, "D", mode);
+			imgH = IMAGE.getHeight(null);
+			imgW = IMAGE.getWidth(null);
 		}
 	}
 
 	public int getCenterX() {
-		return (int) (x + (IMAGE.getWidth(null) / 2));
+		return (int) (x + (imgW / 2));
 	}
 	
 	public int getCenterY() {
-		return (int) (y + (IMAGE.getHeight(null) / 2));
+		return (int) (y + (imgH / 2));
+	}
+	
+	public long getAttackTimer() {
+		return TSLA;
+	}
+	
+	public void addToAttackTimer(long delta) {
+		if(TSLA <= 5000) TSLA += delta;
+	}
+	
+	public void updateAttackTimer() {
+		if(TSLA <= 5000) TSLA += gameLoopTime;
+		if(TSLA >= 1000) inAttack = false;
+	}
+	
+	public void resetAttackTimer() {
+		TSLA = 0;
+	}
+	
+	public boolean canAttack() {
+		return (TSLA > attackSpeedInterval);
+	}
+
+	public void setTarget(Entity ent) {
+		target = ent;
+		if(target != null && inAttack) {
+			if (!target.entityRectangle.intersects(entityRectangle)) {
+				nX = (int) target.getCenterX();
+				nY = (int) target.getCenterY();
+			}
+		}
 	}
 }

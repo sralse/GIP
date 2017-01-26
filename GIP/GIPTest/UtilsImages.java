@@ -6,9 +6,63 @@ import java.awt.RenderingHints;
 import java.awt.geom.AffineTransform;
 import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferedImage;
+import java.util.ArrayList;
 
 public class UtilsImages extends Settings {
-	
+
+	public ArrayList<UtilsImagesEntity> playerImages = new ArrayList<UtilsImagesEntity>();
+	public ArrayList<UtilsImagesEntity> monsterImages = new ArrayList<UtilsImagesEntity>();
+	public ArrayList<UtilsImagesEntity> animalImages = new ArrayList<UtilsImagesEntity>();
+	public ArrayList<UtilsImagesEntity> villagerImages = new ArrayList<UtilsImagesEntity>();
+
+
+	public void init() {
+
+		String dir = "";
+		String type = "";
+		// player
+		dir = tx_player;
+		type = "player";
+		System.out.println("Loading player sprites from: " + tx_player);
+		playerImages = initSubImages(dir, type);
+		// monsters
+		dir = tx_monster;
+		type = "monster";
+		System.out.println("Loading monster sprites from: " + tx_monster);
+		monsterImages = initSubImages(dir, type);
+		// animals
+		dir = tx_animal;
+		type = "animal";
+		System.out.println("Loading animal sprites from: " + tx_animal);
+		animalImages = initSubImages(dir, type);
+		// villagers
+		dir = tx_villager;
+		type = "player";
+		System.out.println("Loading villager sprites from: " + tx_villager);
+		villagerImages = initSubImages(dir, type);
+
+	}
+
+	private ArrayList<UtilsImagesEntity> initSubImages(String dir, String type) {
+		Image img;
+		ArrayList<UtilsImagesEntity> tmp = new ArrayList<UtilsImagesEntity>();
+		for(int subtype = 0; subtype < 20; subtype++) {
+
+			img = uFiles.loadImage(dir + subtype + "D" + 0 + imgExt);
+
+			if(img != null) {
+				// Make image instance
+				UtilsImagesEntity instance = new UtilsImagesEntity(dir, type, subtype);
+				tmp.add(instance);
+
+			} else {
+				System.out.println("No image was loaded from: " + dir + subtype);
+				break;
+			}
+		}
+		return tmp;
+	}
+
 	//TODO Make desc
 	public Image scaleImageCubic(Image img, int i) {
 		int imgWidth = img.getWidth(null);
@@ -78,5 +132,21 @@ public class UtilsImages extends Settings {
 		img = op.filter((BufferedImage) img, null);
 
 		return img;
+	}
+
+	public Image getEntityImage(String TYPE, int subtype, String face, int mode) {
+		if(TYPE=="player") {
+			return playerImages.get(subtype).getImage(face, mode);
+		}
+		if(TYPE=="monster") {
+			return monsterImages.get(subtype).getImage(face, mode);
+		}
+		if(TYPE=="animal") {
+			return animalImages.get(subtype).getImage(face, mode);
+		}
+		if(TYPE=="villager") {
+			return villagerImages.get(subtype).getImage(face, mode);
+		}
+		return null;
 	}
 }

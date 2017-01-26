@@ -10,19 +10,21 @@ import java.awt.Graphics2D;
 public class EntityPlayer extends Entity {
 	
 	public EntityPlayer(int x, int y, int HEALTH, String NAME, String IMAGE) {
-		this.TYPE = 0;
+		this.TYPE = "player";
 		this.x = x * 16;
 		this.y = y * 16;
 		this.HEALTH = HEALTH;
+		this.oldHealth = HEALTH;
 		this.maxHealth = HEALTH;
 		this.NAME = NAME;
-		System.out.println("TYPE: " + TYPE + " Name of TYPE: PLAYER" + " SUBTYPE: " + SUBTYPE + " Display name: " + NAME);
 		if (IMAGE == null) {
 			this.IMAGE = uFiles.loadImage(tx_player + 0 + face + mode + imgExt);
 		} else {
 			this.IMAGE = uFiles.loadImage(tx_player + IMAGE + face + mode + imgExt);
 		}
-		this.entityRectangle.setBounds((int) this.x, (int) this.y, this.IMAGE.getWidth(null), this.IMAGE.getHeight(null));
+		this.imgH = this.IMAGE.getHeight(null);
+		this.imgW = this.IMAGE.getWidth(null);
+		this.entityRectangle.setBounds((int) this.x, (int) this.y, imgW, imgH);
 	}
 
 	public void movementCheck(long delta) {
