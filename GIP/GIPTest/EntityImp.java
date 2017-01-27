@@ -87,17 +87,19 @@ public class EntityImp extends Entity {
 		if(walking) counter = 0;
 		
 		if(inAttack) {
-			int dpX = (int) Math.abs(player.getCenterX() - x);
-			int dpY = (int) Math.abs(player.getCenterY() - y);
+			int cX = super.getCenterX();
+			int cY = super.getCenterY();
+			int dpX = (int) Math.abs(player.getCenterX() - cX);
+			int dpY = (int) Math.abs(player.getCenterY() - cY);
 			
 			if(dpY > dpX) {
-				if(player.getCenterY() - y < 0) {
+				if(player.getCenterY() - cY < 0) {
 					face = "U";
 				} else {
 					face = "D";
 				}
 			} else {
-				if(player.getCenterX() - x < 0) {
+				if(player.getCenterX() - cX < 0) {
 					face = "L";
 				} else {
 					face = "R";

@@ -118,9 +118,9 @@ public class UtilsGUI extends Settings{
 		int wFixed = healthCircleLR.getWidth(null);
 		// Entity Health display
 		for (int i = 1; i < ENTITIES.size(); i++) {
-			int mH = ENTITIES.get(i).maxHealth;
+			int maxHealth = ENTITIES.get(i).maxHealth;
 			// Entity health
-			if(mH > 0) {
+			if(maxHealth > 0) {
 				ENTITIES.get(i).healthCounter += gameLoopTime;
 				int oH = ENTITIES.get(i).oldHealth;
 				int nH = ENTITIES.get(i).HEALTH;
@@ -158,41 +158,40 @@ public class UtilsGUI extends Settings{
 
 				// Red Health holder
 				g.drawImage(healthCircleLR, 
-						(int) ENTITIES.get(i).x - wFixed * 3 + 1, 
+						(int) ENTITIES.get(i).getCenterX() - wFixed * 6 + 1, 
 						(int) ENTITIES.get(i).y - screenCorrection * 2 + 2, null);
 				g.drawImage(healthCircleRR,
-						(int) ENTITIES.get(i).x + wFixed * 7 + 1, 
+						(int) ENTITIES.get(i).getCenterX() + wFixed * 4 + 1, 
 						(int) ENTITIES.get(i).y - screenCorrection * 2 + 2, null);
 				for(int k = 1; k < 9; k++) {
 					g.drawImage(healthCircleMR,
-							(int) ENTITIES.get(i).x - wFixed * 3 + wFixed * k + 1, 
+							(int) ENTITIES.get(i).getCenterX() - wFixed * 6 + wFixed * k + 1, 
 							(int) ENTITIES.get(i).y - screenCorrection * 2 + 2, null);
 				}
 
 				// Begin of health
 				g.drawImage(healthCircleRG,
-						(int) ENTITIES.get(i).x + wFixed * 7 + 1, 
+						(int) ENTITIES.get(i).getCenterX() + wFixed * 4 + 1, 
 						(int) ENTITIES.get(i).y - screenCorrection * 2 + 2, null);
+
 				// Entity health
-				
-				// TODO fix this shit
-				double factor = mH / 10;
-				int beginH = (int) (ENTITIES.get(i).x - wFixed * 3 + 1);
+				double c = 8.0d;
+				double factor = maxHealth / c;
+				double hfactor = nH / factor;
+				int beginH = (int) (ENTITIES.get(i).getCenterX() - wFixed * 6 + 1);
 
-				for(int k = 1; k < 10 - 1; k++) {
+				for(int k = 1; k < hfactor + 1; k++) {
 					// Blocks of health
-					if(nH > k * factor) {
 						g.drawImage(healthCircleMG, 
-								(int) (ENTITIES.get(i).x + wFixed * 6 - wFixed * factor * k + 1), 
+								(int) (ENTITIES.get(i).getCenterX() + wFixed * 3 - wFixed * k + 1), 
 								(int) (ENTITIES.get(i).y - screenCorrection * 2 + 2), null);
-					}
-					if(nH/mH >= 1) {
-
-						// Full health
-						g.drawImage(healthCircleLG,
-								(int) beginH, 
-								(int) ENTITIES.get(i).y - screenCorrection * 2 + 2, null);
-					}
+				}
+				
+				if(nH == maxHealth) {
+					// Full health
+					g.drawImage(healthCircleLG,
+							(int) beginH, 
+							(int) ENTITIES.get(i).y - screenCorrection * 2 + 2, null);
 				}
 			}
 		}
@@ -235,7 +234,7 @@ public class UtilsGUI extends Settings{
 
 				// Virtual Pathfinding
 				g.setColor(Color.blue);
-				if(ENTITIES.get(i).inAttack && ENTITIES.get(i).TYPE.contains("player")) {
+				if(ENTITIES.get(i).inAttack && !ENTITIES.get(i).TYPE.contains("player")) {
 					g.drawLine(ENTITIES.get(i).getCenterX(), ENTITIES.get(i).getCenterY(), 
 							ENTITIES.get(i).nX, ENTITIES.get(i).nY);
 				}

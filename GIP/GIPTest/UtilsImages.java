@@ -134,19 +134,24 @@ public class UtilsImages extends Settings {
 		return img;
 	}
 
-	public Image getEntityImage(String TYPE, int subtype, String face, int mode) {
+	public Image getEntityImage(String TYPE, int subtype, String face, int mode, boolean attackMode) {
 		if(TYPE=="player") {
+			if(attackMode) return playerImages.get(subtype).getAttackImage(face, mode);
 			return playerImages.get(subtype).getImage(face, mode);
 		}
 		if(TYPE=="monster") {
+			if(attackMode) return monsterImages.get(subtype).getAttackImage(face, mode);
 			return monsterImages.get(subtype).getImage(face, mode);
 		}
 		if(TYPE=="animal") {
+			if(attackMode) return animalImages.get(subtype).getAttackImage(face, mode);
 			return animalImages.get(subtype).getImage(face, mode);
 		}
 		if(TYPE=="villager") {
+			if(attackMode) return villagerImages.get(subtype).getAttackImage(face, mode);
 			return villagerImages.get(subtype).getImage(face, mode);
 		}
 		return null;
 	}
+
 }

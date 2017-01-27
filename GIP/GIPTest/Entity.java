@@ -257,20 +257,21 @@ public abstract class Entity extends Settings {
 		}
 
 		if((face != oldFace || mode != oldMode) && !inAttack) {
-			IMAGE = uImages.getEntityImage(TYPE, SUBTYPE, face, mode);
+			IMAGE = uImages.getEntityImage(TYPE, SUBTYPE, face, mode, inAttack);
 			imgH = IMAGE.getHeight(null);
 			imgW = IMAGE.getWidth(null);
 			oldFace = face;
 			oldMode = mode;
 		} else if (walkCounter > interval && inAttack) {
-			IMAGE = uImages.getEntityImage(TYPE, SUBTYPE, face, mode);
+			IMAGE = uImages.getEntityImage(TYPE, SUBTYPE, face, mode, inAttack);
 			imgH = IMAGE.getHeight(null);
 			imgW = IMAGE.getWidth(null);
 			oldFace = face;
+			oldMode = mode;
 		}
 
 		if(IMAGE == null) {
-			IMAGE = uImages.getEntityImage(TYPE, SUBTYPE, "D", mode);
+			IMAGE = uImages.getEntityImage(TYPE, SUBTYPE, "D", mode, inAttack);
 			imgH = IMAGE.getHeight(null);
 			imgW = IMAGE.getWidth(null);
 		}
