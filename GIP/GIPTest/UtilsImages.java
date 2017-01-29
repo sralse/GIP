@@ -15,7 +15,6 @@ public class UtilsImages extends Settings {
 	public ArrayList<UtilsImagesEntity> animalImages = new ArrayList<UtilsImagesEntity>();
 	public ArrayList<UtilsImagesEntity> villagerImages = new ArrayList<UtilsImagesEntity>();
 
-
 	public void init() {
 
 		String dir = "";
@@ -136,8 +135,12 @@ public class UtilsImages extends Settings {
 
 	public Image getEntityImage(String TYPE, int subtype, String face, int mode, boolean attackMode) {
 		if(TYPE=="player") {
-			if(attackMode) return playerImages.get(subtype).getAttackImage(face, mode);
-			return playerImages.get(subtype).getImage(face, mode);
+			if(!DEBUG) {
+				if(attackMode) return playerImages.get(subtype).getAttackImage(face, mode);
+				return playerImages.get(subtype).getImage(face, mode);
+			} else {
+				return debug;
+			}
 		}
 		if(TYPE=="monster") {
 			if(attackMode) return monsterImages.get(subtype).getAttackImage(face, mode);
@@ -151,7 +154,10 @@ public class UtilsImages extends Settings {
 			if(attackMode) return villagerImages.get(subtype).getAttackImage(face, mode);
 			return villagerImages.get(subtype).getImage(face, mode);
 		}
-		return null;
+
+		System.err.println("Wrong image request!");
+		return debug;
+		
 	}
 
 }

@@ -23,6 +23,7 @@ class Settings {
 	public static UtilsObjects uObjects = new UtilsObjects();
 	public static UtilsGraphics uGraph = new UtilsGraphics();
 	public static UtilsGUI uGUI = new UtilsGUI();
+	public static UtilsItem uItems = new UtilsItem();
 	public static Random randGen = new Random();
 
 	// Global Game options
@@ -47,6 +48,7 @@ class Settings {
 	public static final String ICON = "NA.png";
 	public static BufferStrategy graphicsBuffer;
 	public static FontRenderContext frc = null;
+	public static final Color shadow = new Color(0, 0, 0, 0.5f);
 
 	// Global UI settings
 	public static double SCALE_BUTTON = 1.5d;
@@ -79,6 +81,7 @@ class Settings {
 	public static final String health_CircleMR = "barRed_horizontalMid.png";
 	public static final String health_Holder = "barHolder_00.png";
 	public static final String box1_brown = "boxBrown_01.png";
+	public static final String gui_itemBar = "ItemBar.png";
 	public static Image bg0 = uFiles.loadImage(uiImageDir + bg00);
 
 	// Global Language settings
@@ -164,9 +167,11 @@ class Settings {
 	public static final String tx_villager = villagerImgDir + "npc_";
 	public static final String tx_monster = monsterImgDir + "monster_";
 	public static final String tx_animal = animalImgDir + "animal_";
-	public final static String[] playerDirections = { "U", "R", "L", "D", "0" };
-	//public static List<String> logicRequired = new ArrayList<String>();
+	public static final Image debug = uFiles.loadImage(entDir + "debug" + imgExt);
 
+	// Global Item
+	public final static String itemDir = lvlDir + "items/";
+	
 	// Message box settings
 	public static boolean messaged = false;
 	public static Entity msgEntity;

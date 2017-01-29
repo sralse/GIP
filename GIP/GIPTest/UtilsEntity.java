@@ -36,11 +36,12 @@ public class UtilsEntity extends Settings {
 			Entity npc = new EntityVillager(
 					Integer.parseInt(ent.get(i * entDataBlockSize)),
 					Integer.parseInt(ent.get(i * entDataBlockSize + 1)),
-					Integer.parseInt(ent.get(i * entDataBlockSize + 2)), 
+					Double.parseDouble(ent.get(i * entDataBlockSize + 2)),
 					ent.get(i * entDataBlockSize + 3),
 					ENTITY_VILLAGER.valueOf(ent.get(i * entDataBlockSize + 4)).value);
 			uID.addEntity(npc);
 		}
+		
 	}
 
 	public void initMonsters() {
@@ -54,7 +55,7 @@ public class UtilsEntity extends Settings {
 				Entity monster = new EntityImp(
 						Integer.parseInt(ent.get(i * entDataBlockSize)),
 						Integer.parseInt(ent.get(i * entDataBlockSize + 1)),
-						Integer.parseInt(ent.get(i * entDataBlockSize + 2)), 
+						Double.parseDouble(ent.get(i * entDataBlockSize + 2)), 
 						e);
 				uID.addEntity(monster);
 				break;
@@ -62,7 +63,7 @@ public class UtilsEntity extends Settings {
 				monster = new EntityRat(
 						Integer.parseInt(ent.get(i * entDataBlockSize)),
 						Integer.parseInt(ent.get(i * entDataBlockSize + 1)),
-						Integer.parseInt(ent.get(i * entDataBlockSize + 2)), 
+						Double.parseDouble(ent.get(i * entDataBlockSize + 2)), 
 						e);
 				uID.addEntity(monster);
 				break;
@@ -70,7 +71,7 @@ public class UtilsEntity extends Settings {
 				monster = new EntitySkeleton(
 						Integer.parseInt(ent.get(i * entDataBlockSize)),
 						Integer.parseInt(ent.get(i * entDataBlockSize + 1)),
-						Integer.parseInt(ent.get(i * entDataBlockSize + 2)), 
+						Double.parseDouble(ent.get(i * entDataBlockSize + 2)), 
 						e);
 				uID.addEntity(monster);
 				break;			
@@ -143,14 +144,24 @@ public class UtilsEntity extends Settings {
 				if(!ENTITIES.get(i).canInteract 
 						&& player.canAttack()
 						&& ENTITIES.get(i).HEALTH > 0 
-					&& player.entityRectangle.intersects(ENTITIES.get(i).entityRectangle)) {
-					ENTITIES.get(i).HEALTH -= 1;
-					ENTITIES.get(i).DMG = -1;
+						&& player.entityRectangle.intersects(ENTITIES.get(i).entityRectangle)) {
+					ENTITIES.get(i).HEALTH -= player.DMG;
+					ENTITIES.get(i).dmgTaken = -1;
 					ENTITIES.get(i).inAttack = true;
 					player.inAttack = true;
 					player.resetAttackTimer();
 				}
 			}
+		}
+		
+		player.updateHealthTimer();
+		
+		if(player.getAttackTimer() >= 5000 
+				&& player.HEALTH < player.maxHealth 
+				&& player.healthCounter >= 2000 
+				&& !player.inAttack) {
+			player.HEALTH += 0.5d;
+			player.healthCounter = 0;
 		}
 
 	}

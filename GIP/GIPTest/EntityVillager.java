@@ -9,16 +9,16 @@ class EntityVillager extends Entity {
 	private int counter;
 	private int villagerSpeed = (playerSpeed * 2) / 3;
 
-	public EntityVillager(int x, int y, int HEALTH, String NAME, int SUBTYPE) {
+	public EntityVillager(int x, int y, double d, String NAME, int SUBTYPE) {
 		this.x = x * 16;
 		this.y = y * 16;
 		this.aX = (int) this.x;
 		this.aY = (int) this.y;
 		this.nX = this.aX;
 		this.nY = this.aY;
-		this.HEALTH = HEALTH;
-		this.oldHealth = HEALTH;
-		this.maxHealth = HEALTH;
+		this.HEALTH = d;
+		this.oldHealth = d;
+		this.maxHealth = d;
 		this.NAME = NAME;
 		this.TYPE = "villager";
 		this.SUBTYPE = SUBTYPE;

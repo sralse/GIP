@@ -2,6 +2,7 @@ package GIP.GIPTest;
 
 import java.awt.Image;
 import java.awt.Rectangle;
+import java.util.ArrayList;
 
 public abstract class Entity extends Settings {
 	/** The uID of the entity */
@@ -19,10 +20,10 @@ public abstract class Entity extends Settings {
 	protected boolean noMove;
 	protected double dx;
 	protected double dy;
-	protected int HEALTH;
-	protected int maxHealth;
-	protected int oldHealth;
-	protected int DMG = 0;
+	protected double HEALTH;
+	protected double maxHealth;
+	protected double oldHealth;
+	protected double dmgTaken = 0;
 	protected int healthCounter;
 	protected String NAME;
 	protected Image IMAGE;
@@ -44,6 +45,7 @@ public abstract class Entity extends Settings {
 	protected int attackSpeedInterval = 1000;
 	protected int attackFindingRadius = tileWidth * 8;
 	protected int attackingRadius = tileWidth * 3;
+	protected double DMG = 0;
 	protected Entity target = null;
 	/** The way the player is facing default is D (Down/Left/Up/Right) */
 	protected String face = "D";
@@ -52,6 +54,8 @@ public abstract class Entity extends Settings {
 	// Entity speed and reach settings
 	protected static int radius = 100;
 	protected static int defaultEntitySpeed = (playerSpeed * 3) / 4;
+	// ITEMS
+	protected static ArrayList<Item> ITEMS = new ArrayList<Item>();
 
 	/**
 	 * 3 Request that this entity move itself based on a certain ammount of time passing.
@@ -314,5 +318,21 @@ public abstract class Entity extends Settings {
 				nY = (int) target.getCenterY();
 			}
 		}
+	}
+	
+	public void updateHealthTimer() {
+		if (healthCounter <= 2000) healthCounter += gameLoopTime;
+	}
+	
+	public void clearItems() {
+		ITEMS.clear();
+	}
+	
+	public void addItem(int index, Item item) {
+		ITEMS.add(index, item);
+	}
+	
+	public Item getItem(int i) {
+		return ITEMS.get(i);
 	}
 }

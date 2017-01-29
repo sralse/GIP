@@ -17,6 +17,7 @@ public class EntityPlayer extends Entity {
 		this.oldHealth = HEALTH;
 		this.maxHealth = HEALTH;
 		this.NAME = NAME;
+		this.DMG = 1;
 		if (IMAGE == null) {
 			this.IMAGE = uFiles.loadImage(tx_player + 0 + face + mode + imgExt);
 		} else {
@@ -134,4 +135,8 @@ public class EntityPlayer extends Entity {
 		super.move(delta);
 	}
 
+	public void inflictDamage(double dMG) {
+		this.HEALTH -= dMG;
+	}
+	
 }

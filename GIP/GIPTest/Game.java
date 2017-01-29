@@ -58,9 +58,9 @@ public class Game extends Canvas {
 		// going to do that our self in accelerated mode
 		setIgnoreRepaint(true);
 		// finally make the window visible
+		frame.setResizable(false);
 		frame.setIconImage(Settings.uFiles.loadImage(Settings.ICON));
 		frame.pack();
-		frame.setResizable(false);
 		frame.setVisible(true);
 		// add a listener to respond to the user closing the window. If they
 		// do we'd like to exit the game
@@ -92,6 +92,7 @@ public class Game extends Canvas {
 		UtilsID.init();
 		Settings.uGraph.init();
 		Settings.uEntity.init();
+		Settings.uItems.init();
 		Input.init();
 		Settings.DEBUG = false;
 		Settings.INFO = false;

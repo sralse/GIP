@@ -8,7 +8,7 @@ public class EntitySkeleton extends Entity {
 	
 	private int counter;
 
-	public EntitySkeleton(int x, int y, int HEALTH, int SUBTYPE) {
+	public EntitySkeleton(int x, int y, double HEALTH, int SUBTYPE) {
 		this.x = x * 16;
 		this.y = y * 16;
 		this.nX = (int) this.x;
@@ -109,7 +109,7 @@ public class EntitySkeleton extends Entity {
 			// Update Attack AI
 			if(dtp < attackFindingRadius) {
 				if(dtp < attackingRadius && super.canAttack()) {
-					player.HEALTH -= 1;
+					player.inflictDamage(DMG);
 					super.resetAttackTimer();
 				}
 			} else {

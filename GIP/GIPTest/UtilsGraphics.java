@@ -48,8 +48,11 @@ public class UtilsGraphics extends Settings {
 		// dynamic drawing
 		// This part below will make sure our player faces the right direction.
 		if (SETTING_SHADOW) {
-			g.setColor(Color.gray);
-			g.fillOval((int) player.x + 7, (int) player.y + 30, 16, 6);
+			g.setColor(shadow);
+			g.fillOval((int) player.x + 7, (int) player.y + 30 - 1, 16, 6);
+			for(Entity i : ENTITIES) {
+				g.fillOval((int) i.x + i.imgH / 4, (int) i.y + i.imgW - 4, i.imgW / 2, 6);
+			}
 		}
 		
 		for (int i = 0; i <= screenHeight; i++) {

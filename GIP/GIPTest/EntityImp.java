@@ -9,7 +9,7 @@ public class EntityImp extends Entity {
 	private int counter;
 	private int impSpeed = (playerSpeed * 3) / 2;
 
-	public EntityImp(int x, int y, int HEALTH, int SUBTYPE) {
+	public EntityImp(int x, int y, double HEALTH, int SUBTYPE) {
 		this.x = x * 16;
 		this.y = y * 16;
 		this.nX = (int) this.x;
@@ -17,6 +17,7 @@ public class EntityImp extends Entity {
 		this.HEALTH = HEALTH;
 		this.oldHealth = HEALTH;
 		this.maxHealth = HEALTH;
+		this.DMG = 1;
 		this.TYPE = "monster";
 		this.SUBTYPE = ENTITY_MONSTER.IMP_SMALL.value;
 		this.NAME = "Small Imp";
@@ -112,7 +113,7 @@ public class EntityImp extends Entity {
 			// Update Attack AI
 			if(dtp < attackFindingRadius) {
 				if(dtp < attackingRadius && super.canAttack()) {
-					player.HEALTH -= 1;
+					player.inflictDamage(DMG);
 					super.resetAttackTimer();
 				}
 			} else {

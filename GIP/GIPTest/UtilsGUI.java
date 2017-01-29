@@ -29,10 +29,13 @@ public class UtilsGUI extends Settings{
 	private Image healthCircleMR = uImages.scaleImageCubic(uFiles.loadImage(uiImageDir + health_CircleMR), -3);
 	private Image healthCircleLR = uImages.scaleImageCubic(uFiles.loadImage(uiImageDir + health_CircleLR), -3);
 	private Image healthCircleRR = uImages.scaleImageCubic(uFiles.loadImage(uiImageDir + health_CircleRR), -3);
+	private Image itemBar = uImages.scaleImageCubic(uFiles.loadImage(uiImageDir + gui_itemBar), -2);
 	private Image AttackBG = uFiles.loadImage(uiImageDir + "AttackT.png");
 
+	int hBlockWFixed = healthCircleLR.getWidth(null);
+
 	// User space info
-	private int barHolderX = screenWidth - healthHolder.getWidth(null) - screenCorrection * 2 + screenCorrection / 2;
+	private int barHolderX = screenWidth - healthHolder.getWidth(null) - screenCorrection * 2;
 
 	public void entityMessage(Entity ent, String msg) {
 		StringTokenizer tok = new StringTokenizer(msg, " ");
@@ -70,20 +73,110 @@ public class UtilsGUI extends Settings{
 		String s = "";
 		Font tempF = font_med_1.deriveFont(20.0f);
 		GlyphVector gv = tempF.createGlyphVector(frc, s);
+		Entity ent;
 
-		// Health text
+		// Entity Health display
+		for (int i = 1; i < ENTITIES.size(); i++) {
+			ent = ENTITIES.get(i);
+			double maxHealth = ENTITIES.get(i).maxHealth;
+			// Entity health
+			if(maxHealth > 0) {
+				ent.healthCounter += gameLoopTime;
+				double oH = ent.oldHealth;
+				double nH = ent.HEALTH;
+				int TIMER = ent.healthCounter;
+				int DMG = (int) ent.dmgTaken;
+				double hDif = nH - oH;
+
+				if(hDif != 0) {
+					ent.oldHealth = nH;
+					ent.healthCounter = 0;
+					TIMER = 0;
+				}
+
+				if(TIMER < (player.attackSpeedInterval - 300) && DMG != 0) {
+					if(DMG < 0) {
+						g.setColor(Color.red);
+						s = "" + DMG;
+					} else {
+						g.setColor(Color.green);
+						s = "" + DMG;
+					}
+
+					// TODO Attack animation
+					g.drawImage(player.getItem(0).IMAGE, 
+							ent.getCenterX(), 
+							ent.getCenterY(), null);
+
+					Font tempF2 = font_2D_2.deriveFont(10.0f);
+					gv = tempF2.createGlyphVector(frc, s);
+					g.drawImage(AttackBG, 
+							(int) ent.x + hBlockWFixed * 8 + screenCorrection - 2, 
+							(int) ent.y - screenCorrection * 3 + 2, null);
+					g.drawGlyphVector(
+							gv, 
+							(int) ent.x + hBlockWFixed * 9 + screenCorrection, 
+							(int) ent.y);
+				}
+
+				if(TIMER > (player.attackSpeedInterval - 300) && DMG != 0) ENTITIES.get(i).dmgTaken = 0;
+
+				// Red Health holder
+				g.drawImage(healthCircleLR, 
+						(int) ent.getCenterX() - hBlockWFixed * 6 + 1, 
+						(int) ent.y - screenCorrection * 2 + 2, null);
+				g.drawImage(healthCircleRR,
+						(int) ent.getCenterX() + hBlockWFixed * 4 + 1, 
+						(int) ent.y - screenCorrection * 2 + 2, null);
+				for(int k = 1; k < 9; k++) {
+					g.drawImage(healthCircleMR,
+							(int) ENTITIES.get(i).getCenterX() - hBlockWFixed * 6 + hBlockWFixed * k + 1, 
+							(int) ent.y - screenCorrection * 2 + 2, null);
+				}
+
+				// Begin of health
+				g.drawImage(healthCircleRG,
+						(int) ENTITIES.get(i).getCenterX() + hBlockWFixed * 4 + 1, 
+						(int) ent.y - screenCorrection * 2 + 2, null);
+
+				// Entity health
+				double c = 8.0d;
+				double factor = maxHealth / c;
+				double hfactor = nH / factor;
+				int beginH = (int) (ENTITIES.get(i).getCenterX() - hBlockWFixed * 6 + 1);
+
+				if(hfactor > 1.0d) {
+					for(int k = 1; k < hfactor + 1; k++) {
+						// Blocks of health
+						g.drawImage(healthCircleMG, 
+								(int) (ENTITIES.get(i).getCenterX() + hBlockWFixed * 3 - hBlockWFixed * k + 1), 
+								(int) (ent.y - screenCorrection * 2 + 2), null);
+					}
+				}
+
+				if(nH == maxHealth) {
+					// Full health
+					g.drawImage(healthCircleLG,
+							(int) beginH, 
+							(int) ent.y - screenCorrection * 2 + 2, null);
+				}
+			}
+		}
+
+		// GUI Health text
 		g.setColor(Color.black);
 		s = menuLang[16];
-		gv = tempF.createGlyphVector(frc, s);
+		Font tempF2 = tempF.deriveFont(Font.BOLD, 18.0f);
+		gv = tempF2.createGlyphVector(frc, s);
 		g.drawGlyphVector(
 				gv, 
-				(float) (screenWidth - gv.getLogicalBounds().getWidth() - screenCorrection * 3), 
+				(float) (screenWidth - gv.getLogicalBounds().getWidth() - screenCorrection * 4), 
 				screenCorrection * 7);
+		
+		// GUI Healthbar holder
+		g.drawImage(healthHolder, barHolderX, screenCorrection * 9, null);
 
-		// Healthbar holder
-		g.drawImage(healthHolder, barHolderX, (int) (gv.getLogicalBounds().getHeight() + screenCorrection * 3), null);
-
-		// Health blocks
+		// GUI Health blocks
 		for(int i = 1; i < ((player.HEALTH + 9 )/ 10); i++) {
 			if(player.HEALTH <= 30) {
 				g.drawImage(healthBlockRR, 
@@ -113,88 +206,56 @@ public class UtilsGUI extends Settings{
 						barHolderX + screenCorrection + screenCorrection / 2, 
 						screenCorrection * 10 + screenCorrection / 2, null);
 			}
-		}	
-
-		int wFixed = healthCircleLR.getWidth(null);
-		// Entity Health display
-		for (int i = 1; i < ENTITIES.size(); i++) {
-			int maxHealth = ENTITIES.get(i).maxHealth;
-			// Entity health
-			if(maxHealth > 0) {
-				ENTITIES.get(i).healthCounter += gameLoopTime;
-				int oH = ENTITIES.get(i).oldHealth;
-				int nH = ENTITIES.get(i).HEALTH;
-				int TIMER = ENTITIES.get(i).healthCounter;
-				int DMG = ENTITIES.get(i).DMG;
-				int hDif = nH - oH;
-
-				if(hDif != 0) {
-					ENTITIES.get(i).oldHealth = nH;
-					ENTITIES.get(i).healthCounter = 0;
-					TIMER = 0;
-				}
-
-				if(TIMER < (player.attackSpeedInterval - 300) && DMG != 0) {
-					if(DMG < 0) {
-						g.setColor(Color.red);
-						s = "" + DMG;
-					} else {
-						g.setColor(Color.green);
-						s = "" + DMG;
-					}
-
-					Font tempF2 = font_2D_2.deriveFont(10.0f);
-					gv = tempF2.createGlyphVector(frc, s);
-					g.drawImage(AttackBG, 
-							(int) ENTITIES.get(i).x + wFixed * 8 + screenCorrection - 2, 
-							(int) ENTITIES.get(i).y - screenCorrection * 3 + 2, null);
-					g.drawGlyphVector(
-							gv, 
-							(int) ENTITIES.get(i).x + wFixed * 9 + screenCorrection, 
-							(int) ENTITIES.get(i).y);
-				}
-
-				if(TIMER > (player.attackSpeedInterval - 300) && DMG != 0) ENTITIES.get(i).DMG = 0;
-
-				// Red Health holder
-				g.drawImage(healthCircleLR, 
-						(int) ENTITIES.get(i).getCenterX() - wFixed * 6 + 1, 
-						(int) ENTITIES.get(i).y - screenCorrection * 2 + 2, null);
-				g.drawImage(healthCircleRR,
-						(int) ENTITIES.get(i).getCenterX() + wFixed * 4 + 1, 
-						(int) ENTITIES.get(i).y - screenCorrection * 2 + 2, null);
-				for(int k = 1; k < 9; k++) {
-					g.drawImage(healthCircleMR,
-							(int) ENTITIES.get(i).getCenterX() - wFixed * 6 + wFixed * k + 1, 
-							(int) ENTITIES.get(i).y - screenCorrection * 2 + 2, null);
-				}
-
-				// Begin of health
-				g.drawImage(healthCircleRG,
-						(int) ENTITIES.get(i).getCenterX() + wFixed * 4 + 1, 
-						(int) ENTITIES.get(i).y - screenCorrection * 2 + 2, null);
-
-				// Entity health
-				double c = 8.0d;
-				double factor = maxHealth / c;
-				double hfactor = nH / factor;
-				int beginH = (int) (ENTITIES.get(i).getCenterX() - wFixed * 6 + 1);
-
-				for(int k = 1; k < hfactor + 1; k++) {
-					// Blocks of health
-						g.drawImage(healthCircleMG, 
-								(int) (ENTITIES.get(i).getCenterX() + wFixed * 3 - wFixed * k + 1), 
-								(int) (ENTITIES.get(i).y - screenCorrection * 2 + 2), null);
-				}
-				
-				if(nH == maxHealth) {
-					// Full health
-					g.drawImage(healthCircleLG,
-							(int) beginH, 
-							(int) ENTITIES.get(i).y - screenCorrection * 2 + 2, null);
-				}
-			}
 		}
+
+		// GUI Health counter
+		g.setColor(Color.black);
+		tempF2 = tempF.deriveFont(11.0f);
+		s = "/" + String.valueOf((int) player.maxHealth);
+		gv = tempF2.createGlyphVector(frc, s);
+		double tmpX = gv.getLogicalBounds().getWidth();
+		g.drawGlyphVector(
+				gv, 
+				(float) (screenWidth - tmpX - screenCorrection * 4), 
+				screenCorrection * 13);
+		s = String.valueOf((int) player.HEALTH);
+		gv = tempF2.createGlyphVector(frc, s);
+		g.drawGlyphVector(
+				gv, 
+				(float) (screenWidth - gv.getLogicalBounds().getWidth() - tmpX - screenCorrection * 4), 
+				screenCorrection * 13);
+		
+		// GUI Item holder
+		g.drawImage(itemBar, 
+				(screenWidth / 2) - (itemBar.getWidth(null) / 2), 
+				screenHeight - itemBar.getHeight(null), 
+				null);
+
+		// TODO draw items
+		Image tmp;
+		tmp = uItems.getPlayerHotbarItem(0).IMAGE;
+		if(tmp != null) {
+			g.drawImage(tmp, 
+					(screenWidth / 2) - (itemBar.getWidth(null) / 2) - 2, 
+					screenHeight - itemBar.getHeight(null) - 2, 
+					null);
+		}
+
+		// Attack timer
+		if(!player.canAttack()) {
+			g.setColor(shadow);
+			int interval = player.attackSpeedInterval;
+			double factor = interval / 16;
+			int quantity = (int) (player.getAttackTimer() / factor);
+			
+			g.fillRect(
+					(screenWidth / 2) - (itemBar.getWidth(null) / 2) + 6,
+					screenHeight - itemBar.getHeight(null) + 6 + quantity, 
+					16, 
+					16 - quantity);
+		}
+
+		// TODO draw GUI key (to press) for item holder
 
 		// FPS Counter and X&Y coords
 		if (DEBUG || INFO) {
@@ -229,20 +290,21 @@ public class UtilsGUI extends Settings{
 			}
 			// Entity ESP
 			for (int i = 1; i < ENTITIES.size(); i++) {
-				if(ENTITIES.get(i).inAttack) g.setColor(Color.red); else g.setColor(Color.orange);
-				g.draw(ENTITIES.get(i).entityRectangle);
+				ent = ENTITIES.get(i);
+				if(ent.inAttack) g.setColor(Color.red); else g.setColor(Color.orange);
+				g.draw(ent.entityRectangle);
 
 				// Virtual Pathfinding
 				g.setColor(Color.blue);
-				if(ENTITIES.get(i).inAttack && !ENTITIES.get(i).TYPE.contains("player")) {
-					g.drawLine(ENTITIES.get(i).getCenterX(), ENTITIES.get(i).getCenterY(), 
-							ENTITIES.get(i).nX, ENTITIES.get(i).nY);
+				if(ent.inAttack && !ent.TYPE.contains("player")) {
+					g.drawLine(ent.getCenterX(), ent.getCenterY(), 
+							ent.nX, ent.nY);
 				}
 				if(ENTITIES.get(i).HEALTH > 0) {
-					int x = (int) ENTITIES.get(i).getCenterX();
-					int y = (int) ENTITIES.get(i).getCenterY();
-					int atr = ENTITIES.get(i).attackingRadius;
-					int fr = ENTITIES.get(i).attackFindingRadius;
+					int x = ent.getCenterX();
+					int y = ent.getCenterY();
+					int atr = ent.attackingRadius;
+					int fr = ent.attackFindingRadius;
 					g.setColor(Color.red);
 					g.drawOval(x - atr, y - atr, atr * 2, atr * 2);
 					g.setColor(Color.blue);
