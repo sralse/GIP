@@ -66,7 +66,7 @@ class EntityVillager extends Entity {
 					if(((x + adx <= aX + radius) && (x - adx >= aX - radius))) {
 						nX = aX;
 						nX += adx;
-						if(DEBUG || INFO) System.out.println("MOVEMENT - Type: VILLAGER ID: " + ID 
+						if(DEBUG || INFO) System.out.println("MOVEMENT - Type: " + TYPE + " ID: " + ID 
 								+ " Name: " + NAME 
 								+ " New X: " + nX
 								+ " Old X: " + x);
@@ -74,7 +74,7 @@ class EntityVillager extends Entity {
 					if(((y + ady <= aY + radius) && (y - ady >= aY - radius))) {
 						nY = aY;
 						nY += ady;
-						if(DEBUG || INFO) System.out.println("MOVEMENT - Type: VILLAGER ID: " + ID 
+						if(DEBUG || INFO) System.out.println("MOVEMENT - Type: " + TYPE + " ID: " + ID 
 								+ " Name: " + NAME 
 								+ " New Y: " + nY
 								+ " Old Y:" + y);
@@ -84,11 +84,11 @@ class EntityVillager extends Entity {
 					nX += adx;
 					nY = aY;
 					nY += ady;
-					if(DEBUG || INFO) System.out.println("MOVEMENT - Type: VILLAGER ID: " + ID 
+					if(DEBUG || INFO) System.out.println("MOVEMENT - Type: " + TYPE + " ID: " + ID 
 							+ " Name: " + NAME 
 							+ " New X: " + nX
 							+ " Old X: " + x);
-					if(DEBUG || INFO) System.out.println("MOVEMENT - Type: VILLAGER ID: " + ID 
+					if(DEBUG || INFO) System.out.println("MOVEMENT - Type: " + TYPE + " ID: " + ID 
 							+ " Name: " + NAME 
 							+ " New Y: " + nY
 							+ " Old Y:" + y);

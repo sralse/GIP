@@ -29,13 +29,15 @@ public class UtilsGUI extends Settings{
 	private Image healthCircleMR = uImages.scaleImageCubic(uFiles.loadImage(uiImageDir + health_CircleMR), -3);
 	private Image healthCircleLR = uImages.scaleImageCubic(uFiles.loadImage(uiImageDir + health_CircleLR), -3);
 	private Image healthCircleRR = uImages.scaleImageCubic(uFiles.loadImage(uiImageDir + health_CircleRR), -3);
-	private Image itemBar = uImages.scaleImageCubic(uFiles.loadImage(uiImageDir + gui_itemBar), -2);
+	private Image itemBar = uFiles.loadImage(uiImageDir + gui_itemBar);
 	private Image AttackBG = uFiles.loadImage(uiImageDir + "AttackT.png");
 
 	int hBlockWFixed = healthCircleLR.getWidth(null);
 
 	// User space info
 	private int barHolderX = screenWidth - healthHolder.getWidth(null) - screenCorrection * 2;
+	private int itemBarW = itemBar.getWidth(null);
+	private int itemBarH = itemBar.getHeight(null);
 
 	public void entityMessage(Entity ent, String msg) {
 		StringTokenizer tok = new StringTokenizer(msg, " ");
@@ -104,9 +106,9 @@ public class UtilsGUI extends Settings{
 					}
 
 					// TODO Attack animation
-					g.drawImage(player.getItem(0).IMAGE, 
-							ent.getCenterX(), 
-							ent.getCenterY(), null);
+					g.drawImage(uItems.IMAGE_MELEE, 
+							player.getCenterX() - 8, 
+							(int) player.y - 32, null);
 
 					Font tempF2 = font_2D_2.deriveFont(10.0f);
 					gv = tempF2.createGlyphVector(frc, s);
@@ -210,8 +212,10 @@ public class UtilsGUI extends Settings{
 
 		// GUI Health counter
 		g.setColor(Color.black);
+		double maxH = player.maxHealth;
+		if(player.HEALTH < (maxH / 10) * 3.5d) g.setColor(Color.white);
 		tempF2 = tempF.deriveFont(11.0f);
-		s = "/" + String.valueOf((int) player.maxHealth);
+		s = "/" + String.valueOf((int) maxH);
 		gv = tempF2.createGlyphVector(frc, s);
 		double tmpX = gv.getLogicalBounds().getWidth();
 		g.drawGlyphVector(
@@ -227,17 +231,18 @@ public class UtilsGUI extends Settings{
 		
 		// GUI Item holder
 		g.drawImage(itemBar, 
-				(screenWidth / 2) - (itemBar.getWidth(null) / 2), 
-				screenHeight - itemBar.getHeight(null), 
+				(screenWidth / 2) - (itemBarW / 2), 
+				screenHeight - itemBarH, 
 				null);
 
 		// TODO draw items
 		Image tmp;
 		tmp = uItems.getPlayerHotbarItem(0).IMAGE;
 		if(tmp != null) {
+			if(tmp.getWidth(null) != 32) tmp = uImages.scaleImageDetailed(tmp, 32, 32);
 			g.drawImage(tmp, 
-					(screenWidth / 2) - (itemBar.getWidth(null) / 2) - 2, 
-					screenHeight - itemBar.getHeight(null) - 2, 
+					(screenWidth / 2) - (itemBarW / 2) + 12, 
+					screenHeight - itemBarH + 12, 
 					null);
 		}
 
@@ -245,18 +250,20 @@ public class UtilsGUI extends Settings{
 		if(!player.canAttack()) {
 			g.setColor(shadow);
 			int interval = player.attackSpeedInterval;
-			double factor = interval / 16;
+			double factor = interval / 32;
 			int quantity = (int) (player.getAttackTimer() / factor);
 			
 			g.fillRect(
-					(screenWidth / 2) - (itemBar.getWidth(null) / 2) + 6,
-					screenHeight - itemBar.getHeight(null) + 6 + quantity, 
-					16, 
-					16 - quantity);
+					1 + (screenWidth / 2) - (itemBarW / 2) + 12,
+					1 + screenHeight - itemBarH + 12 + quantity, 
+					32, 
+					32 - quantity);
 		}
 
 		// TODO draw GUI key (to press) for item holder
 
+		
+		
 		// FPS Counter and X&Y coords
 		if (DEBUG || INFO) {
 			long currentTime = System.currentTimeMillis();

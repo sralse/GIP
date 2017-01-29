@@ -178,12 +178,14 @@ public class UtilsEntity extends Settings {
 			((EntityImp)ENTITIES.get(i)).doLogic();
 			break;
 		case 1:
-			((EntityImp)ENTITIES.get(i)).doLogic();
+			((EntityRat)ENTITIES.get(i)).doLogic();
 			break;
 		case 2:
 			((EntitySkeleton)ENTITIES.get(i)).doLogic();
 			break;
+		case 3:
+			//((Other)ENTITIES.get(i)).doLogic();
+			break;
 		}
-
 	}
 }

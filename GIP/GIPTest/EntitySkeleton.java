@@ -1,7 +1,7 @@
 package GIP.GIPTest;
 
 /**
- * Create a new entity that represents an Imp
+ * Create a new entity that represents a Skeleton
  * @author Lars Carré
  */
 public class EntitySkeleton extends Entity {
@@ -16,13 +16,14 @@ public class EntitySkeleton extends Entity {
 		this.HEALTH = HEALTH;
 		this.oldHealth = HEALTH;
 		this.maxHealth = HEALTH;
+		this.DMG = 1.5d;
 		this.TYPE = "monster";
 		this.SUBTYPE = ENTITY_MONSTER.SKELETON_NORMAL.value;
 		this.NAME = "Skeletal";
 		this.canInteract = false;
 		this.IMAGE = uFiles.loadImage(tx_monster + this.SUBTYPE + face + mode + imgExt);
 		if (IMAGE == null) {
-			this.IMAGE = uFiles.loadImage(tx_player + 0 + face + mode + imgExt);
+			this.IMAGE = debug;
 		}
 		this.imgH = this.IMAGE.getHeight(null);
 		this.imgW = this.IMAGE.getWidth(null);
@@ -70,11 +71,11 @@ public class EntitySkeleton extends Entity {
 				if(aX + adx > 100 && aX + adx < screenWidth - 100) {nX += adx;} else {nX -= adx;}
 				if(aY + ady > 100 && aY + ady < screenWidth - 100) {nY += ady;} else {nY -= ady;}
 				
-				if(DEBUG || INFO) System.out.println("MOVEMENT - Type: VILLAGER ID: " + ID 
+				if(DEBUG || INFO) System.out.println("MOVEMENT - Type: " + TYPE + " ID: " + ID 
 						+ " Name: " + NAME 
 						+ " New X: " + nX
 						+ " Old X: " + x);
-				if(DEBUG || INFO) System.out.println("MOVEMENT - Type: VILLAGER ID: " + ID 
+				if(DEBUG || INFO) System.out.println("MOVEMENT - Type: " + TYPE + " ID: " + ID 
 						+ " Name: " + NAME 
 						+ " New Y: " + nY
 						+ " Old Y:" + y);
@@ -125,7 +126,5 @@ public class EntitySkeleton extends Entity {
 		super.movementCheck(gameLoopTime, defaultEntitySpeed);
 		super.animationWalk(tx_monster, 500);
 	}
-	
-	
 	
 }

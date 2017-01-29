@@ -33,7 +33,7 @@ public class ItemSword extends Item {
 			}
 		}
 		
-		this.IMAGE = uImages.scaleImageDetailed(uFiles.loadImage(itemDir + this.TYPE + "_" + this.SUBTYPE + imgExt), 32, 32);
+		this.IMAGE = uFiles.loadImage(itemDir + this.TYPE + "_" + this.SUBTYPE + imgExt);
 		
 	}
 

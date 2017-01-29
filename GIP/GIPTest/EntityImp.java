@@ -17,14 +17,14 @@ public class EntityImp extends Entity {
 		this.HEALTH = HEALTH;
 		this.oldHealth = HEALTH;
 		this.maxHealth = HEALTH;
-		this.DMG = 1;
+		this.DMG = 1.0d;
 		this.TYPE = "monster";
 		this.SUBTYPE = ENTITY_MONSTER.IMP_SMALL.value;
 		this.NAME = "Small Imp";
 		this.canInteract = false;
 		this.IMAGE = uFiles.loadImage(tx_monster + this.SUBTYPE + face + mode + imgExt);
 		if (IMAGE == null) {
-			this.IMAGE = uFiles.loadImage(tx_player + 0 + face + mode + imgExt);
+			this.IMAGE = debug;
 		}
 		this.imgH = this.IMAGE.getHeight(null);
 		this.imgW = this.IMAGE.getWidth(null);
@@ -72,11 +72,11 @@ public class EntityImp extends Entity {
 				if(aX + adx > 100 && aX + adx < screenWidth - 100) {nX += adx;} else {nX -= adx;}
 				if(aY + ady > 100 && aY + ady < screenWidth - 100) {nY += ady;} else {nY -= ady;}
 				
-				if(DEBUG || INFO) System.out.println("MOVEMENT - Type: VILLAGER ID: " + ID 
+				if(DEBUG || INFO) System.out.println("MOVEMENT - Type: " + TYPE + " ID: " + ID 
 						+ " Name: " + NAME 
 						+ " New X: " + nX
 						+ " Old X: " + x);
-				if(DEBUG || INFO) System.out.println("MOVEMENT - Type: VILLAGER ID: " + ID 
+				if(DEBUG || INFO) System.out.println("MOVEMENT - Type: " + TYPE + " ID: " + ID 
 						+ " Name: " + NAME 
 						+ " New Y: " + nY
 						+ " Old Y:" + y);
