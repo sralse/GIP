@@ -7,6 +7,7 @@ This repo introduces the DEMO of Neamless Aura
       
 > A 2D top-down fantasy RPG
 
+[![Build Status](https://travis-ci.org/sralse/GIP.svg?branch=master)]
 
 Featuring:   
 - [x] Standalone
