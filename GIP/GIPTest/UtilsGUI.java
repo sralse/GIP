@@ -105,7 +105,7 @@ public class UtilsGUI extends Settings{
 						s = "" + DMG;
 					}
 
-					// TODO Attack animation
+					// TODO Fix Attack animation
 					g.drawImage(uItems.IMAGE_MELEE, 
 							player.getCenterX() - 8, 
 							(int) player.y - 32, null);
@@ -174,7 +174,7 @@ public class UtilsGUI extends Settings{
 				gv, 
 				(float) (screenWidth - gv.getLogicalBounds().getWidth() - screenCorrection * 4), 
 				screenCorrection * 7);
-		
+
 		// GUI Healthbar holder
 		g.drawImage(healthHolder, barHolderX, screenCorrection * 9, null);
 
@@ -228,22 +228,34 @@ public class UtilsGUI extends Settings{
 				gv, 
 				(float) (screenWidth - gv.getLogicalBounds().getWidth() - tmpX - screenCorrection * 4), 
 				screenCorrection * 13);
-		
+
 		// GUI Item holder
 		g.drawImage(itemBar, 
 				(screenWidth / 2) - (itemBarW / 2), 
 				screenHeight - itemBarH, 
 				null);
 
-		// TODO draw items
+		// Draw items
 		Image tmp;
 		tmp = uItems.getPlayerHotbarItem(0).IMAGE;
 		if(tmp != null) {
 			if(tmp.getWidth(null) != 32) tmp = uImages.scaleImageDetailed(tmp, 32, 32);
 			g.drawImage(tmp, 
-					(screenWidth / 2) - (itemBarW / 2) + 12, 
+					(screenWidth / 2) - (itemBarW / 2) + 13, 
 					screenHeight - itemBarH + 12, 
 					null);
+		
+		}
+		for(int i = 1; i < 3; i++) {
+			tmp = uItems.getPlayerHotbarItem(i).IMAGE;
+			if(tmp != null) {
+				if(tmp.getWidth(null) != 32) tmp = uImages.scaleImageDetailed(tmp, 32, 32);
+				g.drawImage(tmp, 
+						(screenWidth / 2) - (itemBarW / 2) + 17 + 56 * i, 
+						screenHeight - itemBarH + 12, 
+						null);
+			
+			}
 		}
 
 		// Attack timer
@@ -252,18 +264,64 @@ public class UtilsGUI extends Settings{
 			int interval = player.attackSpeedInterval;
 			double factor = interval / 32;
 			int quantity = (int) (player.getAttackTimer() / factor);
-			
+
+			// First slot
 			g.fillRect(
 					1 + (screenWidth / 2) - (itemBarW / 2) + 12,
 					1 + screenHeight - itemBarH + 12 + quantity, 
 					32, 
 					32 - quantity);
+
+			// Second slot
+			g.fillRect(
+					1 + (screenWidth / 2) - (itemBarW / 2) + 71,
+					1 + screenHeight - itemBarH + 12 + quantity, 
+					32, 
+					32 - quantity);
+
+			// Third slot
+			g.fillRect(
+					1 + (screenWidth / 2) - (itemBarW / 2) + 127,
+					1 + screenHeight - itemBarH + 12 + quantity, 
+					32, 
+					32 - quantity);
+
+			// Fourth slot
+			g.fillRect(
+					1 + (screenWidth / 2) - (itemBarW / 2) + 183,
+					1 + screenHeight - itemBarH + 12 + quantity, 
+					32, 
+					32 - quantity);
 		}
 
-		// TODO draw GUI key (to press) for item holder
+		// GUI Keys
+		g.setColor(Color.WHITE);
+		tempF2 = tempF.deriveFont(Font.BOLD, 13.0f);
+		s = "C"; // C key - first slot
+		gv = tempF2.createGlyphVector(frc, s);
+		g.drawGlyphVector(
+				gv, 
+				560,
+				1 + screenHeight - 24);
+		s = "V"; // V key - second slot
+		gv = tempF2.createGlyphVector(frc, s);
+		g.drawGlyphVector(
+				gv, 
+				616,
+				1 + screenHeight - 24);
+		s = "B"; // B key - third slot
+		gv = tempF2.createGlyphVector(frc, s);
+		g.drawGlyphVector(
+				gv, 
+				676,
+				1 + screenHeight - 24);
+		s = "N"; // N key - fourth slot
+		gv = tempF2.createGlyphVector(frc, s);
+		g.drawGlyphVector(
+				gv, 
+				730,
+				1 + screenHeight - 24);
 
-		
-		
 		// FPS Counter and X&Y coords
 		if (DEBUG || INFO) {
 			long currentTime = System.currentTimeMillis();

@@ -10,9 +10,8 @@ public class ItemSword extends Item {
 	private final static int SWORD_IRON = 3;
 	private final static int SWORD_DIAMOND = 5;
 	
-	public ItemSword(String name, double damage, int SUBTYPE,Image img) {
+	public ItemSword(String name, int SUBTYPE) {
 		this.NAME = name;
-		this.DMG = damage;
 		this.TYPE = "sword";
 		this.SUBTYPE = SUBTYPE;
 		
@@ -35,6 +34,14 @@ public class ItemSword extends Item {
 		
 		this.IMAGE = uFiles.loadImage(itemDir + this.TYPE + "_" + this.SUBTYPE + imgExt);
 		
+	}
+	
+	public ItemSword(String name, double damage, int SUBTYPE, Image img) {
+		this.NAME = name;
+		this.DMG = damage;
+		this.TYPE = "sword";
+		this.SUBTYPE = SUBTYPE;
+		this.IMAGE = uFiles.loadImage(itemDir + this.TYPE + "_" + this.SUBTYPE + imgExt);
 	}
 
 }

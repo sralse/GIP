@@ -47,9 +47,6 @@ public class Input implements KeyListener {
 		if (e.getKeyCode() == KeyEvent.VK_DOWN) {
 			Settings.downPressed = true;
 		}
-		if (e.getKeyCode() == KeyEvent.VK_SPACE) {
-			// firePressed = true;
-		}
 		if (e.getKeyCode() == KeyEvent.VK_D) {
 			if (Settings.DEBUG) {
 				Settings.DEBUG = false;
@@ -57,7 +54,7 @@ public class Input implements KeyListener {
 				Settings.DEBUG = true;
 			}
 		}
-		if (e.getKeyCode() == KeyEvent.VK_C) {
+		if (e.getKeyCode() == KeyEvent.VK_I) {
 			if (Settings.INFO) {
 				Settings.INFO = false;
 			} else {
@@ -82,7 +79,18 @@ public class Input implements KeyListener {
 				}
 			}
 		}
-
+		if (e.getKeyCode() == KeyEvent.VK_C) {
+			Settings.slot1C = true;
+		}
+		if (e.getKeyCode() == KeyEvent.VK_V) {
+			Settings.slot2V = true;
+		}
+		if (e.getKeyCode() == KeyEvent.VK_B) {
+			Settings.slot3B = true;
+		}
+		if (e.getKeyCode() == KeyEvent.VK_N) {
+			Settings.slot4N = true;
+		}
 		return;
 
 	}
@@ -113,16 +121,24 @@ public class Input implements KeyListener {
 		if (e.getKeyCode() == KeyEvent.VK_DOWN) {
 			Settings.downPressed = false;
 		}
-		if (e.getKeyCode() == KeyEvent.VK_SPACE) {
-			// firePressed = false;
-		}
 		if ((e.getKeyCode() == KeyEvent.VK_SPACE) || (e.getKeyCode() == KeyEvent.VK_ENTER)) {
 			Settings.spacePressed = false;
 		}
 		if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
 			Settings.escape = false;
 		}
-
+		if (e.getKeyCode() == KeyEvent.VK_C) {
+			Settings.slot1C = false;
+		}
+		if (e.getKeyCode() == KeyEvent.VK_V) {
+			Settings.slot2V = false;
+		}
+		if (e.getKeyCode() == KeyEvent.VK_B) {
+			Settings.slot3B = false;
+		}
+		if (e.getKeyCode() == KeyEvent.VK_N) {
+			Settings.slot4N = false;
+		}
 		return;
 
 	}
@@ -169,5 +185,10 @@ public class Input implements KeyListener {
 		Settings.rightPressed = false;
 		Settings.upPressed = false;
 		Settings.downPressed = false;
+		Settings.slot1C = false;
+		Settings.slot2V = false;
+		Settings.slot3B = false;
+		Settings.slot4N = false;
+		Settings.spacePressed = false;
 	}
 }

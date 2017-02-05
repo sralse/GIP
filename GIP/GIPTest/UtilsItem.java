@@ -7,20 +7,24 @@ public class UtilsItem extends Settings{
 
 	public void init() {
 		player.clearItems();
-		Item wsword = new ItemSword("Sam", 0, 1, null);
-		player.addItem(0, wsword);
-		player.DMG = wsword.DMG;
+		Item wsword = new ItemSword("Sam", 1);
+		player.addWeapon(0, wsword);
+		wsword = new ItemSword("Carl", 2);
+		player.addWeapon(1, wsword);
+		wsword = new ItemSword("Lol", 3);
+		player.addWeapon(2, wsword);
 	}
 	
+	@Deprecated
 	public Item getPlayerHotbarItem(int i) {
-		return player.getItem(i);
+		return player.getWeapon(i);
 	}
 	
 	public Item getPlayerHotbarItem(String i) {
-		if(i.toLowerCase().equals("m")) return player.getItem(0);
-		if(i.toLowerCase().equals("v")) return player.getItem(1);
-		if(i.toLowerCase().equals("b")) return player.getItem(2);
-		if(i.toLowerCase().equals("n")) return player.getItem(3);
+		if(i.toLowerCase().equals("c")) return player.getWeapon(0);
+		if(i.toLowerCase().equals("v")) return player.getWeapon(1);
+		if(i.toLowerCase().equals("b")) return player.getWeapon(2);
+		if(i.toLowerCase().equals("n")) return player.getWeapon(3);
 		return null;
 	}
 	

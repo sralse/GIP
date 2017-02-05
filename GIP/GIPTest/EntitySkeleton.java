@@ -38,6 +38,7 @@ public class EntitySkeleton extends Entity {
 		
 		if(HEALTH <= 0) {
 			uID.removeID(ID);
+			uEffects.newEffect(x, y, uEffects.ef_SMOKE);
 			return;	
 		}
 		

@@ -122,6 +122,7 @@ public class UtilsEntity extends Settings {
 				}
 			}
 		}
+		
 	}
 
 	public String getMessage() {
@@ -139,13 +140,19 @@ public class UtilsEntity extends Settings {
 		if (DEBUG) player.face = "0";
 		player.movementCheck(gameLoopTime);
 
-		if(spacePressed) {
+		if(spacePressed || slot1C || slot2V || slot3B || slot4N) {
 			for(int i = 1; i < ENTITIES.size(); i++) {
 				if(!ENTITIES.get(i).canInteract 
 						&& player.canAttack()
 						&& ENTITIES.get(i).HEALTH > 0 
 						&& player.entityRectangle.intersects(ENTITIES.get(i).entityRectangle)) {
 					ENTITIES.get(i).HEALTH -= player.DMG;
+					int index = 0;
+					if(slot4N) index = 3;
+					if(slot3B) index = 2;
+					if(slot2V) index = 1;
+					if(slot1C || spacePressed) index = 0;
+					if(player.getWeapon(index) != null) ENTITIES.get(i).HEALTH -= player.getWeapon(index).DMG;
 					ENTITIES.get(i).dmgTaken = -1;
 					ENTITIES.get(i).inAttack = true;
 					player.inAttack = true;

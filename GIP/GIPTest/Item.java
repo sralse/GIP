@@ -9,6 +9,7 @@ public class Item extends Settings {
 	protected int SUBTYPE;
 	protected double DMG;
 	protected Image IMAGE;
-	
+	/* invPos The item's inventory position **/
+	protected int invPOS;
 	
 }

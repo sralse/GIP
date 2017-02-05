@@ -136,6 +136,7 @@ public class EntityPlayer extends Entity {
 	}
 
 	public void inflictDamage(double dMG) {
+		//TODO add damage effect
 		this.HEALTH -= dMG;
 	}
 	

@@ -36,7 +36,7 @@ public class UtilsImagesEntity extends Settings {
 		}
 	}
 
-	private ArrayList<Image> directionCollection(String face) {
+	public ArrayList<Image> directionCollection(String face) {
 		ArrayList<Image> tmp = new ArrayList<Image>();
 
 		if(face.equals("a")) {

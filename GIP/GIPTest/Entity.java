@@ -328,11 +328,60 @@ public abstract class Entity extends Settings {
 		ITEMS.clear();
 	}
 	
-	public void addItem(int index, Item item) {
+	/**
+	  * Adds a certain item to your hotbar from slot 0 to 3
+	  * @param index The index at which your item should be inserted (0...3)
+	  * @param item The item that you want to add
+	  */
+	public void addWeapon(int index, Item item) {
+		if(index > 3) return;
 		ITEMS.add(index, item);
+		item.invPOS = index;
+		
+		// TODO Replace weapon
+		
 	}
 	
-	public Item getItem(int i) {
-		return ITEMS.get(i);
+	 /**
+	  * Adds a certain piece of armor
+	  * @param item The armor that you want to add
+	  */
+	public void addArmor(Item item) {
+		String string = item.TYPE.toLowerCase();
+		int index = 0;
+		if(string.equals("helmet")) index = 1;
+		if(string.equals("chestplate")) index = 2;
+		if(string.equals("leggings")) index = 3;
+		if(string.equals("boots")) index = 4;
+		if(string.equals("shield")) index = 5;
+		if(index == 0) return;
+		
+		// TODO Replace armor
+		
+		ITEMS.add(index + 3, item);
+		item.invPOS = index + 3;
+	}
+	
+	/**
+	  * Adds a certain item to your hotbar from slot 0 to the max Inventory size
+	  * @param index The index at which your item should be inserted (0...inventorySize)
+	  * @param item The item that you want to add to your inventory
+	  */
+	public void addInvItem(int index, Item item) {
+		ITEMS.add(index + 9, item);
+		item.invPOS = index + 9;
+		
+		// TODO replace item
+		
+	}
+	
+	 /**
+	  * Returns the weapon in the desired slot
+	  * @param index Index of the Item Weapon
+	  */
+	public Item getWeapon(int index) {
+		if(index > 3) return null;
+		if(index >= ITEMS.size()) return null;
+		return ITEMS.get(index);
 	}
 }

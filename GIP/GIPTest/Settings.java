@@ -24,6 +24,7 @@ class Settings {
 	public static UtilsGraphics uGraph = new UtilsGraphics();
 	public static UtilsGUI uGUI = new UtilsGUI();
 	public static UtilsItem uItems = new UtilsItem();
+	public static UtilsEffects uEffects = new UtilsEffects();
 	public static Random randGen = new Random();
 
 	// Global Game options
@@ -128,6 +129,10 @@ class Settings {
 	public static boolean upPressed = false;
 	public static boolean downPressed = false;
 	public static boolean spacePressed = false;
+	public static boolean slot1C = false;
+	public static boolean slot2V = false;
+	public static boolean slot3B = false;
+	public static boolean slot4N = false;
 	public static boolean escape = false;
 
 	// Global map settings

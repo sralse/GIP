@@ -136,6 +136,8 @@ public class MenuMain extends Settings {
 		uAudio.init();
 		// Set up Images
 		uImages.init();
+		// Set up effects
+		uEffects.init();
 		// Set our font
 		localFont = uGraph.getFont(FONTS.MEDIEVAL.value);
 		// Scale our buttons

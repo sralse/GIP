@@ -32,7 +32,9 @@ public class UtilsGraphics extends Settings {
 
 		// Now we ask to draw any object/house/tree/player/entity
 		updateGraphics(g);
-
+		// update effects
+		uEffects.update(g);
+		
 		// Update GUI
 		uGUI.update(g);
 
