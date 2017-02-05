@@ -39,7 +39,7 @@ public class EntityImp extends Entity {
 		
 		if(HEALTH <= 0) {
 			uID.removeID(ID);
-			uEffects.newEffect(x, y, uEffects.ef_FIRE);
+			uEffects.newEffect(super.getCenterX(), super.getCenterY(), uEffects.ef_FIRE);
 			return;	
 		}
 		

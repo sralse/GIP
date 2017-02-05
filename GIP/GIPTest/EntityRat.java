@@ -34,7 +34,7 @@ public class EntityRat extends Entity {
 		
 		if(HEALTH <= 0) {
 			uID.removeID(ID);
-			uEffects.newEffect(x, y, uEffects.ef_SMOKE);
+			uEffects.newEffect(super.getCenterX(), super.getCenterY(), uEffects.ef_SMOKE);
 			return;	
 		}
 		

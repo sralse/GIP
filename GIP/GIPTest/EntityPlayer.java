@@ -136,7 +136,7 @@ public class EntityPlayer extends Entity {
 	}
 
 	public void inflictDamage(double dMG) {
-		//TODO add damage effect
+		uEffects.newEffect(player.getCenterX() - 8, player.getCenterY() - 8, uEffects.ef_SCRATCH);
 		this.HEALTH -= dMG;
 	}
 	

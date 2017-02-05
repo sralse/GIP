@@ -113,7 +113,7 @@ public class UtilsGUI extends Settings{
 					Font tempF2 = font_2D_2.deriveFont(10.0f);
 					gv = tempF2.createGlyphVector(frc, s);
 					g.drawImage(AttackBG, 
-							(int) ent.x + hBlockWFixed * 8 + screenCorrection - 2, 
+							(int) ent.x + hBlockWFixed * 8 + screenCorrection + 1, 
 							(int) ent.y - screenCorrection * 3 + 2, null);
 					g.drawGlyphVector(
 							gv, 
