@@ -396,4 +396,10 @@ public abstract class Entity extends Settings {
 		if(tmp == null) tmp = nullImg;
 		return tmp;
 	}
+	
+	public boolean hasNoItemInSlot(int index) {
+		if(ITEMS.size() < index) return true;
+		if (ITEMS.get(index) == null) return true;
+		return false;
+	}
 }

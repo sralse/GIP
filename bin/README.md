@@ -40,6 +40,10 @@ Debug Mode (Press 'D')
 
 ![alt text](/preview/npc1.JPG "DEBUG mode")
 
+Latest Build:
+
+![alt text](preview/dev27.png "Latest build")
+
 <h2>Credits</h2>
 *   [Kevin Macleod](https://incompetech.com/) - All music inc.
 *   [Kevin Glass](http://www.cokeandcode.com) - Core Game

@@ -460,12 +460,12 @@ public class UtilsGUI extends Settings{
 			if(inventoryCursor == 7) g.drawImage(menu_toolboxSelected, 320, 492, null); // Boots
 			if(inventoryCursor == 8) g.drawImage(menu_toolboxSelected, 364, 404, null); // Shield
 			g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER,0.2f));
-			g.drawImage(icon_ghostHelmet, 324, 364, null); // Helmet
-			g.drawImage(icon_ghostChestplate, 324, 408, null); // Chestplate
-			g.drawImage(icon_ghostPants, 324, 452, null); // Pants
-			g.drawImage(icon_ghostBoots, 324, 498, null); // Boots
-			g.drawImage(icon_ghostShield, 368, 408, null); // Shield
-			g.drawImage(icon_ghostWeapon, 280, 408, null); // Sword
+			if(player.hasNoItemInSlot(0)) g.drawImage(icon_ghostWeapon, 280, 408, null); // Sword
+			if(player.hasNoItemInSlot(4)) g.drawImage(icon_ghostHelmet, 324, 364, null); // Helmet
+			if(player.hasNoItemInSlot(5)) g.drawImage(icon_ghostChestplate, 324, 408, null); // Chestplate
+			if(player.hasNoItemInSlot(6)) g.drawImage(icon_ghostPants, 324, 452, null); // Pants
+			if(player.hasNoItemInSlot(7)) g.drawImage(icon_ghostBoots, 324, 498, null); // Boots
+			if(player.hasNoItemInSlot(8)) g.drawImage(icon_ghostShield, 368, 408, null); // Shield
 			g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER));	
 			g.drawImage(player.getItemImage(0), 280, 408, null); // Sword
 			// Weapons

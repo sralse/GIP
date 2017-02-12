@@ -141,5 +141,5 @@ public class EntityPlayer extends Entity {
 		uEffects.newEffect(player.getCenterX() - 8, player.getCenterY() - 8, uEffects.ef_SCRATCH);
 		this.HEALTH -= dMG;
 	}
-	
+
 }

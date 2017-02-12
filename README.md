@@ -42,7 +42,7 @@ Debug Mode (Press 'D')
 
 Latest Build:
 
-![alt text](preview/dev26.PNG "Latest build")
+![alt text](preview/dev27.png "Latest build")
 
 <h2>Credits</h2>
 *   [Kevin Macleod](https://incompetech.com/) - All music inc.
