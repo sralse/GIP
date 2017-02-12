@@ -3,7 +3,7 @@ package GIP.GIPTest;
 import java.awt.Image;
 
 public class UtilsItem extends Settings{
-	public final Image IMAGE_MELEE = uImages.scaleImageDetailed(uFiles.loadImage(itemDir + "sword_1" + imgExt), 16, 16);
+	public final Image IMAGE_MELEE = uImages.scaleImageLinear(uFiles.loadImage(itemDir + "sword_1" + imgExt), 16, 16);
 
 	public void init() {
 		player.clearItems();

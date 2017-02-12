@@ -18,7 +18,7 @@ public class UtilsEntity extends Settings {
 	}
 
 	public void initPlayer() {
-		player = new EntityPlayer(10, 1, 100, "PLAYER", null);
+		player = new EntityPlayer(10, 1, 100, "PLAYER", 0);
 
 		player.animationWalk(tx_player, aDefInt);
 		if (DEBUG) System.out.println("Player graphics initialised");

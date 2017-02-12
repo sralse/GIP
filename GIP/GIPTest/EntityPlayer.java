@@ -9,7 +9,7 @@ import java.awt.Graphics2D;
  */
 public class EntityPlayer extends Entity {
 	
-	public EntityPlayer(int x, int y, int HEALTH, String NAME, String IMAGE) {
+	public EntityPlayer(int x, int y, int HEALTH, String NAME, int SUBTYPE) {
 		this.TYPE = "player";
 		this.x = x * 16;
 		this.y = y * 16;
@@ -18,10 +18,12 @@ public class EntityPlayer extends Entity {
 		this.maxHealth = HEALTH;
 		this.NAME = NAME;
 		this.DMG = 1;
-		if (IMAGE == null) {
+		if (SUBTYPE == 0) {
 			this.IMAGE = uFiles.loadImage(tx_player + 0 + face + mode + imgExt);
+			this.SUBTYPE = 0;
 		} else {
-			this.IMAGE = uFiles.loadImage(tx_player + IMAGE + face + mode + imgExt);
+			this.IMAGE = uFiles.loadImage(tx_player + SUBTYPE + face + mode + imgExt);
+			this.SUBTYPE = SUBTYPE;
 		}
 		this.imgH = this.IMAGE.getHeight(null);
 		this.imgW = this.IMAGE.getWidth(null);

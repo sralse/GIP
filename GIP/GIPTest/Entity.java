@@ -2,6 +2,7 @@ package GIP.GIPTest;
 
 import java.awt.Image;
 import java.awt.Rectangle;
+import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
 public abstract class Entity extends Settings {
@@ -383,5 +384,16 @@ public abstract class Entity extends Settings {
 		if(index > 3) return null;
 		if(index >= ITEMS.size()) return null;
 		return ITEMS.get(index);
+	}
+	
+	/**
+	  * Returns the weapon in the desired slot
+	  * @param index Index of the Item Weapon
+	  */
+	public BufferedImage getItemImage(int index) {
+		BufferedImage tmp = null;
+		if(index < ITEMS.size()) tmp =  (BufferedImage) ITEMS.get(index).IMAGE;
+		if(tmp == null) tmp = nullImg;
+		return tmp;
 	}
 }

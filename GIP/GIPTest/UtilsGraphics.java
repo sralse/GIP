@@ -28,12 +28,14 @@ public class UtilsGraphics extends Settings {
 		g.fillRect(0, 0, screenWidth, screenHeight);
 		g.drawImage(mapImage, 0, 0, null);
 		
-		uEntity.update();
+		// If we open up a menu don't do entity logic
+		if(!menuOpen) uEntity.update();
 
 		// Now we ask to draw any object/house/tree/player/entity
 		updateGraphics(g);
+		
 		// update effects
-		uEffects.update(g);
+		if(!menuOpen) uEffects.update(g);
 		
 		// Update GUI
 		uGUI.update(g);

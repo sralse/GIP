@@ -91,6 +91,9 @@ public class Input implements KeyListener {
 		if (e.getKeyCode() == KeyEvent.VK_N) {
 			Settings.slot4N = true;
 		}
+		if (e.getKeyCode() == KeyEvent.VK_COMMA) {
+			Settings.invMenuKey = true;
+		}
 		return;
 
 	}
@@ -138,6 +141,9 @@ public class Input implements KeyListener {
 		}
 		if (e.getKeyCode() == KeyEvent.VK_N) {
 			Settings.slot4N = false;
+		}
+		if (e.getKeyCode() == KeyEvent.VK_COMMA) {
+			Settings.invMenuKey = false;
 		}
 		return;
 
@@ -190,5 +196,6 @@ public class Input implements KeyListener {
 		Settings.slot3B = false;
 		Settings.slot4N = false;
 		Settings.spacePressed = false;
+		Settings.invMenuKey = false;
 	}
 }

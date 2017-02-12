@@ -25,6 +25,7 @@ class Settings {
 	public static UtilsGUI uGUI = new UtilsGUI();
 	public static UtilsItem uItems = new UtilsItem();
 	public static UtilsEffects uEffects = new UtilsEffects();
+	public static UtilsCursorLogic uCursor = new UtilsCursorLogic();
 	public static Random randGen = new Random();
 
 	// Global Game options
@@ -50,6 +51,7 @@ class Settings {
 	public static BufferStrategy graphicsBuffer;
 	public static FontRenderContext frc = null;
 	public static final Color shadow = new Color(0, 0, 0, 0.5f);
+	public static final BufferedImage nullImg = new BufferedImage(1,1,BufferedImage.TYPE_INT_RGB);
 
 	// Global UI settings
 	public static double SCALE_BUTTON = 1.5d;
@@ -57,47 +59,50 @@ class Settings {
 	public static final String bg00 = "BG5.png";
 	public static final String buttonNormalLong = "grey_button03.png";
 	public static final String buttonNormalLongSelected = "blue_button00.png";
-	public static final String arrowL_grey = "arrowSilver_left.png";
-	public static final String arrowR_grey = "arrowSilver_right.png";
-	public static final String arrowL_blue = "arrowBlue_left.png";
-	public static final String arrowR_blue = "arrowBlue_right.png";
-	public static final String sliderLine_h = "sliderLine_horizontal.png";
-	public static final String sliderEnd = "sliderDot.png";
-	public static final String sliderD_blue = "sliderBlue_down.png";
-	public static final String sliderD_grey = "sliderGrey_down.png";
-	public static final String health_Block = "barGreen_horizontalMid2.png";
-	public static final String health_BlockMO = "barOrange_horizontalMid2.png";
-	public static final String health_BlockMR = "barRed_horizontalMid2.png";
-	public static final String health_BlockL = "barGreen_horizontalLeft2.png";
-	public static final String health_BlockR = "barGreen_horizontalRight2.png";
-	public static final String health_BlockLO = "barOrange_horizontalLeft2.png";
-	public static final String health_BlockRO = "barOrange_horizontalRight2.png";
-	public static final String health_BlockLR = "barOrange_horizontalLeft2.png";
-	public static final String health_BlockRR = "barOrange_horizontalRight2.png";
-	public static final String health_CircleL = "barGreen_horizontalLeft.png";
-	public static final String health_CircleR = "barGreen_horizontalRight.png";
-	public static final String health_CircleM = "barGreen_horizontalMid.png";
-	public static final String health_CircleLR = "barRed_horizontalLeft.png";
-	public static final String health_CircleRR = "barRed_horizontalRight.png";
-	public static final String health_CircleMR = "barRed_horizontalMid.png";
-	public static final String health_Holder = "barHolder_00.png";
 	public static final String box1_brown = "boxBrown_01.png";
-	public static final String gui_itemBar = "ItemBar.png";
-	public static Image bg0 = uFiles.loadImage(uiImageDir + bg00);
+	public static final String gui_itemBar = "ItemBar2.png";
+	public static final Image bg0 = uFiles.loadImage(uiImageDir + bg00);
 
+	// Global game menu settings
+	public static boolean menuOpen = false;
+	public static int menuCooldown = 1000;
+	public static int MENU_TYPE = 0;
+	public static final int MENU_EXIT = 1;
+	public static final int MENU_INVENTORY = 2;
+	public static final int MENU_TRADE = 3;
+	public static final Color menuHeaderColor = new Color(
+			0.4980392156862745f, 
+			0.3176470588235294f, 
+			0.1882352941176471f); // #7f5130
+	public static final Color menuTextColor = new Color(
+			0.7411764705882353f, 
+			0.5176470588235294f, 
+			0.0392156862745098f); // #bd840a
+	public static int inventoryCursor = 9;
+	
 	// Global Language settings
 	public static final int EN = 0;
 	public static final int NL = 1;
 	public static final int FR = 2;
 	public static final String[] LANG = { "ENGLISH", "NEDERLANDS", "FRANÇAIS" };
-	public static final String[] menuEN = { "START", "OPTIONS", "EXIT", "CONTINUE", "LANGUAGE", "MODE", "ANTI ALIAS",
-			"GRAPHICS ACCELERATION", "SHADOWS", "ENABLED", "DISABLED", "YES", "NO", "VOLUME", "error", "SAVE",
-			"HEALTH" };
-	public static final String[] menuNL = { "START", "OPTIES", "EXIT", "VERDER SPELEN", "TAAL", "MODUS", "ANTI ALIAS",
-			"GRAFISCHE ACCELERATIE", "SCHADUWEN", "AAN", "UIT", "JA", "NEE", "VOLUME", "error", "OPSLAAN", "LEVENS" };
-	public static final String[] menuFR = { "START", "OPTIONS", "FERMER", "CONTINUER", "LANGUE", "MODE", "ANTI ALIAS",
-			"GRAPHICS ACCELERATION", "OMBRES", "ENABLED", "DISABLED", "OUI", "NON", "VOLUME", "error", "SAUVER",
-			"HEALTH" };
+	public static final String[] menuEN = { 
+			"START", "OPTIONS", "EXIT", "CONTINUE", "LANGUAGE", 
+			"MODE", "ANTI ALIAS", "GRAPHICS ACCELERATION", "SHADOWS", "ENABLED", 
+			"DISABLED", "YES", "NO", "VOLUME", "error", 
+			"SAVE",	"HEALTH", "INVENTORY", "DAMAGE", "DEFENSE", 
+			"LEVEL"};
+	public static final String[] menuNL = { 
+			"START", "OPTIES", "EXIT", "VERDER SPELEN", "TAAL", 
+			"MODUS", "ANTI ALIAS", "GRAFISCHE ACCELERATIE", "SCHADUWEN", "AAN", 
+			"UIT", "JA", "NEE", "VOLUME", "error", 
+			"OPSLAAN", "LEVENS", "INVENTARIS", "SCHADE", "VERDEDIGING",
+			"LEVEL" };
+	public static final String[] menuFR = { 
+			"START", "OPTIONS", "FERMER", "CONTINUER", "LANGUE", 
+			"MODE", "ANTI ALIAS", "GRAPHICS ACCELERATION", "OMBRES", "ENABLED", 
+			"DISABLED", "OUI", "NON", "VOLUME", "error", 
+			"SAUVER", "HEALTH", "INVENTORY", "DAMAGE", "DEFENSE",
+			"LEVEL" };
 	public static String SETTING_LANGUAGE = LANG[EN];
 	public static String[] menuLang;
 
@@ -133,6 +138,7 @@ class Settings {
 	public static boolean slot2V = false;
 	public static boolean slot3B = false;
 	public static boolean slot4N = false;
+	public static boolean invMenuKey = false;
 	public static boolean escape = false;
 
 	// Global map settings
@@ -155,7 +161,6 @@ class Settings {
 
 	// Global entity
 	public static Image mapImage;
-	public static Image defaultPlayerImage = null;
 	public static int entDataBlockSize = 5;
 	public static int aDefInt = 300;
 	public static final String mapDirObjects = "_objects";

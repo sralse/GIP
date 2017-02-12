@@ -1,5 +1,6 @@
 package GIP.GIPTest;
 
+import java.awt.AlphaComposite;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Image;
@@ -17,9 +18,12 @@ public class MenuMain extends Settings {
 	// Private button properties TEST.
 	private static Image button = uFiles.loadImage(uiImageDir + buttonNormalLong);
 	private static Image buttonSelected = uFiles.loadImage(uiImageDir + buttonNormalLongSelected);
+	private static Image keys = uFiles.loadImage(uiImageDir + "keys.png");
 	private static double btnWidth = button.getWidth(null) * SCALE_BUTTON;
 	private static int btnSpacing = 100;
 	private static int btnCenter = (int) ((screenWidth / 2) - (btnWidth / 2));
+	private static float colorAdjust = 1.0f;
+	private static boolean colorAdjustNeeded = false;
 
 	public static void main(String argv[]) {
 		// init our game menu
@@ -50,6 +54,19 @@ public class MenuMain extends Settings {
 		g = (Graphics2D) graphicsBuffer.getDrawGraphics();
 		g.drawImage(bg0, 0, 0, null);
 
+		// Display keys
+		float colorAdjustment = 0.0002f;
+		if(colorAdjust >= 1.0f) {
+			colorAdjustNeeded = true;
+		} else if (colorAdjust <= 0.3f) {
+			colorAdjustNeeded = false;
+		}
+		if(colorAdjustNeeded) colorAdjust -= colorAdjustment; else colorAdjust += colorAdjustment;
+		
+		g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, colorAdjust));
+		g.drawImage(keys, 1000, 550, null);
+		g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC));
+		
 		// Button drawing
 		for (int i = 0; i < 3; i++) {
 			if (i != choice) {
@@ -142,8 +159,8 @@ public class MenuMain extends Settings {
 		localFont = uGraph.getFont(FONTS.MEDIEVAL.value);
 		// Scale our buttons
 		if (SCALE_BUTTON != 1) {
-			button = uImages.scaleImageDetailed(button, (int) btnWidth, button.getHeight(null));
-			buttonSelected = uImages.scaleImageDetailed(buttonSelected, (int) btnWidth, buttonSelected.getHeight(null));
+			button = uImages.scaleImageLinear(button, (int) btnWidth, button.getHeight(null));
+			buttonSelected = uImages.scaleImageLinear(buttonSelected, (int) btnWidth, buttonSelected.getHeight(null));
 		}
 		// New button sizes
 		btnWidth = button.getWidth(null);

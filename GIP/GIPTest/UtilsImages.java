@@ -102,11 +102,34 @@ public class UtilsImages extends Settings {
 	 * @param newHeight
 	 *            Integer: The scaling amount for y.
 	 */
-	public Image scaleImageDetailed(Image img, int newWidth, int newHeight) {
+	public Image scaleImageLinear(Image img, int newWidth, int newHeight) {
 		BufferedImage newImage = new BufferedImage(newWidth, newHeight, BufferedImage.TYPE_INT_ARGB);
 		Graphics2D g = newImage.createGraphics();
 		try {
-			g.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BICUBIC);
+			g.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
+			g.drawImage(img, 0, 0, newWidth, newHeight, null);
+		} finally {
+			g.dispose();
+		}
+		return newImage;
+	}
+	
+	/**
+	 * Scales any image using NEAREST NEIGHBOUR
+	 * 
+	 * @return <b>Image</b> The new and scaled version of the input Image.
+	 * @param img
+	 *            Image: This is the Image that needs to be converted.
+	 * @param newWidth
+	 *            Integer: The scaling amount for x.
+	 * @param newHeight
+	 *            Integer: The scaling amount for y.
+	 */
+	public Image scaleImageNearest(Image img, int newWidth, int newHeight) {
+		BufferedImage newImage = new BufferedImage(newWidth, newHeight, BufferedImage.TYPE_INT_ARGB);
+		Graphics2D g = newImage.createGraphics();
+		try {
+			g.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_NEAREST_NEIGHBOR);
 			g.drawImage(img, 0, 0, newWidth, newHeight, null);
 		} finally {
 			g.dispose();

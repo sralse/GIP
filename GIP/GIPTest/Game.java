@@ -1,7 +1,10 @@
 package GIP.GIPTest;
 
 import java.awt.Canvas;
+import java.awt.Cursor;
 import java.awt.Dimension;
+import java.awt.Point;
+import java.awt.Toolkit;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
@@ -84,7 +87,12 @@ public class Game extends Canvas {
 		}
 
 		Settings.graphicsBuffer = getBufferStrategy();
-
+		
+		// Hide cursor
+		Toolkit tk = getToolkit();
+		Cursor transparent = tk.createCustomCursor(tk.getImage(""), new Point(), "trans");
+		frame.setCursor(transparent);
+		
 	}
 
 	public void initGame() {

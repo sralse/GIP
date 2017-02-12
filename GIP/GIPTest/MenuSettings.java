@@ -17,15 +17,16 @@ class MenuSettings extends Settings {
 	// Images
 	private static Image button = uFiles.loadImage(uiImageDir + buttonNormalLong);
 	private static Image buttonSelected = uFiles.loadImage(uiImageDir + buttonNormalLongSelected);
-	private static Image arrowLeft = uFiles.loadImage(uiImageDir + arrowL_grey);
-	private static Image arrowRight = uFiles.loadImage(uiImageDir + arrowR_grey);
-	private static Image arrowLeftSelected = uFiles.loadImage(uiImageDir + arrowL_blue);
-	private static Image arrowRightSelected = uFiles.loadImage(uiImageDir + arrowR_blue);
-	private static Image sliderLine = uImages.scaleImageDetailed(uFiles.loadImage(uiImageDir + sliderLine_h), sliderWidth,
+	private static Image arrowLeft = uFiles.loadImage(uiImageDir + "arrowSilver_left.png");
+	private static Image arrowRight = uFiles.loadImage(uiImageDir + "arrowSilver_right.png");
+	private static Image arrowLeftSelected = uFiles.loadImage(uiImageDir + "arrowBlue_left.png");
+	private static Image arrowRightSelected = uFiles.loadImage(uiImageDir + "arrowBlue_right.png");
+	private static Image sliderLine = uImages.scaleImageLinear(uFiles.loadImage(uiImageDir + "sliderLine_horizontal.png"),
+			sliderWidth,
 			sliderHeigth);
-	private static Image sliderDot = uFiles.loadImage(uiImageDir + sliderEnd);
-	private static Image sliderActive = uFiles.loadImage(uiImageDir + sliderD_blue);
-	private static Image sliderInactive = uFiles.loadImage(uiImageDir + sliderD_grey);
+	private static Image sliderDot = uFiles.loadImage(uiImageDir + "sliderDot.png");
+	private static Image sliderActive = uFiles.loadImage(uiImageDir + "sliderBlue_down.png");
+	private static Image sliderInactive = uFiles.loadImage(uiImageDir + "sliderGrey_down.png");
 	// Layout vars
 	private static int choice = 0;
 	private static int oldChoice = choice;
