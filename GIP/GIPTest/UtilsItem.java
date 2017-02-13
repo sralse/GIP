@@ -6,13 +6,20 @@ public class UtilsItem extends Settings{
 	public final Image IMAGE_MELEE = uImages.scaleImageLinear(uFiles.loadImage(itemDir + "sword_1" + imgExt), 16, 16);
 
 	public void init() {
+		//Test items
 		player.clearItems();
-		Item wsword = new ItemSword("Sam", 1);
-		player.addWeapon(0, wsword);
-		wsword = new ItemSword("Carl", 2);
-		player.addWeapon(1, wsword);
-		wsword = new ItemSword("Lol", 3);
-		player.addWeapon(2, wsword);
+		Item item = new ItemSword("Sam", 1);
+		player.addWeapon(0, item);
+		item = new ItemSword("Carl", 2);
+		player.addWeapon(1, item);
+		item = new ItemSword("Lol", 3);
+		player.addWeapon(2, item);
+		item = new ItemWood(null, 0, 1);
+		player.addInvItem(0, item);
+		item = new ItemWood(null, 0, 2);
+		player.addInvItem(9, item);
+		item = new ItemWood(null, 0, 3);
+		player.addInvItem(41, item);
 	}
 	
 	@Deprecated

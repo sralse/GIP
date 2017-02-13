@@ -67,6 +67,7 @@ class Settings {
 	public static boolean menuOpen = false;
 	public static int menuCooldown = 1000;
 	public static int MENU_TYPE = 0;
+	public static final int MENU_DIED = -1;
 	public static final int MENU_EXIT = 1;
 	public static final int MENU_INVENTORY = 2;
 	public static final int MENU_TRADE = 3;
@@ -78,6 +79,7 @@ class Settings {
 			0.7411764705882353f, 
 			0.5176470588235294f, 
 			0.0392156862745098f); // #bd840a
+	public static final Color transWhite = new Color(1.0f, 1.0f, 1.0f, 0.5f);
 	public static int inventoryCursor = 9;
 	
 	// Global Language settings
@@ -90,19 +92,19 @@ class Settings {
 			"MODE", "ANTI ALIAS", "GRAPHICS ACCELERATION", "SHADOWS", "ENABLED", 
 			"DISABLED", "YES", "NO", "VOLUME", "error", 
 			"SAVE",	"HEALTH", "INVENTORY", "DAMAGE", "DEFENSE", 
-			"LEVEL"};
+			"LEVEL", "STATISTICS", "ATTACK", "YOU DIED", "Press [ESC] to return to menu"};
 	public static final String[] menuNL = { 
 			"START", "OPTIES", "EXIT", "VERDER SPELEN", "TAAL", 
 			"MODUS", "ANTI ALIAS", "GRAFISCHE ACCELERATIE", "SCHADUWEN", "AAN", 
 			"UIT", "JA", "NEE", "VOLUME", "error", 
 			"OPSLAAN", "LEVENS", "INVENTARIS", "SCHADE", "VERDEDIGING",
-			"LEVEL" };
+			"LEVEL", "STATISTIEKEN", "ATTACK", "GESTORVEN", "Duw op [ESC] om terug te keren naar het menu" };
 	public static final String[] menuFR = { 
 			"START", "OPTIONS", "FERMER", "CONTINUER", "LANGUE", 
 			"MODE", "ANTI ALIAS", "GRAPHICS ACCELERATION", "OMBRES", "ENABLED", 
 			"DISABLED", "OUI", "NON", "VOLUME", "error", 
 			"SAUVER", "HEALTH", "INVENTORY", "DAMAGE", "DEFENSE",
-			"LEVEL" };
+			"LEVEL", "STATISTICS", "ATTACK", "MORT", "Pusser [ESC] pour retourner a menu" };
 	public static String SETTING_LANGUAGE = LANG[EN];
 	public static String[] menuLang;
 
@@ -160,6 +162,7 @@ class Settings {
 			.asList(new String[] { "4", "5", "n", "m", "o", "h", "i", "j", "k", "l" });
 
 	// Global entity
+	public static boolean ALIVE = true;
 	public static Image mapImage;
 	public static int entDataBlockSize = 5;
 	public static int aDefInt = 300;
@@ -181,6 +184,13 @@ class Settings {
 
 	// Global Item
 	public final static String itemDir = lvlDir + "items/";
+	
+	// Global statistics
+	public final static int STAT_HEALTH = 0;
+	public final static int STAT_ATTACK = 1;
+	public final static int STAT_DEFENSE = 2;
+	public final static int STAT_TEST = 3;
+	public static final String tx_icons = "gui/inventory/icons/";
 	
 	// Message box settings
 	public static boolean messaged = false;

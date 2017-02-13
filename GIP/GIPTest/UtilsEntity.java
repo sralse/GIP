@@ -146,14 +146,15 @@ public class UtilsEntity extends Settings {
 						&& player.canAttack()
 						&& ENTITIES.get(i).HEALTH > 0 
 						&& player.entityRectangle.intersects(ENTITIES.get(i).entityRectangle)) {
-					ENTITIES.get(i).HEALTH -= player.DMG;
-					ENTITIES.get(i).dmgTaken = 0 - player.DMG;
+					ENTITIES.get(i).HEALTH -= player.DMG + (player.STATS.get(STAT_ATTACK).level / 25);
+					ENTITIES.get(i).dmgTaken = 0 - player.DMG - (player.STATS.get(STAT_ATTACK).level / 25);
 					int index = 0;
 					if(slot4N) index = 3;
 					if(slot3B) index = 2;
 					if(slot2V) index = 1;
 					if(slot1C || spacePressed) index = 0;
 					if(player.getWeapon(index) != null) {
+						
 						ENTITIES.get(i).HEALTH -= player.getWeapon(index).DMG;
 						ENTITIES.get(i).dmgTaken -= player.getWeapon(index).DMG;
 					}

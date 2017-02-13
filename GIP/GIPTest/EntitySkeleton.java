@@ -28,6 +28,7 @@ public class EntitySkeleton extends Entity {
 		this.imgH = this.IMAGE.getHeight(null);
 		this.imgW = this.IMAGE.getWidth(null);
 		this.entityRectangle.setBounds((int) this.x, (int) this.y, imgW, imgH);
+		this.xpReward += xpReward * 2;
 	}
 
 	public void doLogic() {
@@ -39,6 +40,8 @@ public class EntitySkeleton extends Entity {
 		if(HEALTH <= 0) {
 			uID.removeID(ID);
 			uEffects.newEffect(super.getCenterX(), super.getCenterY(), uEffects.ef_SMOKE);
+			player.STATS.get(STAT_ATTACK).addXP(xpReward);
+			player.STATS.get(STAT_HEALTH).addXP(xpReward / 10);
 			return;	
 		}
 		

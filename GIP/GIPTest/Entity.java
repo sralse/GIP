@@ -57,6 +57,9 @@ public abstract class Entity extends Settings {
 	protected static int defaultEntitySpeed = (playerSpeed * 3) / 4;
 	// ITEMS
 	protected static ArrayList<Item> ITEMS = new ArrayList<Item>();
+	// STATS
+	protected double xpReward = 10;
+	protected ArrayList<StatBase> STATS = new ArrayList<StatBase>();
 
 	/**
 	 * 3 Request that this entity move itself based on a certain ammount of time passing.
@@ -327,6 +330,7 @@ public abstract class Entity extends Settings {
 	
 	public void clearItems() {
 		ITEMS.clear();
+		for(int i = 0; i < 50; i++) ITEMS.add(null);
 	}
 	
 	/**
@@ -338,9 +342,6 @@ public abstract class Entity extends Settings {
 		if(index > 3) return;
 		ITEMS.add(index, item);
 		item.invPOS = index;
-		
-		// TODO Replace weapon
-		
 	}
 	
 	 /**
@@ -356,24 +357,26 @@ public abstract class Entity extends Settings {
 		if(string.equals("boots")) index = 4;
 		if(string.equals("shield")) index = 5;
 		if(index == 0) return;
-		
-		// TODO Replace armor
-		
 		ITEMS.add(index + 3, item);
 		item.invPOS = index + 3;
 	}
 	
 	/**
-	  * Adds a certain item to your hotbar from slot 0 to the max Inventory size
+	  * Adds a certain item to your inventory from slot 0 to the max Inventory size
 	  * @param index The index at which your item should be inserted (0...inventorySize)
 	  * @param item The item that you want to add to your inventory
 	  */
 	public void addInvItem(int index, Item item) {
-		ITEMS.add(index + 9, item);
+		ITEMS.set(index + 9, item);
 		item.invPOS = index + 9;
-		
-		// TODO replace item
-		
+	}
+	
+	/**
+	 * Removes a certaint item from the ITEMS list.
+	 * @param index ItemIndex
+	 * */
+	public void removeItem(int index) {
+		ITEMS.set(index, null);
 	}
 	
 	 /**
@@ -387,19 +390,42 @@ public abstract class Entity extends Settings {
 	}
 	
 	/**
+	 * Returns the desired item
+	 * @param index The index of the item needed
+	 * */
+	public Item getInvItem(int index) {
+		if(ITEMS.size() < index) return null;
+		return ITEMS.get(index);
+	}
+	
+	/**
 	  * Returns the weapon in the desired slot
 	  * @param index Index of the Item Weapon
 	  */
 	public BufferedImage getItemImage(int index) {
 		BufferedImage tmp = null;
-		if(index < ITEMS.size()) tmp =  (BufferedImage) ITEMS.get(index).IMAGE;
+		if(index < ITEMS.size()) {
+			if(ITEMS.get(index) != null) tmp = (BufferedImage) ITEMS.get(index).IMAGE;
+		}
 		if(tmp == null) tmp = nullImg;
 		return tmp;
 	}
 	
+	/**
+	 * Tests if there's any item in the given slot.
+	 * @param index The index of the slot to test
+	 * */
 	public boolean hasNoItemInSlot(int index) {
-		if(ITEMS.size() < index) return true;
 		if (ITEMS.get(index) == null) return true;
 		return false;
+	}
+	
+	public void switchItems(Item item, int ogItemSlot, int inventoryCursor) {
+		// TODO check itemTypes
+		if(ITEMS.get(inventoryCursor) != null) {
+			Item itemOriginal = ITEMS.get(inventoryCursor);
+			ITEMS.set(ogItemSlot, itemOriginal);
+		} 
+		ITEMS.set(inventoryCursor, item);
 	}
 }

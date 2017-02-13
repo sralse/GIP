@@ -28,6 +28,10 @@ public class EntityPlayer extends Entity {
 		this.imgH = this.IMAGE.getHeight(null);
 		this.imgW = this.IMAGE.getWidth(null);
 		this.entityRectangle.setBounds((int) this.x, (int) this.y, imgW, imgH);
+		this.STATS.add(STAT_HEALTH, new StatHealth());
+		this.STATS.add(STAT_ATTACK, new StatAttack());
+		this.STATS.add(STAT_DEFENSE, new StatDefense());
+		uCursor.maxInventoryCursorSize = 50 + STATS.size();
 	}
 
 	public void movementCheck(long delta) {
@@ -140,6 +144,10 @@ public class EntityPlayer extends Entity {
 	public void inflictDamage(double dMG) {
 		uEffects.newEffect(player.getCenterX() - 8, player.getCenterY() - 8, uEffects.ef_SCRATCH);
 		this.HEALTH -= dMG;
+		if(HEALTH < 1) {
+			MENU_TYPE = MENU_DIED;
+			menuOpen = true;
+		}
 	}
 
 }

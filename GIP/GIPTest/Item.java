@@ -7,6 +7,8 @@ public class Item extends Settings {
 	protected String NAME;
 	protected String TYPE;
 	protected int SUBTYPE;
+	protected int STATBOOST;
+	protected int AMOUNT;
 	protected double DMG;
 	protected Image IMAGE;
 	/* invPos The item's inventory position **/

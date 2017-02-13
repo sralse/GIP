@@ -14,6 +14,7 @@ public class ItemSword extends Item {
 		this.NAME = name;
 		this.TYPE = "sword";
 		this.SUBTYPE = SUBTYPE;
+		this.STATBOOST = STAT_ATTACK;
 		
 		if (SUBTYPE != 0) {
 			switch(SUBTYPE) {

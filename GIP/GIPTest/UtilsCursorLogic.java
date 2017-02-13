@@ -2,6 +2,11 @@ package GIP.GIPTest;
 
 public class UtilsCursorLogic extends Settings{
 
+	public int maxInventoryCursorSize;
+	public boolean hasSelected;
+	public Item selectedItem;
+	public int ogItemSlot;
+
 	public void update() {
 		switch(MENU_TYPE) {
 		case MENU_INVENTORY:
@@ -22,6 +27,20 @@ public class UtilsCursorLogic extends Settings{
 	}
 
 	private void updateInventoryCursor() {
+		if(spacePressed) {
+			if(!hasSelected) {
+				hasSelected = true;
+				selectedItem = player.ITEMS.get(inventoryCursor);
+				if(selectedItem == null) hasSelected = false;
+				player.removeItem(inventoryCursor);
+				ogItemSlot = inventoryCursor;
+			} else {
+				hasSelected = false;
+				player.switchItems(selectedItem, ogItemSlot, inventoryCursor);
+				selectedItem = null;
+			}
+			spacePressed = false;
+		}
 		if(inventoryCursor < 9) {
 			if(inventoryCursor == 0) {
 				if(leftPressed) inventoryCursor = 1;
@@ -62,14 +81,19 @@ public class UtilsCursorLogic extends Settings{
 				if(rightPressed) inventoryCursor = 30;
 			}
 		} else {
+			if(inventoryCursor > 50) {
+				if(leftPressed) inventoryCursor = 50;
+				if(upPressed) inventoryCursor -= 1;
+				if(downPressed) inventoryCursor += 1;
+				if(inventoryCursor < 51 && !leftPressed) inventoryCursor = maxInventoryCursorSize;
+				if(inventoryCursor > maxInventoryCursorSize) inventoryCursor = 51;
+				return;
+			}
 			if(inventoryCursor == 9) {
 				if(rightPressed) inventoryCursor += 1;
 				if(downPressed) inventoryCursor += 7;
-			} else if (inventoryCursor == 50) {
-				if(leftPressed) inventoryCursor -= 1;
-				if(upPressed) inventoryCursor -= 7;
 			} else {
-				if(leftPressed) {
+				if(leftPressed && !hasSelected) {
 					if(inventoryCursor == 23) {
 						inventoryCursor = 4;
 						return;
@@ -84,12 +108,30 @@ public class UtilsCursorLogic extends Settings{
 						return;
 					} else {inventoryCursor -= 1;}
 				}
-				if(rightPressed) inventoryCursor += 1;
+				if(leftPressed && hasSelected && inventoryCursor > 9) inventoryCursor -= 1;
+				if(rightPressed && !hasSelected) {
+					if(inventoryCursor == 15) {
+						inventoryCursor = 51;
+						return;
+					} else if(inventoryCursor == 22) {
+						inventoryCursor = 51;
+						return;
+					} else if(inventoryCursor == 29) {
+						inventoryCursor = 51;
+						return;
+					} else if(inventoryCursor == 36) {
+						inventoryCursor = 51;
+						return;
+					} else if(inventoryCursor == 43) {
+						inventoryCursor = 51;
+						return;
+					} else {inventoryCursor += 1;}
+				}
+				if(rightPressed && hasSelected && inventoryCursor < 50) inventoryCursor += 1;
 				if(upPressed && inventoryCursor - 7 >= 9) inventoryCursor -= 7;
 				if(downPressed && inventoryCursor + 7 <= 50) inventoryCursor += 7;
 			}
 		}
-
+		if(hasSelected) selectedItem.invPOS = inventoryCursor;
 	}
-
 }

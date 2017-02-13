@@ -7,7 +7,7 @@ import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.font.GlyphVector;
 import java.util.StringTokenizer;
-@SuppressWarnings("unused")
+
 public class UtilsGUI extends Settings{
 	// FPS Counter
 	private long nextSecond = System.currentTimeMillis() + 1000;
@@ -57,6 +57,7 @@ public class UtilsGUI extends Settings{
 	private final int barHolderX = screenWidth - healthHolder.getWidth(null) - screenCorrection * 2;
 	private final int itemBarW = itemBar.getWidth(null);
 	private final int itemBarH = itemBar.getHeight(null);
+	private float fade = 0.0f;
 	private Image inv_playerImg;
 
 	public void entityMessage(Entity ent, String msg) {
@@ -261,7 +262,7 @@ public class UtilsGUI extends Settings{
 				screenHeight - itemBarH + 12, 
 				null);
 
-		for(int i = 1; i < 3; i++) {
+		for(int i = 1; i < 4; i++) {
 			g.drawImage(player.getItemImage(i), 
 					(screenWidth / 2) - (itemBarW / 2) + 17 + 56 * i, 
 					screenHeight - itemBarH + 12, 
@@ -427,6 +428,15 @@ public class UtilsGUI extends Settings{
 				for(int j = 0; j < 6; j++) {
 					g.drawImage(menu_toolbox, 481 + i * 40, 285 + j * 40, null);
 					if(i + j * 7 == inventoryCursor - 9) g.drawImage(menu_toolboxSelected, 481 + i * 40, 285 + j * 40, null);
+					if(player.getInvItem((i + j * 7) + 9) != null) 
+						g.drawImage(player.getItemImage((i + j * 7) + 9), 485 + i * 40, 289 + j * 40, null);
+					if(uCursor.hasSelected && i + j * 7 == inventoryCursor - 9) {
+						g.drawImage(uCursor.selectedItem.IMAGE, 485 + i * 40, 289 + j * 40, null);
+						Color oldColor = g.getColor();
+						g.setColor(transWhite);
+						g.fillRect(481 + i * 40, 285 + j * 40, 40, 40);
+						g.setColor(oldColor);
+					}
 				}
 			}
 			
@@ -491,13 +501,167 @@ public class UtilsGUI extends Settings{
 			g.drawGlyphVector(gv, 260, 528);
 			
 			// Sidebar
-			g.drawImage(menu_sidebar_bg, screenWidth - 200, 0, null);
+			// TODO Draw stats info
+			g.setColor(menuHeaderColor);
+			tempF2 = font_2D_2.deriveFont(22.0f);
+			g.drawImage(menu_sidebar_bg, screenWidth - 200 - screenCorrection * 2, 0, null);
+			s = menuLang[21];
+			gv = tempF2.createGlyphVector(frc, s);
+			g.drawGlyphVector(gv, (float) (screenWidth - 100 - (gv.getLogicalBounds().getWidth()) / 2), 20);
+			s = player.NAME;
+			tempF2 = font_2D_2.deriveFont(17.0f);
+			gv = tempF2.createGlyphVector(frc, s);
+			g.drawGlyphVector(gv, (float) (screenWidth - 100 - (gv.getLogicalBounds().getWidth()) / 2), 35);
+			g.setColor(menuTextColor);
+			boolean active = false;
+			for(int i = 0; i < player.STATS.size(); i++) {
+				int j;
+				s = player.STATS.get(i).getLevelString();
+				if(player.STATS.get(i).statType + 51 == inventoryCursor) {
+					g.drawImage(menu_sidebar_frameSelected, 
+							screenWidth - 200 - screenCorrection, 
+							screenCorrection + 50 * (i + 1), null);
+					g.drawImage(menu_toolbox, 
+							screenWidth - 200 + screenCorrection,
+							50 * (i + 1) + 10, null);
+					g.drawImage(player.STATS.get(i).icon, 
+							screenWidth - 200 + screenCorrection * 2, 
+							50 * (i + 1) + screenCorrection + 10, null);
+					g.drawImage(menu_sidebar_stat, 
+							screenWidth - 100, 
+							50 * (i + 1) + screenCorrection * 5, null);
+					Color oldColor = g.getColor();
+					g.setColor(Color.green);
+					g.fillRect(screenWidth - 99, 50 * (i + 1) + screenCorrection * 6, 
+							(int) ((player.STATS.get(i).getXPTotal() / player.STATS.get(i).getXPNeeded()) * 80), 12);
+					g.setColor(oldColor);
+					
+					// Stat level
+					gv = tempF2.createGlyphVector(frc, s);
+					g.drawGlyphVector(gv, 
+							(float) (screenWidth - 130 - (gv.getLogicalBounds().getWidth()) / 2), 
+							50 * (i + 1) + screenCorrection * 8);
+					
+					// Stat name (first line)
+					int firstLine = screenCorrection * 17;
+					s = player.STATS.get(i).statName;
+					gv = tempF2.createGlyphVector(frc, s);
+					g.drawGlyphVector(gv, 
+							screenWidth - 200 + screenCorrection, 
+							50 * (i + 1) + firstLine);
+					s = "TOT. :";
+					gv = tempF2.createGlyphVector(frc, s);
+					g.drawGlyphVector(gv, 
+							screenWidth - 115, 
+							50 * (i + 1) + firstLine);
+					g.setColor(Color.white);
+					s = player.STATS.get(i).getXPShort();
+					gv = tempF2.createGlyphVector(frc, s);
+					g.drawGlyphVector(gv, 
+							screenWidth - 65, 
+							50 * (i + 1) + firstLine);
+					g.setColor(menuTextColor);
+					s = "XP";
+					gv = tempF2.createGlyphVector(frc, s);
+					g.drawGlyphVector(gv, 
+							screenWidth - 35, 
+							50 * (i + 1) + firstLine);
+					
+					// XP Needed (bottom Line)
+					int bottomLine = screenCorrection * 22;
+					s = "XP:";
+					gv = tempF2.createGlyphVector(frc, s);
+					g.drawGlyphVector(gv, 
+							screenWidth - 200 + screenCorrection, 
+							50 * (i + 1) + bottomLine);
+					g.setColor(Color.red);
+					s = player.STATS.get(i).getXPRemainderShort();
+					gv = tempF2.createGlyphVector(frc, s);
+					g.drawGlyphVector(gv, 
+							screenWidth - 165, 
+							50 * (i + 1) + bottomLine);
+					g.setColor(menuTextColor);
+					s = ">";
+					gv = tempF2.createGlyphVector(frc, s);
+					g.drawGlyphVector(gv, 
+							screenWidth - 130, 
+							50 * (i + 1) + bottomLine);
+					g.setColor(Color.white);
+					s = "LVL" + player.STATS.get(i).getNextLevelString() + ":";
+					gv = tempF2.createGlyphVector(frc, s);
+					g.drawGlyphVector(gv, 
+							screenWidth - 115, 
+							50 * (i + 1) + bottomLine);
+					g.setColor(Color.green);
+					s = player.STATS.get(i).getXPNeededShort();
+					gv = tempF2.createGlyphVector(frc, s);
+					g.drawGlyphVector(gv, 
+							screenWidth - 65, 
+							50 * (i + 1) + bottomLine);
+					g.setColor(menuTextColor);
+					s = "XP";
+					gv = tempF2.createGlyphVector(frc, s);
+					g.drawGlyphVector(gv, 
+							screenWidth - 35, 
+							50 * (i + 1) + bottomLine);
+					
+					active = true;
+				
+				} else {
+					
+					if(active) j = 50; else j = 0;
+					s = player.STATS.get(i).getLevelString();
+					g.drawImage(menu_sidebar_frame, 
+							screenWidth - 200 - screenCorrection, 
+							screenCorrection + 50 * (i + 1) + j, null);
+					g.drawImage(menu_toolbox, 
+							screenWidth - 200 + screenCorrection,
+							50 * (i + 1) + j + 10, null);
+					g.drawImage(player.STATS.get(i).icon, 
+							screenWidth - 200 + screenCorrection * 2, 
+							50 * (i + 1) + j + screenCorrection + 10, null);
+					g.drawImage(menu_sidebar_stat, 
+							screenWidth - 100, 
+							50 * (i + 1) + j + screenCorrection * 5, null);
+					Color oldColor = g.getColor();
+					g.setColor(Color.green);
+					g.fillRect(screenWidth - 99, 50 * (i + 1) + j + screenCorrection * 6, 
+							(int) ((player.STATS.get(i).getXPTotal() / player.STATS.get(i).getXPNeeded()) * 80), 12);
+					g.setColor(oldColor);
+					
+					// Stat level
+					gv = tempF2.createGlyphVector(frc, s);
+					g.drawGlyphVector(gv, 
+							(float) (screenWidth - 130 - (gv.getLogicalBounds().getWidth()) / 2), 
+							50 * (i + 1) + j + screenCorrection * 8);
+				}
+			}
 			break;
 		case(MENU_TRADE):
 			
 			break;
 		case(MENU_EXIT):
 			
+			break;
+		case(MENU_DIED):
+			if(fade < 0.99f) fade += (float) gameLoopTime / 10000;
+			g.setColor(new Color(0, 0, 0, fade));
+			g.fillRect(0, 0, screenWidth, screenHeight);
+			g.setColor(Color.red);
+			s = menuLang[23];
+			tempF2 = font_med_1.deriveFont(60.0f);
+			gv = tempF2.createGlyphVector(frc, s);
+			g.drawGlyphVector(gv, 
+					(float) ((screenWidth / 2) - gv.getLogicalBounds().getCenterX()), 
+					300);
+			s = menuLang[24];
+			tempF2 = font_med_1.deriveFont(40.0f);
+			gv = tempF2.createGlyphVector(frc, s);
+			g.drawGlyphVector(gv, 
+					(float) ((screenWidth / 2) - gv.getLogicalBounds().getCenterX()), 
+					400);
+			
+			if(pressCount == 1) gameRunning = false;
 			break;
 		}
 	}

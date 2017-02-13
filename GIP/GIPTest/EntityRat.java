@@ -35,6 +35,7 @@ public class EntityRat extends Entity {
 		if(HEALTH <= 0) {
 			uID.removeID(ID);
 			uEffects.newEffect(super.getCenterX(), super.getCenterY(), uEffects.ef_SMOKE);
+			player.STATS.get(STAT_ATTACK).addXP(xpReward);
 			return;	
 		}
 		

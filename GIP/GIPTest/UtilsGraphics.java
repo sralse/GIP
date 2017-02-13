@@ -12,6 +12,8 @@ public class UtilsGraphics extends Settings {
 	public void init() {
 		// TODO UI Images
 		localFont = getFont(FONTS.MEDIEVAL.value);
+		menuOpen = false;
+		MENU_TYPE = 0;
 
 	}
 
