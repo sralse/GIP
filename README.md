@@ -10,9 +10,8 @@ This repo introduces the DEMO of Neamless Aura
 
 Featuring:   
 - [x] Standalone
-- [ ] ? Supports Multiple Screenresolutions
 * - [ ] Game GUI
-  * - [ ] In-game Debug mode
+  * - [x] In-game Debug mode
 * - [ ] Scriptable:
   * - [x] Objects
   * - [x] Tiles
@@ -42,7 +41,7 @@ Debug Mode (Press 'D')
 
 Latest Build:
 
-![alt text](preview/dev27.png "Latest build")
+![alt text](preview/dev28.png "Latest build")
 
 <h2>Credits</h2>
 *   [Kevin Macleod](https://incompetech.com/) - All music inc.
