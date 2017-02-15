@@ -10,26 +10,13 @@ public class EntityImp extends Entity {
 	private int impSpeed = (playerSpeed * 3) / 2;
 
 	public EntityImp(int x, int y, double HEALTH, int SUBTYPE) {
-		this.x = x * 16;
-		this.y = y * 16;
-		this.nX = (int) this.x;
-		this.nY = (int) this.y;
-		this.HEALTH = HEALTH;
-		this.oldHealth = HEALTH;
-		this.maxHealth = HEALTH;
 		this.DMG = 1.0d;
 		this.TYPE = "monster";
 		this.SUBTYPE = ENTITY_MONSTER.IMP_SMALL.value;
 		this.NAME = "Small Imp";
 		this.canInteract = false;
-		this.IMAGE = uFiles.loadImage(tx_monster + this.SUBTYPE + face + mode + imgExt);
-		if (IMAGE == null) {
-			this.IMAGE = debug;
-		}
-		this.imgH = this.IMAGE.getHeight(null);
-		this.imgW = this.IMAGE.getWidth(null);
-		this.entityRectangle.setBounds((int) this.x, (int) this.y, imgW, imgH);
 		this.xpReward = xpReward + HEALTH / 2;
+		super.init(x, y, HEALTH);
 	}
 
 	public void doLogic() {
@@ -55,19 +42,19 @@ public class EntityImp extends Entity {
 					int rand1 = randGen.nextInt(2);
 					if(rand1 == 0) {
 						adx += rand;
-						face = "L";
+						face = "R";
 					} else {
 						adx -= rand;
-						face = "R";
+						face = "L";
 					}
 				} else {
 					int rand2 = randGen.nextInt(2);
 					if(rand2 == 0) {
 						ady += rand;
-						face = "U";
+						face = "D";
 					} else {
 						ady -= rand;
-						face = "D";
+						face = "U";
 					}
 				}
 				nX = (int) x;

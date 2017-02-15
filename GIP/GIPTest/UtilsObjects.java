@@ -1,95 +1,41 @@
 package GIP.GIPTest;
 
-import java.awt.Image;
-import java.awt.Rectangle;
-import java.util.ArrayList;
-
 public class UtilsObjects extends Settings {
 
-	public ArrayList<Integer> objectX = new ArrayList<Integer>();
-	public ArrayList<Integer> objectY = new ArrayList<Integer>();
-	public ArrayList<Integer> objectNameWidth = new ArrayList<Integer>();
-	public ArrayList<Integer> objectNameLength = new ArrayList<Integer>();
-	public ArrayList<String> objectName = new ArrayList<String>();
-	public ArrayList<Image> objectImage = new ArrayList<Image>();
-	public ArrayList<Rectangle> objectRectangle = new ArrayList<Rectangle>();
 	private static String[] objectsList = {};
-	public static String splitSymbol = ",";
-
-	/** Will make an instance of all our drawing methods */
-
-	public int sum() {
-		if (objectsList == null) {
-			return 0;
-		}
-		int val = objectName.size();
-		return val;
-	}
 
 	/**
 	 * init() Initializes everything that has to do with MapObjects
 	 */
 	public void init() {
 		// Clear old data
-		objectX.clear();
-		objectY.clear();
-		objectNameWidth.clear();
-		objectNameLength.clear();
-		objectName.clear();
-		objectImage.clear();
-		objectRectangle.clear();
+		mapObjects.clear();
 		// Read the file and its contents where the objects are
 		// Transform our map into objectsList
 		String mapCurrent = mapDir + mapName + mapID + mapDirObjects + lvlExt;
 		objectsList = uFiles.readFileString(mapCurrent).split(splitSymbol);
-		// Get the array of non walkables, extend the current mapBounds
-		extendBounds();
 		// Get the lists of objects that need to be drawn on this map.
 		getObjects();
 	}
 
 	public void getObjects() {
 		// Parsing of our objects
-		int j = 0;
-		for (int i = 0; i <= objectsList.length - 3; i += 3) {
-			// Seperate names
-			objectName.add(objectDir + objectsList[i]);
-			// Seperate X values
-			objectX.add(Integer.parseInt(objectsList[i + 1]));
-			// Seperate Y values
-			objectY.add(Integer.parseInt(objectsList[i + 2]));
-
+		MapObject object = null;
+		for (int i = 0; i < objectsList.length / 3; i ++) {
+			object = new MapObject(objectsList[i * 3], Integer.parseInt(objectsList[(i * 3) + 1]), Integer.parseInt(objectsList[(i * 3 ) + 2]));
+			mapObjects.add(object);
 			// Debug output
 			if (DEBUG) {
-				System.out.println("Object detected : " + objectName.get(j));
+				System.out.println("Object added : " + object.NAME + " images(x): " + object.images.size());
+				System.out.println("RAW object info: " + object);
 			}
 
-			j++;
-		}
-
-		for (int i = 0; i < objectName.size(); i++) {
-			// Load our image into the array
-			Image image = uFiles.loadImage(objectName.get(i));
-
-			if (image != null) {
-				objectImage.add(image);
-				int imgW = image.getWidth(null) / 2;
-				int imgH = image.getHeight(null) / 2;
-				int x = objectX.get(i);
-				int y = objectX.get(i);
-				objectRectangle.add(new Rectangle(x + (imgW / 2), y + (imgH / 2), imgW, imgH));
-			}
 		}
 
 		// Debug output
 		if (DEBUG) {
-			System.out.println(objectName.size() + " objects detected");
+			System.out.println(mapObjects.size() + " objects detected");
 		}
-	}
-
-	public void extendBounds() {
-		// TODO Extend our current MapUtils.mapBounds
-
 	}
 
 }

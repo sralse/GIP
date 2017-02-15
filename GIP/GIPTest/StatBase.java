@@ -3,22 +3,23 @@ package GIP.GIPTest;
 import java.awt.Image;
 
 public class StatBase extends Settings{
-	protected int level = 0;
+	protected int level = 1;
 	protected int statType;
 	private double xpTotal = 0;
-	private double xpNeeded = 1;
+	private double xpNeeded = 0;
 	protected String statName;
 	protected Image icon;
 	
 	public void calcXPNeeded() {
-		for(int i = 0; i < level + 1; i++) {
-			this.xpNeeded += (Math.pow(5 * (i+1), 3) - Math.pow(25 * (i+1), 2) + 100 * (i+1) + 2000) / 10;
+		for(int i = 1; i < level + 1; i++) {
+			this.xpNeeded += (Math.pow(5 * i, 3) - Math.pow(25 * i, 2) + 100 * i + 1000) / 10;
 		}
 		System.out.println("XP total needed for next level(" + level + "): " + statName + " = " + xpNeeded);
 	}
 	
 	public void updateStat() {
 		if(xpTotal >= xpNeeded) {
+			uEffects.newEffect(player.x, player.y, uEffects.ef_SPARKS);
 			level += 1;
 			calcXPNeeded();
 		}

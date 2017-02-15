@@ -10,15 +10,6 @@ class EntityVillager extends Entity {
 	private int villagerSpeed = (playerSpeed * 2) / 3;
 
 	public EntityVillager(int x, int y, double d, String NAME, int SUBTYPE) {
-		this.x = x * 16;
-		this.y = y * 16;
-		this.aX = (int) this.x;
-		this.aY = (int) this.y;
-		this.nX = this.aX;
-		this.nY = this.aY;
-		this.HEALTH = d;
-		this.oldHealth = d;
-		this.maxHealth = d;
 		this.NAME = NAME;
 		this.TYPE = "villager";
 		this.SUBTYPE = SUBTYPE;
@@ -26,10 +17,7 @@ class EntityVillager extends Entity {
 		if (this.SUBTYPE < ENTITY_VILLAGER.VILLAGER_MALE.value) {
 			this.anchor = true;
 		}
-		this.IMAGE = uFiles.loadImage(tx_villager + SUBTYPE + face + mode + imgExt);
-		this.imgH = this.IMAGE.getHeight(null);
-		this.imgW = this.IMAGE.getWidth(null);
-		this.entityRectangle.setBounds((int) this.x, (int) this.y, imgW, imgH);
+		super.init(x, y, HEALTH);
 	}
 
 	public void doLogic() {

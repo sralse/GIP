@@ -62,16 +62,15 @@ public class UtilsGraphics extends Settings {
 		
 		for (int i = 0; i <= screenHeight; i++) {
 			// Cycle throug all of our objects asking to redraw themselves by X.
-			for (int j = 0; j < uObjects.sum(); j++) {
-				if (i == (uObjects.objectY.get(j) + uObjects.objectImage.get(j).getHeight(null))) {
-					if (uObjects.objectImage != null) {
+			for (int j = 0; j < mapObjects.size(); j++) {
+				if (i == (mapObjects.get(j).y + mapObjects.get(j).height)) {
+					if (mapObjects.get(j).IMAGE != null) {
 						g.drawImage(
-								uObjects.objectImage.get(j), 
-								uObjects.objectX.get(j), 
-								uObjects.objectY.get(j), 
-							null);
+								mapObjects.get(j).getImage(), 
+								mapObjects.get(j).x,
+								mapObjects.get(j).y, null);
 					} else {
-						System.out.println("No objects initialised");
+						System.out.println("No object image initialised");
 					}
 				}
 			}

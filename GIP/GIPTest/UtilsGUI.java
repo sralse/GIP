@@ -23,7 +23,7 @@ public class UtilsGUI extends Settings{
 	private Image healthBlockMO = uImages.scaleImageCubic(uFiles.loadImage(uiImageDir + "barOrange_horizontalMid2.png"), -3);
 	private Image healthBlockRO = uImages.scaleImageCubic(uFiles.loadImage(uiImageDir + "barOrange_horizontalRight2.png"), -3);
 	private Image healthBlockMR = uImages.scaleImageCubic(uFiles.loadImage(uiImageDir + "barRed_horizontalMid2.png"), -3);
-	private Image healthBlockRR = uImages.scaleImageCubic(uFiles.loadImage(uiImageDir + "barOrange_horizontalRight2.png"), -3);
+	private Image healthBlockRR = uImages.scaleImageCubic(uFiles.loadImage(uiImageDir + "barRed_horizontalRight2.png"), -3);
 	private Image healthHolder = uImages.scaleImageLinear(uFiles.loadImage(uiImageDir + "barHolder_00.png"), 130, 25);
 	private Image healthCircleMG = uImages.scaleImageCubic(uFiles.loadImage(uiImageDir + "barGreen_horizontalMid.png"), -3);
 	private Image healthCircleLG = uImages.scaleImageCubic(uFiles.loadImage(uiImageDir + "barGreen_horizontalLeft.png"), -3);
@@ -200,34 +200,36 @@ public class UtilsGUI extends Settings{
 		g.drawImage(healthHolder, barHolderX, screenCorrection * 9, null);
 
 		// GUI Health blocks
-		for(int i = 1; i < ((player.HEALTH + 9 )/ 10); i++) {
-			if(player.HEALTH <= 30) {
-				g.drawImage(healthBlockRR, 
-						screenWidth - healthBlockRR.getWidth(null) - screenCorrection * 3, 
-						screenCorrection * 10 + screenCorrection / 2, null);
-				g.drawImage(healthBlockMR,  
-						screenWidth - i * healthBlockMR.getWidth(null) - screenCorrection * 3, 
-						screenCorrection * 10 + screenCorrection / 2, null);
-			} else if(player.HEALTH > 30) {
-				g.drawImage(healthBlockRO, 
-						screenWidth - healthBlockRO.getWidth(null) - screenCorrection * 3, 
-						screenCorrection * 10 + screenCorrection / 2, null);
-				g.drawImage(healthBlockMO,  
-						screenWidth - i * healthBlockMO.getWidth(null) - screenCorrection * 3, 
-						screenCorrection * 10 + screenCorrection / 2, null);
-			} 
-			if(player.HEALTH >= 60) {
-				g.drawImage(healthBlockR, 
-						screenWidth - healthBlockR.getWidth(null) - screenCorrection * 3, 
-						screenCorrection * 10 + screenCorrection / 2, null);
-				g.drawImage(healthBlock,  
-						screenWidth - i * healthBlockR.getWidth(null) - screenCorrection * 3, 
-						screenCorrection * 10 + screenCorrection / 2, null);
-			}
-			if(player.HEALTH >= 100) {
-				g.drawImage(healthBlockL, 
-						barHolderX + screenCorrection + screenCorrection / 2, 
-						screenCorrection * 10 + screenCorrection / 2, null);
+		for(int i = 1; i < 11; i++) {
+			if((double) i / 10 <= player.HEALTH / player.maxHealth){
+				if(player.HEALTH / player.maxHealth <= 0.3d) {
+					g.drawImage(healthBlockRR, 
+							screenWidth - healthBlockRR.getWidth(null) - screenCorrection * 3, 
+							screenCorrection * 10 + screenCorrection / 2, null);
+					g.drawImage(healthBlockMR,  
+							screenWidth - i * healthBlockMR.getWidth(null) - screenCorrection * 3, 
+							screenCorrection * 10 + screenCorrection / 2, null);
+				} else if(player.HEALTH / player.maxHealth > 0.3d) {
+					g.drawImage(healthBlockRO, 
+							screenWidth - healthBlockRO.getWidth(null) - screenCorrection * 3, 
+							screenCorrection * 10 + screenCorrection / 2, null);
+					g.drawImage(healthBlockMO,  
+							screenWidth - i * healthBlockMO.getWidth(null) - screenCorrection * 3, 
+							screenCorrection * 10 + screenCorrection / 2, null);
+				} 
+				if(player.HEALTH / player.maxHealth >= 0.6d) {
+					g.drawImage(healthBlockR, 
+							screenWidth - healthBlockR.getWidth(null) - screenCorrection * 3, 
+							screenCorrection * 10 + screenCorrection / 2, null);
+					g.drawImage(healthBlock,  
+							screenWidth - i * healthBlockR.getWidth(null) - screenCorrection * 3, 
+							screenCorrection * 10 + screenCorrection / 2, null);
+				}
+				if(player.HEALTH == player.maxHealth) {
+					g.drawImage(healthBlockL, 
+							barHolderX + screenCorrection + screenCorrection / 2, 
+							screenCorrection * 10 + screenCorrection / 2, null);
+				}
 			}
 		}
 
@@ -370,19 +372,21 @@ public class UtilsGUI extends Settings{
 			g.setColor(Color.pink);
 			g.draw(player.entityRectangle);
 			// Object ESP
-			for (int i = 0; i < uObjects.objectImage.size(); i++) {
+			for (int i = 0; i < mapObjects.size(); i++) {
 				g.setColor(Color.red);
-				g.drawRect(uObjects.objectX.get(i), uObjects.objectY.get(i),
-						uObjects.objectImage.get(i).getWidth(null), uObjects.objectImage.get(i).getHeight(null));
+				g.draw(mapObjects.get(i).imageRect);
 				g.setColor(Color.blue);
-				g.draw(uObjects.objectRectangle.get(i));
+				g.draw(mapObjects.get(i).collisionRect);
 			}
+			
 			// Entity ESP
 			for (int i = 1; i < ENTITIES.size(); i++) {
 				ent = ENTITIES.get(i);
 				if(ent.inAttack) g.setColor(Color.red); else g.setColor(Color.orange);
 				g.draw(ent.entityRectangle);
-
+				g.setColor(Color.blue);
+				g.draw(ent.entityCollision);
+				
 				// Virtual Pathfinding
 				g.setColor(Color.blue);
 				if(ent.inAttack && !ent.TYPE.contains("player")) {

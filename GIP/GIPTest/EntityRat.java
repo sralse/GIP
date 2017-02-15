@@ -1,29 +1,20 @@
 package GIP.GIPTest;
 
+/**
+ * Create a new entity that represents a Rat
+ * @author Lars Carré
+ */
 public class EntityRat extends Entity {
 
 	private int counter;
 	
 	public EntityRat(int x, int y, double HEALTH, int SUBTYPE) {
-		this.x = x * 16;
-		this.y = y * 16;
-		this.nX = (int) this.x;
-		this.nY = (int) this.y;
-		this.HEALTH = HEALTH;
-		this.oldHealth = HEALTH;
-		this.maxHealth = HEALTH;
 		this.DMG = 1.5d;
 		this.TYPE = "monster";
 		this.SUBTYPE = ENTITY_MONSTER.RAT_BIG.value;
 		this.NAME = "Giant Rat";
 		this.canInteract = false;
-		this.IMAGE = uFiles.loadImage(tx_monster + this.SUBTYPE + face + mode + imgExt);
-		if (IMAGE == null) {
-			this.IMAGE = debug;
-		}
-		this.imgH = this.IMAGE.getHeight(null);
-		this.imgW = this.IMAGE.getWidth(null);
-		this.entityRectangle.setBounds((int) this.x, (int) this.y, imgW, imgH);
+		super.init(x, y, HEALTH);
 	}
 
 	public void doLogic() {
@@ -36,6 +27,7 @@ public class EntityRat extends Entity {
 			uID.removeID(ID);
 			uEffects.newEffect(super.getCenterX(), super.getCenterY(), uEffects.ef_SMOKE);
 			player.STATS.get(STAT_ATTACK).addXP(xpReward);
+			player.STATS.get(STAT_HEALTH).addXP(xpReward / 5);
 			return;	
 		}
 		
@@ -48,19 +40,19 @@ public class EntityRat extends Entity {
 					int rand1 = randGen.nextInt(2);
 					if(rand1 == 0) {
 						adx += rand;
-						face = "L";
+						face = "R";
 					} else {
 						adx -= rand;
-						face = "R";
+						face = "L";
 					}
 				} else {
 					int rand2 = randGen.nextInt(2);
 					if(rand2 == 0) {
 						ady += rand;
-						face = "U";
+						face = "D";
 					} else {
 						ady -= rand;
-						face = "D";
+						face = "U";
 					}
 				}
 				nX = (int) x;

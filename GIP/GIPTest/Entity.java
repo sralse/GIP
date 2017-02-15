@@ -31,9 +31,11 @@ public abstract class Entity extends Settings {
 	protected int imgW;
 	protected int imgH;
 	protected Rectangle entityRectangle = new Rectangle();
+	protected Rectangle entityCollision = new Rectangle();
 	// Animations modes of an entity
 	protected int mode = 0;
-	protected int oldMode = mode;
+	private int oldMode = mode;
+	private int oldMode2 = mode;
 	// Helps detecting when to animate
 	protected int walkCounter;
 	protected boolean walking = false;
@@ -52,15 +54,42 @@ public abstract class Entity extends Settings {
 	protected String face = "D";
 	protected String oldFace = face;
 	protected boolean forceAnimation = false;
+	protected boolean alwaysAnimated = false;
 	// Entity speed and reach settings
 	protected static int radius = 100;
 	protected static int defaultEntitySpeed = (playerSpeed * 3) / 4;
 	// ITEMS
 	protected static ArrayList<Item> ITEMS = new ArrayList<Item>();
 	// STATS
-	protected double xpReward = 10;
+	protected double xpReward = 5;
 	protected ArrayList<StatBase> STATS = new ArrayList<StatBase>();
 
+	public void init(int x, int y, double HEALTH) {
+		this.x = x * 16;
+		this.y = y * 16;
+		this.nX = (int) this.x;
+		this.nY = (int) this.y;
+		this.aX = (int) this.x;
+		this.aY = (int) this.y;
+		this.HEALTH = HEALTH;
+		this.oldHealth = HEALTH;
+		this.maxHealth = HEALTH;
+		final int RAND = randGen.nextInt(4);
+		if(RAND == 0) face = "U";
+		if(RAND == 1) face = "D";
+		if(RAND == 2) face = "L";
+		if(RAND == 3) face = "R";
+		if(this.TYPE == "monster") this.IMAGE = uFiles.loadImage(tx_monster + this.SUBTYPE + face + mode + imgExt);
+		if(this.TYPE == "villager") this.IMAGE = uFiles.loadImage(tx_villager + this.SUBTYPE + face + mode + imgExt);
+		if (IMAGE == null) {
+			this.IMAGE = debug;
+		}
+		this.imgH = this.IMAGE.getHeight(null);
+		this.imgW = this.IMAGE.getWidth(null);
+		this.entityRectangle.setBounds((int) this.x, (int) this.y, imgW, imgH);
+		this.entityCollision.setBounds((int) this.x + (imgW / 3), (int) this.y + (imgW / 3), (imgW / 3), (imgW / 3));
+	}
+	
 	/**
 	 * 3 Request that this entity move itself based on a certain ammount of time passing.
 	 * @param delta The ammount of time that has passed in milliseconds
@@ -181,6 +210,97 @@ public abstract class Entity extends Settings {
 			System.out.println("No map bounds set.");
 		}
 
+		// Check for object boxes
+		if(mapObjects != null) {
+			for(MapObject mapObject: mapObjects) {
+				// TOP
+				if(dy > 0) {
+					if(entityRectangle.intersects(
+							mapObject.collisionRect.getX() + screenCorrection, 
+							mapObject.collisionRect.getY(), 
+							mapObject.collisionRect.getWidth() - screenCorrection, 1)) {
+						setVerticalMovement(0);
+						walking = false;
+					}
+				}
+				// BOTTOM
+				if(dy < 0) {
+					if(entityRectangle.intersects(
+							mapObject.collisionRect.getX() + screenCorrection, 
+							mapObject.collisionRect.getMaxY(), 
+							mapObject.collisionRect.getWidth() - screenCorrection, 1)) {
+						setVerticalMovement(0);
+						walking = false;
+					}
+				}
+				// LEFT
+				if(dx > 0) {
+					if(entityRectangle.intersects(
+							mapObject.collisionRect.getX(), 
+							mapObject.collisionRect.getY() + screenCorrection, 
+							1, mapObject.collisionRect.getHeight() -screenCorrection)) {
+						setHorizontalMovement(0);
+						walking = false;
+					}
+				}
+				// RIGHT
+				if(dx < 0) {
+					if(entityRectangle.intersects(
+							mapObject.collisionRect.getMaxX(), 
+							mapObject.collisionRect.getY() + screenCorrection, 
+							1, mapObject.collisionRect.getHeight() -screenCorrection)) {
+						setHorizontalMovement(0);
+						walking = false;
+					}
+				}
+			}
+		}
+
+		for(Entity entity: ENTITIES) {
+			if(entity.ID != ID) {
+				// TOP
+				if(dy > 0) {
+					if(entityRectangle.intersects(
+							entity.entityCollision.getX() + screenCorrection, 
+							entity.entityCollision.getY(), 
+							entity.entityCollision.getWidth() - screenCorrection, 1)) {
+						setVerticalMovement(0);
+						walking = false;
+					}
+				}
+				// BOTTOM
+				if(dy < 0) {
+					if(entityRectangle.intersects(
+							entity.entityCollision.getX() + screenCorrection, 
+							entity.entityCollision.getMaxY(), 
+							entity.entityCollision.getWidth() - screenCorrection, 1)) {
+						setVerticalMovement(0);
+						walking = false;
+					}
+				}
+				// LEFT
+				if(dx > 0) {
+					if(entityRectangle.intersects(
+							entity.entityCollision.getX(), 
+							entity.entityCollision.getY() + screenCorrection, 
+							1, entity.entityCollision.getHeight() -screenCorrection)) {
+						setHorizontalMovement(0);
+						walking = false;
+					}
+				}
+				// RIGHT
+				if(dx < 0) {
+					if(entityRectangle.intersects(
+							entity.entityCollision.getMaxX(), 
+							entity.entityCollision.getY() + screenCorrection, 
+							1, entity.entityCollision.getHeight() -screenCorrection)) {
+						setHorizontalMovement(0);
+						walking = false;
+					}
+				}
+			}
+		}
+		
 		move(delta);
 	}
 
@@ -191,6 +311,7 @@ public abstract class Entity extends Settings {
 		y += (dy * delta) / 1000;
 		
 		entityRectangle.setBounds((int) x, (int) y, imgW, imgH);
+		entityCollision.setLocation((int) this.x + (imgW / 3), (int) this.y + (imgW / 3));;
 	}
 
 	/**
@@ -255,11 +376,44 @@ public abstract class Entity extends Settings {
 	public void animationWalk(String path, int interval) {
 		// Walk animation
 		walkCounter += gameLoopTime;
-
+		boolean done = false;
+		if(alwaysAnimated) walking = true;
 		if(walkCounter > interval && walking == true) {
-			mode += 1;
-			if(mode > 2) {mode = 1;}
+			
+			if(mode == 2 && oldMode2 == 0) {
+				mode = 0;
+				oldMode2 = 2;
+				done = true;
+			}
+			
+			if(mode == 0 && oldMode2 == 1 && !done) {
+				mode = 2;
+				oldMode2 = 0;
+				done = true;
+			}
+			
+			if(mode == 1 && oldMode2 == 0 && !done) {
+				mode = 0;
+				oldMode2 = 1;
+				done = true;
+			}
+			
+			if(mode == 0 && oldMode2 == 2 && !done) {
+				mode = 1;
+				oldMode2 = 0;
+				done = true;
+			}
+			
+			if(mode == 0 && oldMode2 == 0 && !done) {
+				mode = 1;
+				oldMode2 = 0;
+			}
+			
 			walkCounter = 0;
+			
+//			mode += 1;
+//			if(mode > 2) {mode = 1;}
+//			walkCounter = 0;
 		} else if (walking == false) {
 			mode = 0;
 		}

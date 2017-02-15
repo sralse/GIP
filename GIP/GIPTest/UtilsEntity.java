@@ -18,7 +18,7 @@ public class UtilsEntity extends Settings {
 	}
 
 	public void initPlayer() {
-		player = new EntityPlayer(10, 1, 100, "PLAYER", 0);
+		player = new EntityPlayer(10, 1, 10, "PLAYER", 0);
 
 		player.animationWalk(tx_player, aDefInt);
 		if (DEBUG) System.out.println("Player graphics initialised");
@@ -75,7 +75,14 @@ public class UtilsEntity extends Settings {
 						e);
 				uID.addEntity(monster);
 				break;			
-
+			case 3:
+				monster = new EntityGargoyle(
+						Integer.parseInt(ent.get(i * entDataBlockSize)),
+						Integer.parseInt(ent.get(i * entDataBlockSize + 1)),
+						Double.parseDouble(ent.get(i * entDataBlockSize + 2)), 
+						e);
+				uID.addEntity(monster);
+				break;
 			}
 
 		}
@@ -83,8 +90,9 @@ public class UtilsEntity extends Settings {
 	}
 
 	public void update() {
-
-		updatePlayer();
+		
+		// TODO Random spawning
+		player.update();
 
 		if (messaged) {
 			msgTimer2 = System.currentTimeMillis();
@@ -129,55 +137,6 @@ public class UtilsEntity extends Settings {
 		return messages.get(randGen.nextInt(messages.size()));
 	}
 
-	private void updatePlayer() {
-		player.updateAttackTimer();
-		if(!player.inAttack) {
-			player.animationWalk(tx_player, aDefInt);
-		} else {
-			player.animationWalk(tx_player + "a", aDefInt);
-		}
-
-		if (DEBUG) player.face = "0";
-		player.movementCheck(gameLoopTime);
-
-		if(spacePressed || slot1C || slot2V || slot3B || slot4N) {
-			for(int i = 1; i < ENTITIES.size(); i++) {
-				if(!ENTITIES.get(i).canInteract 
-						&& player.canAttack()
-						&& ENTITIES.get(i).HEALTH > 0 
-						&& player.entityRectangle.intersects(ENTITIES.get(i).entityRectangle)) {
-					ENTITIES.get(i).HEALTH -= player.DMG + (player.STATS.get(STAT_ATTACK).level / 25);
-					ENTITIES.get(i).dmgTaken = 0 - player.DMG - (player.STATS.get(STAT_ATTACK).level / 25);
-					int index = 0;
-					if(slot4N) index = 3;
-					if(slot3B) index = 2;
-					if(slot2V) index = 1;
-					if(slot1C || spacePressed) index = 0;
-					if(player.getWeapon(index) != null) {
-						
-						ENTITIES.get(i).HEALTH -= player.getWeapon(index).DMG;
-						ENTITIES.get(i).dmgTaken -= player.getWeapon(index).DMG;
-					}
-					ENTITIES.get(i).inAttack = true;
-					player.inAttack = true;
-					player.resetAttackTimer();
-					if(ENTITIES.get(i).HEALTH > 0) uEffects.newEffect(ENTITIES.get(i).getCenterX(), ENTITIES.get(i).getCenterY(), uEffects.ef_SCRATCH);
-				}
-			}
-		}
-		
-		player.updateHealthTimer();
-		
-		if(player.getAttackTimer() >= 5000 
-				&& player.HEALTH < player.maxHealth
-				&& player.healthCounter >= 2000 
-				&& !player.inAttack) {
-			player.HEALTH += 0.5d;
-			player.healthCounter = 0;
-		}
-
-	}
-
 	private void updateVillager(int i) {
 		((EntityVillager)ENTITIES.get(i)).doLogic();
 	}
@@ -196,7 +155,7 @@ public class UtilsEntity extends Settings {
 			((EntitySkeleton)ENTITIES.get(i)).doLogic();
 			break;
 		case 3:
-			//((Other)ENTITIES.get(i)).doLogic();
+			((EntityGargoyle)ENTITIES.get(i)).doLogic();
 			break;
 		}
 	}

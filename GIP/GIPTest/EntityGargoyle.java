@@ -1,21 +1,24 @@
 package GIP.GIPTest;
 
 /**
- * Create a new entity that represents a Skeleton
+ * Create a new entity that represents a Gargoyle
  * @author Lars Carré
  */
-public class EntitySkeleton extends Entity {
+public class EntityGargoyle extends Entity {
 	
 	private int counter;
+	private int gargoyleSpeed = (playerSpeed * 3) / 2;
 
-	public EntitySkeleton(int x, int y, double HEALTH, int SUBTYPE) {
-		this.DMG = 1.5d;
+	public EntityGargoyle(int x, int y, double HEALTH, int SUBTYPE) {
 		this.TYPE = "monster";
-		this.SUBTYPE = ENTITY_MONSTER.SKELETON_NORMAL.value;
-		this.NAME = "Skeletal";
+		this.SUBTYPE = ENTITY_MONSTER.GARGOYLE_NORMAL.value;
+		this.DMG = 2.0d;
+		this.NAME = "Gargoyle";
 		this.canInteract = false;
-		this.xpReward += xpReward * 5;
+		this.alwaysAnimated = true;
+		this.xpReward = xpReward + HEALTH;
 		super.init(x, y, HEALTH);
+		
 	}
 
 	public void doLogic() {
@@ -26,9 +29,9 @@ public class EntitySkeleton extends Entity {
 		
 		if(HEALTH <= 0) {
 			uID.removeID(ID);
-			uEffects.newEffect(super.getCenterX(), super.getCenterY(), uEffects.ef_SMOKE);
+			uEffects.newEffect(super.getCenterX(), super.getCenterY(), uEffects.ef_FIRE);
 			player.STATS.get(STAT_ATTACK).addXP(xpReward);
-			player.STATS.get(STAT_HEALTH).addXP(xpReward / 5);
+			player.STATS.get(STAT_HEALTH).addXP(xpReward / 10);
 			return;	
 		}
 		
@@ -77,19 +80,20 @@ public class EntitySkeleton extends Entity {
 		
 		if(walking) counter = 0;
 		
-		int dpX = (int) Math.abs(player.getCenterX() - x);
-		int dpY = (int) Math.abs(player.getCenterY() - y);
-		int dtp = (int) Math.sqrt((dpX*dpX) + (dpY*dpY));
-		if(inAttack || dtp < attackFindingRadius) {
-			if(!inAttack) inAttack = true;
+		if(inAttack) {
+			int cX = super.getCenterX();
+			int cY = super.getCenterY();
+			int dpX = (int) Math.abs(player.getCenterX() - cX);
+			int dpY = (int) Math.abs(player.getCenterY() - cY);
+			
 			if(dpY > dpX) {
-				if(player.getCenterY() - y < 0) {
+				if(player.getCenterY() - cY < 0) {
 					face = "U";
 				} else {
 					face = "D";
 				}
 			} else {
-				if(player.getCenterX() - x < 0) {
+				if(player.getCenterX() - cX < 0) {
 					face = "L";
 				} else {
 					face = "R";
@@ -98,6 +102,7 @@ public class EntitySkeleton extends Entity {
 			
 			if(oldFace != face) counter = 0;
 			
+			int dtp = (int) Math.sqrt((dpX*dpX) + (dpY*dpY));
 			// Update Attack AI
 			if(dtp < attackFindingRadius) {
 				if(dtp < attackingRadius && super.canAttack()) {
@@ -114,8 +119,10 @@ public class EntitySkeleton extends Entity {
 			super.setTarget(null);
 		}
 		
-		super.movementCheck(gameLoopTime, defaultEntitySpeed);
-		super.animationWalk(tx_monster, 500);
+		super.movementCheck(gameLoopTime, gargoyleSpeed);
+		super.animationWalk(tx_monster, 300);
 	}
+	
+	
 	
 }

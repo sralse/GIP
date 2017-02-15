@@ -148,7 +148,7 @@ class Settings {
 	public static int mapColumns;
 	public static char[] charArrayMap = {};
 	public static final String lvlDir = "level/";
-	public static final String objectDir = lvlDir + "objects/";
+	public static final String tx_objects = lvlDir + "objects/";
 	public static final String imgDir = lvlDir + "tiles/";
 	public static final String mapDir = "/" + lvlDir + "maps/";
 	public static final String mapName = "map_";
@@ -168,6 +168,7 @@ class Settings {
 	public static int aDefInt = 300;
 	public static final String mapDirObjects = "_objects";
 	public static final String mapDirTiles = "_tiles";
+	public static ArrayList<MapObject> mapObjects = new ArrayList<MapObject>();
 	public static final String entDir = "entity/";
 	public static final String playerImgDir = entDir + "player/";
 	public static final String animalImgDir = entDir + "animal/";
@@ -263,7 +264,7 @@ class Settings {
 	}
 
 	public static enum ENTITY_MONSTER {
-		IMP_SMALL(0), RAT_BIG(1), SKELETON_NORMAL(2);
+		IMP_SMALL(0), RAT_BIG(1), SKELETON_NORMAL(2), GARGOYLE_NORMAL(3);
 		public int value;
 
 		private ENTITY_MONSTER(int value) {

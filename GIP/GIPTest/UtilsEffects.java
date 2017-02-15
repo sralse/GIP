@@ -7,38 +7,49 @@ import java.util.ArrayList;
 public class UtilsEffects extends Settings {
 
 	private ArrayList<Effect> effects = new ArrayList<Effect>();
-	private ArrayList<Image> effectSmoke = new ArrayList<Image>();
-	private ArrayList<Image> effectFire = new ArrayList<Image>();
-	private ArrayList<Image> effectScratch = new ArrayList<Image>();
+	private ArrayList<Image> effect0 = new ArrayList<Image>();
+	private ArrayList<Image> effect1 = new ArrayList<Image>();
+	private ArrayList<Image> effect2 = new ArrayList<Image>();
+	private ArrayList<Image> effect3 = new ArrayList<Image>();
 	private String effectPath = lvlDir + "effects/effect_";
+	public final int effectBatch = 10;
 	public final int ef_SMOKE = 0;
 	public final int ef_FIRE = 1;
 	public final int ef_SCRATCH = 2;
+	public final int ef_SPARKS = 3;
 
 	public void init() {
 		Image tmp;
 
 		// Smoke effect
-		for(int subtype = 0; subtype < 10; subtype++) {
-			tmp = uFiles.loadImage(effectPath + "0" + subtype + imgExt);
+		for(int subtype = 0; subtype < effectBatch + 1; subtype++) {
+			tmp = uFiles.loadImage(effectPath + ef_SMOKE + subtype + imgExt);
 			if(tmp == null) break;
-			effectSmoke.add(tmp);
+			effect0.add(tmp);
 		}
 		// Fire effect
-		for(int subtype = 0; subtype < 10; subtype++) {
-			tmp = uFiles.loadImage(effectPath + "1" + subtype + imgExt);
+		for(int subtype = 0; subtype < effectBatch + 1; subtype++) {
+			tmp = uFiles.loadImage(effectPath + ef_FIRE + subtype + imgExt);
 			if(tmp == null) break;
-			effectFire.add(tmp);
+			effect1.add(tmp);
 		}
-		for(int subtype = 0; subtype < 10; subtype++) {
-			tmp = uFiles.loadImage(effectPath + "2" + subtype + imgExt);
+		// Scratch effect
+		for(int subtype = 0; subtype < effectBatch + 1; subtype++) {
+			tmp = uFiles.loadImage(effectPath + ef_SCRATCH + subtype + imgExt);
 			if(tmp == null) break;
-			effectScratch.add(tmp);
+			effect2.add(tmp);
+		}
+		// Sparks effect
+		for(int subtype = 0; subtype < effectBatch + 1; subtype++) {
+			tmp = uFiles.loadImage(effectPath + ef_SPARKS + subtype + imgExt);
+			if(tmp == null) break;
+			effect3.add(tmp);
 		}
 		
-		System.out.println("Size of effectSmoke: " + effectSmoke.size());
-		System.out.println("Size of effectFire: " + effectFire.size());
-		System.out.println("Size of effectScratch: " + effectFire.size());
+		System.out.println("Size of effectSmoke: " + effect0.size());
+		System.out.println("Size of effectFire: " + effect1.size());
+		System.out.println("Size of effectScratch: " + effect2.size());
+		System.out.println("Size of effectSparks: " + effect3.size());
 
 	}
 
@@ -46,13 +57,16 @@ public class UtilsEffects extends Settings {
 		Effect effect = null;
 		switch(effectType) {
 		case ef_SMOKE:
-			effect = new Effect((int) x,(int) y, ef_SMOKE, 1, 1000, effectSmoke.size(), effects.size());
+			effect = new Effect((int) x,(int) y, ef_SMOKE, 1, 1000, effect0.size(), effects.size());
 			break;
 		case ef_FIRE:
-			effect = new Effect((int) x,(int) y, ef_FIRE, 1, 1000, effectFire.size(), effects.size());
+			effect = new Effect((int) x,(int) y, ef_FIRE, 1, 1000, effect1.size(), effects.size());
 			break;
 		case ef_SCRATCH:
-			effect = new Effect((int) x,(int) y, ef_SCRATCH, 1, 1000, effectScratch.size(), effects.size());
+			effect = new Effect((int) x,(int) y, ef_SCRATCH, 1, 1000, effect2.size(), effects.size());
+			break;
+		case ef_SPARKS:
+			effect = new Effect((int) x,(int) y, ef_SCRATCH, 1, 1000, effect3.size(), effect3.size());
 			break;
 		}
 		
@@ -68,13 +82,16 @@ public class UtilsEffects extends Settings {
 				ArrayList<Image> tmp = new ArrayList<Image>();
 				switch(effect.TYPE) {
 				case ef_SMOKE:
-					tmp = effectSmoke;
+					tmp = effect0;
 					break;
 				case ef_FIRE:
-					tmp = effectFire;
+					tmp = effect1;
 					break;
 				case ef_SCRATCH:
-					tmp = effectScratch;
+					tmp = effect2;
+					break;
+				case ef_SPARKS:
+					tmp = effect3;
 					break;
 				}
 				int step = tmp.size() - (effect.TIMER / effect.INTERVAL) - 1;

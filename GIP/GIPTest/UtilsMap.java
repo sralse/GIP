@@ -112,7 +112,7 @@ public class UtilsMap extends Settings {
 		Graphics2D gBuffer = (Graphics2D) image.getGraphics();
 		// This part converts all the tiles we have to 1 list of tiles tileData
 		String[] strTileData = uFiles.readFileString(mapDir + mapName + mapID + mapDirTiles + lvlExt)
-				.split(UtilsObjects.splitSymbol);
+				.split(splitSymbol);
 
 		for (int i = 0; i < strTileData.length; i++) {
 			String s = strTileData[i];

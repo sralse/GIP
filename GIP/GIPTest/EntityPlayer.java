@@ -27,7 +27,7 @@ public class EntityPlayer extends Entity {
 		}
 		this.imgH = this.IMAGE.getHeight(null);
 		this.imgW = this.IMAGE.getWidth(null);
-		this.entityRectangle.setBounds((int) this.x, (int) this.y, imgW, imgH);
+		this.entityRectangle.setBounds((int) this.x, (int) this.y + 10, imgW, 16);
 		this.STATS.add(STAT_HEALTH, new StatHealth());
 		this.STATS.add(STAT_ATTACK, new StatAttack());
 		this.STATS.add(STAT_DEFENSE, new StatDefense());
@@ -87,6 +87,7 @@ public class EntityPlayer extends Entity {
 		// Detect where we can or cannot walk
 		g = (Graphics2D) graphicsBuffer.getDrawGraphics();
 		if (mapBounds != null) {
+			entityRectangle.setBounds((int) x, (int) y + 10, 32, 22);
 			for (int i = 0; i < mapLines; i++) {
 				for (int j = 0; j < mapColumns; j++) {
 					int k = (mapColumns * i) + j;
@@ -96,7 +97,6 @@ public class EntityPlayer extends Entity {
 						int y1 = i * 16;
 						int y2 = i * 16 + 16;
 						if (!DEBUG) {
-							entityRectangle.setBounds((int) x, (int) y, 32, 32);
 							// TOP
 							if (dy > 0) {
 								if (entityRectangle.intersects(x1 + screenCorrection, y1, 16 - screenCorrection, 1)) {
@@ -137,6 +137,96 @@ public class EntityPlayer extends Entity {
 		} else {
 			System.out.println("No map bounds set.");
 		}
+		
+		// Check for object boxes
+		entityRectangle.setBounds((int) x, (int) y + 10, 32, 16);
+		if(mapObjects != null) {
+			for(MapObject mapObject: mapObjects) {
+				// TOP
+				if(dy > 0) {
+					if(entityRectangle.intersects(
+							mapObject.collisionRect.getX() + screenCorrection, 
+							mapObject.collisionRect.getY(), 
+							mapObject.collisionRect.getWidth() - screenCorrection, 1)) {
+						setVerticalMovement(0);
+						walking = false;
+					}
+				}
+				// BOTTOM
+				if(dy < 0) {
+					if(entityRectangle.intersects(
+							mapObject.collisionRect.getX() + screenCorrection, 
+							mapObject.collisionRect.getMaxY(), 
+							mapObject.collisionRect.getWidth() - screenCorrection, 1)) {
+						setVerticalMovement(0);
+						walking = false;
+					}
+				}
+				// LEFT
+				if(dx > 0) {
+					if(entityRectangle.intersects(
+							mapObject.collisionRect.getX(), 
+							mapObject.collisionRect.getY() + screenCorrection, 
+							1, mapObject.collisionRect.getHeight() -screenCorrection)) {
+						setHorizontalMovement(0);
+						walking = false;
+					}
+				}
+				// RIGHT
+				if(dx < 0) {
+					if(entityRectangle.intersects(
+							mapObject.collisionRect.getMaxX(), 
+							mapObject.collisionRect.getY() + screenCorrection, 
+							1, mapObject.collisionRect.getHeight() -screenCorrection)) {
+						setHorizontalMovement(0);
+						walking = false;
+					}
+				}
+			}
+		}
+		
+		for(Entity entity: ENTITIES) {
+			// TOP
+			if(dy > 0) {
+				if(entityRectangle.intersects(
+						entity.entityCollision.getX() + screenCorrection, 
+						entity.entityCollision.getY(), 
+						entity.entityCollision.getWidth() - screenCorrection, 1)) {
+					setVerticalMovement(0);
+					walking = false;
+				}
+			}
+			// BOTTOM
+			if(dy < 0) {
+				if(entityRectangle.intersects(
+						entity.entityCollision.getX() + screenCorrection, 
+						entity.entityCollision.getMaxY(), 
+						entity.entityCollision.getWidth() - screenCorrection, 1)) {
+					setVerticalMovement(0);
+					walking = false;
+				}
+			}
+			// LEFT
+			if(dx > 0) {
+				if(entityRectangle.intersects(
+						entity.entityCollision.getX(), 
+						entity.entityCollision.getY() + screenCorrection, 
+						1, entity.entityCollision.getHeight() -screenCorrection)) {
+					setHorizontalMovement(0);
+					walking = false;
+				}
+			}
+			// RIGHT
+			if(dx < 0) {
+				if(entityRectangle.intersects(
+						entity.entityCollision.getMaxX(), 
+						entity.entityCollision.getY() + screenCorrection, 
+						1, entity.entityCollision.getHeight() -screenCorrection)) {
+					setHorizontalMovement(0);
+					walking = false;
+				}
+			}
+		}
 
 		super.move(delta);
 	}
@@ -145,9 +235,59 @@ public class EntityPlayer extends Entity {
 		uEffects.newEffect(player.getCenterX() - 8, player.getCenterY() - 8, uEffects.ef_SCRATCH);
 		this.HEALTH -= dMG;
 		if(HEALTH < 1) {
+			uEffects.newEffect(player.getCenterX() - 8, player.getCenterY() - 8, uEffects.ef_SMOKE);
 			MENU_TYPE = MENU_DIED;
 			menuOpen = true;
 		}
+	}
+	
+	public void update() {
+		player.updateAttackTimer();
+		if(!player.inAttack) {
+			player.animationWalk(tx_player, aDefInt);
+		} else {
+			player.animationWalk(tx_player + "a", aDefInt);
+		}
+
+		if (DEBUG) player.face = "0";
+		player.movementCheck(gameLoopTime);
+
+		if(spacePressed || slot1C || slot2V || slot3B || slot4N) {
+			for(int i = 1; i < ENTITIES.size(); i++) {
+				if(!ENTITIES.get(i).canInteract 
+						&& player.canAttack()
+						&& ENTITIES.get(i).HEALTH > 0 
+						&& player.entityRectangle.intersects(ENTITIES.get(i).entityRectangle)) {
+					ENTITIES.get(i).HEALTH -= player.DMG + (player.STATS.get(STAT_ATTACK).level / 25);
+					ENTITIES.get(i).dmgTaken = 0 - player.DMG - (player.STATS.get(STAT_ATTACK).level / 25);
+					int index = 0;
+					if(slot4N) index = 3;
+					if(slot3B) index = 2;
+					if(slot2V) index = 1;
+					if(slot1C || spacePressed) index = 0;
+					if(player.getWeapon(index) != null) {
+						
+						ENTITIES.get(i).HEALTH -= player.getWeapon(index).DMG;
+						ENTITIES.get(i).dmgTaken -= player.getWeapon(index).DMG;
+					}
+					ENTITIES.get(i).inAttack = true;
+					player.inAttack = true;
+					player.resetAttackTimer();
+					if(ENTITIES.get(i).HEALTH > 0) uEffects.newEffect(ENTITIES.get(i).getCenterX(), ENTITIES.get(i).getCenterY(), uEffects.ef_SCRATCH);
+				}
+			}
+		}
+		
+		player.updateHealthTimer();
+		
+		if(player.getAttackTimer() >= 5000 
+				&& player.HEALTH < player.maxHealth
+				&& player.healthCounter >= 2000 
+				&& !player.inAttack) {
+			player.HEALTH += 0.5d;
+			player.healthCounter = 0;
+		}
+
 	}
 
 }

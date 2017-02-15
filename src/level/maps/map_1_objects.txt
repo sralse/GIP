@@ -1,3 +1,3 @@
-tree_01.png,105,210,tree_01.png,105,180,tree_01.png,105,150,tree_01.png,105,120,tree_01.png,105,90,tree_01.png,105,60,tree_01.png,105,30,tree_01.png,105,0,
-tree_01.png,200,210,tree_01.png,200,180,tree_01.png,200,150,tree_01.png,200,120,tree_01.png,200,90,tree_01.png,200,60,tree_01.png,200,30,tree_01.png,200,0,
-bush_00.png,590,500,bush_00.png,700,500,bush_00.png,625,465,bush_00.png,670,465
+tree_1,6,0,tree_1,6,2,tree_1,6,4,tree_1,6,6,tree_1,6,8,tree_1,6,10,tree_1,6,12,tree_1,6,13,
+tree_1,13,0,tree_1,13,2,tree_1,13,4,tree_1,13,6,tree_1,13,8,tree_1,13,10,tree_1,13,12,tree_1,13,13,
+bush_0,20,21,bush_0,21,21,bush_0,22,21,bush_0,23,21,fire_1,25,10,tree_1,70,21
